@@ -133,20 +133,7 @@
         </div>
     </footer>
 
-
-    <script>
-        document.getElementById('boton_hamburguesa').addEventListener('click', function() {
-            let menu=document.getElementById('menu_hamburguesa');
-            menu.style.right = menu.style.right==='0px'?'-100%':'0px';
-
-
-            let icono_boton=document.getElementById('icono_boton')
-
-            icono_boton.classList.toggle("fa-bars");
-            icono_boton.classList.toggle("fa-x");       
-        });
-    </script>
-
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 </html>
