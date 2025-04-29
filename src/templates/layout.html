@@ -3,19 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Titulo -->
     <title>{% block title %} {% endblock %}</title>
+    
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    
+    <!-- Css -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <header class="bg-[#1B1A1A] z-50 flex justify-between items-center py-[10px] px-[15px] sm:px-[35px] fixed top-0 w-full h-[80px] md:h-[100px] ">
         <!-- Logo -->
         <a href="#" class="w-[16%] min-[568px]:w-[10%] sm:w-[10%] lg:w-[7%] xl:w-[5%]">
-            <img class="w-full" src="{{ url_for('static', filename='images/logos/logo.png') }}" alt="Kraft Boost Logo">
+            <img class="w-full" src="{{ url_for('static', filename='images/logos/logo.png') }}" alt="Logo">
         </a>
         
         <!-- Buscador -->
@@ -73,7 +83,7 @@
     </header>
     
     
-    
+    <!-- El cuerpo del html -->
     {% block body %} 
     
     {% endblock %}
@@ -95,7 +105,7 @@
             <!-- Redes Sociales -->
             <div id="redes_sociales" class="flex flex-col items-center text-center">
                 <a href="">
-                    <img id="logo_footer" src="{{ url_for('static', filename='images/logos/logo.png') }}"  alt="Kraft Boost Logo" class="w-[100px] mb-4" />
+                    <img id="logo_footer" src="{{ url_for('static', filename='images/logos/logo.png') }}"  alt="Logo" class="w-[100px] mb-4" />
                 </a>
                 <div class="social-links flex gap-4">
                     <a href="" class="flex justify-center items-center text-white bg-[#222] border-2 border-[#C40C0C] w-10 h-10 md:w-12 md:h-12 lg:w-[50px] lg:h-[50px] rounded-full hover:text-[#1AA9FF] transition-all duration-300">
@@ -133,6 +143,7 @@
         </div>
     </footer>
 
+    <!-- Script -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
