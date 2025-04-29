@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <style>
+       *{
+        font-family: "Montserrat", sans-serif;
+       }
+    </style>
+</head>
+<body>
+    <header class="bg-[#1B1A1A] z-50 flex justify-between items-center py-[10px] px-[15px] sm:px-[35px] fixed top-0 w-full h-[80px] md:h-[100px] ">
+        <!-- Logo -->
+        <a href="#" class="w-[16%] min-[568px]:w-[10%] sm:w-[10%] lg:w-[7%] xl:w-[5%]">
+            <img class="w-full" src="{{ url_for('static', filename='images/logos/logo.png') }}" alt="Kraft Boost Logo">
+        </a>
+        
+        <!-- Buscador -->
+        <form class="">
+            <div class="relative w-full">
+                <input type="search" class="font-bold outline-none p-2 w-[200px] max-[320px]:w-[160px] min-[568px]:w-[350px] sm:w-[450px] md:w-[500px] lg:w-[420px] min-[1180px]:w-[500px] min-[1280px]:w-[600px] min-[1281px]:w-[700px] h-[30px] min-[568px]:h-[35px] sm:h-[40px] text-gray-900  bg-gray-50 rounded-[5px] rounded-r-lg border border-gray-300 text-[12px]  max-[320px]:text-[10px] sm:text-[15px]" placeholder="Busca tu producto" required />
+                
+                <button type="submit" class="h-[30px] min-[568px]:h-[35px] sm:h-[40px] absolute right-0 px-1.5 sm:px-3 md:px-3 bg-[#C40C0C] text-white rounded-r-lg border border-red-700">
+                    <i class="fa-solid fa-magnifying-glass text-lg md:text-xl"></i>
+                </button>
+            </div>
+        </form>
+
+        <!-- Icono tienda -->
+        <a href="#" class="hidden lg:flex text-white text-[25px] duration-[0.5s] hover:text-[#C40C0C]"><i class="fa-solid fa-shop"></i></a>
+        
+
+        <!-- botones -->
+        <div class="hidden lg:flex items-center">
+            <div id="botones" class="flex space-x-4">
+                <a href="#"><button class="bg-white text-[#C40C0C] rounded px-[16px] py-[8px] font-bold text-[14px]">Iniciar Sesión</button></a>
+                <a href="#"><button class="bg-[#C40C0C] text-white rounded px-[16px] py-[8px] font-bold text-[14px]">Crear cuenta</button></a>
+            </div>
+  
+        </div>
+
+
+        <!-- Icono Carrito -->
+        <a href="#" class="hidden lg:flex text-white text-[25px] hover:text-[#C40C0C] duration-[0.5s]"><i class="fa-solid fa-cart-shopping"></i></a>
+        
+    
+        
+        <!-- Boton menu hamburguesa -->
+        <button id="boton_hamburguesa" class="lg:hidden text-white text-2xl">
+            <i id="icono_boton" class="fa-solid fa-bars"></i>
+        </button>
+
+
+        <!-- Menu hamburguesa -->
+        <nav id="menu_hamburguesa" class="fixed right-[-100%] top-[80px] md:top-[100px] w-[60%] h-screen overflow-y-auto scrollbar-hide bg-gradient-to-b from-[#1B1A1A] to-[#C40C0C] shadow-lg flex flex-col items-start pl-[20px] pt-[30px] gap-[40px] max-[320px]:gap-[20px] duration-300 lg:hidden overflow-y-scroll min-[568px]:flex-row min-[568px]:w-[100%] min-[568px]:justify-center min-[568px]:items-center min-[568px]:h-[60px] min-[568px]:gap-[20px] sm:h-[100px] sm:gap-[30px] md:h-[100px] md:gap-[35px]">
+    
+            <a href="#" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
+                <i class="fa-solid fa-shop"></i> Tienda
+            </a>
+            <a href="#" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
+                <i class="fa-solid fa-user"></i> Iniciar Sesión
+            </a>
+            <a href="#" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
+                <i class="fa-solid fa-user-plus"></i> Crear Cuenta
+            </a>
+            <a href="#" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
+                <i class="fa-solid fa-cart-shopping"></i> Carrito
+            </a>  
+        </nav>
+    </header>
+    
+    
+    
+    {% block body %} 
+    
+    {% endblock %}
+
+    
+    <footer class="bg-[#1B1A1A] text-white w-full flex flex-col items-center px-6 py-8">
+        
+        <div class="w-full max-w-screen-xl flex flex-col lg:flex-row justify-between items-center lg:items-start gap-8 lg:gap-16">
+            <!-- General -->
+            <div class="menus_footer flex flex-col justify-center items-center lg:items-start gap-4 text-center lg:text-left min-w-[180px]">
+                <span class="text-[#C40C0C] font-bold text-[20px] lg:text-[22px] md:text-[25px]">GENERAL</span>
+                <div class="info_footer flex flex-col justify-center items-center lg:items-start gap-3">
+                    <a href="" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">Sobre Nosotros</a>
+                    <a href="" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">Términos y condiciones</a>
+                    <a href="" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">Política de privacidad</a>
+                </div>
+             </div>
+      
+            <!-- Redes Sociales -->
+            <div id="redes_sociales" class="flex flex-col items-center text-center">
+                <a href="">
+                    <img id="logo_footer" src="{{ url_for('static', filename='images/logos/logo.png') }}"  alt="Kraft Boost Logo" class="w-[100px] mb-4" />
+                </a>
+                <div class="social-links flex gap-4">
+                    <a href="" class="flex justify-center items-center text-white bg-[#222] border-2 border-[#C40C0C] w-10 h-10 md:w-12 md:h-12 lg:w-[50px] lg:h-[50px] rounded-full hover:text-[#1AA9FF] transition-all duration-300">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="" class="flex justify-center items-center text-white bg-[#222] border-2 border-[#C40C0C] w-10 h-10 md:w-12 md:h-12 lg:w-[50px] lg:h-[50px] rounded-full hover:text-[#e4405f] transition-all duration-300">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="" class="flex justify-center items-center text-white bg-[#222] border-2 border-[#C40C0C] w-10 h-10 md:w-12 md:h-12 lg:w-[50px] lg:h-[50px] rounded-full hover:text-[#69c9d0] transition-all duration-300">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </div>
+            </div>
+      
+            <!--Tiendas -->
+            <div class="menus_footer flex flex-col justify-center items-center lg:items-start gap-4 text-center lg:text-left min-w-[180px]">
+                <span class="text-[#C40C0C] font-bold text-[20px] lg:text-[22px] md:text-[25px]">TIENDAS</span>
+                <div class="info_footer flex flex-col justify-center items-center lg:items-start gap-3">
+                    <a href="#" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">
+                        <i class="fa-solid fa-location-dot text-[#b0b0b0] mr-1"></i> Valencia
+                    </a>
+                    <a href="#" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">
+                        <i class="fa-solid fa-location-dot text-[#b0b0b0] mr-1"></i> Madrid
+                    </a>
+                    <a href="#" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">
+                        <i class="fa-solid fa-location-dot text-[#b0b0b0] mr-1"></i> Barcelona
+                    </a>
+                </div>
+            </div>
+        </div>
+      
+        <!-- Copyright -->
+        <div class="w-full mt-8 pt-4 border-t border-[#333] text-center text-[#777] text-[14px]">
+          &copy; 2025 KraftBoost. Todos los derechos reservados.
+        </div>
+    </footer>
+
+
+    <script>
+        document.getElementById('boton_hamburguesa').addEventListener('click', function() {
+            let menu=document.getElementById('menu_hamburguesa');
+            menu.style.right = menu.style.right==='0px'?'-100%':'0px';
+
+
+            let icono_boton=document.getElementById('icono_boton')
+
+            icono_boton.classList.toggle("fa-bars");
+            icono_boton.classList.toggle("fa-x");       
+        });
+    </script>
+
+
+</body>
+</html>
