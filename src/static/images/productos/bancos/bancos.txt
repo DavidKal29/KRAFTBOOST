@@ -1,0 +1,5 @@
+banca_con_soportes_tunturi.png
+banco_inclinado_domyos.png
+banco_inclinado_tunturi.png
+banco_multifuncion_domyos.png
+banco_plano_e-series.png

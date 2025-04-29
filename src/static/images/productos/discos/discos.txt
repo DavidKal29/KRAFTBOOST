@@ -1,0 +1,16 @@
+discos_maniak.png
+disco_1.25kg_goma_domyos.png
+disco_10kg_domyos.png
+disco_10kg_goma_domyos.png
+disco_10kg_maniak.png
+disco_15kg_maniak.png
+disco_1kg_domyos.png
+disco_2.5kg_goma_domyos.png
+disco_20kg_domyos.png
+disco_20kg_goma_domyos.png
+disco_20kg_maniak.png
+disco_25kg_maniak.png
+disco_2kg_domyos.png
+disco_5kg_domyos.png
+disco_5kg_goma_domyos.png
+disco_5kg_maniak.png

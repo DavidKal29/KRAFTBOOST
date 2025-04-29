@@ -1,0 +1,6 @@
+banda_15kg.png
+banda_25kg.png
+banda_35kg.png
+banda_45kg.png
+banda_5kg.png
+banda_60kg.png
