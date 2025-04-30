@@ -4,8 +4,3 @@ class Category():
         self.id=id
         self.nombre=nombre
         self.imagen=imagen
-        
-
-    
-
-
