@@ -1,6 +1,6 @@
 from entities.Category import Category
 
-class ModelCateogry():
+class ModelCategory():
     
     #Función para devolver todas las categorías
     @classmethod
