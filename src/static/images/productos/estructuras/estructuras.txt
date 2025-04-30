@@ -1,7 +1,0 @@
-barra_dominadas_kraftboost.png
-maquina_poleas_kraftboost.png
-megatron_kraftboost.png
-multiestacion_kraftboost.png
-multipower_kraftboost.png
-paralelas_kraftboost.png
-torre_paralelas_dominadas_kraftboost.png

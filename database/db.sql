@@ -88,24 +88,24 @@ CREATE TABLE detalles_pedido (
 
 -- Insertamos todas las marcas de la tienda
 INSERT INTO marcas (nombre) VALUES
-('domyos'),
-('tunturi'),
-('kraftboost'),
-('corength'),
-('maniak'),
-('e-series');
+('Domyos'),
+('Tunturi'),
+('Kraftboost'),
+('Corength'),
+('Maniak'),
+('E-series');
 
 
 -- Insertamos todas las categorias de la tienda
 INSERT INTO categorias (nombre, imagen) VALUES
-('barras', 'images/productos/barras/barra_exagonal.png'),
-('bancos', 'images/productos/bancos/banco_multifuncion_domyos.png'),
-('discos', 'images/productos/discos/disco_20kg_domyos.png'),
-('mancuernas', 'images/productos/mancuernas/mancuerna_50kg_maniak.png'),
-('accesorios', 'images/productos/accesorios/cinturon_lastre_corength.png'),
-('bandas elasticas', 'images/productos/bandas elasticas/banda_60kg.png'),
-('kettlebells', 'images/productos/kettlebells/kettlebell_32kg_tunturi.png'),
-('estructuras', 'images/productos/estructuras/paralelas_kraftboost.png');
+('Barras', 'images/productos/barras/barra_exagonal.png'),
+('Bancos', 'images/productos/bancos/banco_multifuncion_domyos.png'),
+('Discos', 'images/productos/discos/disco_20kg_domyos.png'),
+('Mancuernas', 'images/productos/mancuernas/mancuerna_50kg_maniak.png'),
+('Accesorios', 'images/productos/accesorios/cinturon_lastre_corength.png'),
+('Bandas elasticas', 'images/productos/bandas elasticas/banda_60kg.png'),
+('Kettlebells', 'images/productos/kettlebells/kettlebell_32kg_tunturi.png'),
+('Estructuras', 'images/productos/estructuras/paralelas_kraftboost.png');
 
 
 -- Barras (categoria 1, todos marca domyos)
@@ -163,8 +163,10 @@ Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_1kg_d
 Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_2kg_domyos.png'),
 ('Disco 5kg Domyos', 50, 9.99, 3, 1, 'Disco de hierro de 5 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_5kg_domyos.png'),
-('Disco 10kg', 50, 15.99, 3, 1, 'Disco de hierro de 10 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
+('Disco 10kg Domyos', 50, 15.99, 3, 1, 'Disco de hierro de 10 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_10kg_domyos.png'),
+('Disco 20kg Domyos', 50, 15.99, 3, 1, 'Disco de hierro de 20 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
+Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_20kg_domyos.png'),
 
 
 
@@ -255,9 +257,9 @@ VALUES
 ('Kettlebell 16kg Tunturi', 50, 19.99, 7, 2, 'Kettlebell de 16 kilogramos. Ideal para entrenamientos funcionales o CrossFit. Distribuido por la marca Tunturi.', 'images/productos/kettlebells/kettlebell_16kg_tunturi.png'),
 ('Kettlebell 20kg Tunturi', 50, 24.99, 7, 2, 'Kettlebell de 20 kilogramos. Ideal para entrenamientos funcionales o CrossFit. Distribuido por la marca Tunturi.', 'images/productos/kettlebells/kettlebell_20kg_tunturi.png'),
 ('Kettlebell 24kg Tunturi', 50, 29.99, 7, 2, 'Kettlebell de 24 kilogramos. Ideal para entrenamientos funcionales o CrossFit. Distribuido por la marca Tunturi.', 'images/productos/kettlebells/kettlebell_24kg_tunturi.png'),
-('Kettlebell 32kg Tunturi', 50, 39.99, 7, 2, 'Kettlebell de 32 kilogramos. Ideal para entrenamientos funcionales o CrossFit. Distribuido por la marca Tunturi.', 'images/productos/kettlebells/kettlebell_32kg_tunturi.png'),
+('Kettlebell 32kg Tunturi', 50, 39.99, 7, 2, 'Kettlebell de 32 kilogramos. Ideal para entrenamientos funcionales o CrossFit. Distribuido por la marca Tunturi.', 'images/productos/kettlebells/kettlebell_32kg_tunturi.png');
 
-('Kettlebell Gorilla 40kg Kraftboost', 50, 99.99, 7, 3, 'Kettlebell de 40 kilogramos. Ideal para entrenamientos funcionales o CrossFit. Distribuido por la marca Kraft Boost.', 'images/productos/kettlebells/kettlebell_gorilla_40kg_kraftboost.png');
+
 
 -- Estructuras (categoria 8)
 INSERT INTO productos (nombre, stock, precio, id_categoria, id_marca, descripcion, imagen)
@@ -278,8 +280,8 @@ VALUES
 Oxylane, distribuido por la marca Domyos.', 'images/productos/bancos/banco_multifuncion_domyos.png'),
 ('Torre Paralelas y Dominadas', 50, 149.99, 8, 3, 'Torre de paralelas y dominadas. Ideal para hacer dominadas, muscle ups, fondos y demás ejercicios. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/torre_paralelas_dominadas_kraftboost.png'),
 ('Kettlebell 28kg Tunturi', 50, 34.99, 7, 2, 'Kettlebell de 28 kilogramos. Ideal para entrenamientos funcionales o CrossFit. Distribuido por la marca Tunturi.', 'images/productos/kettlebells/kettlebell_28kg_tunturi.png'),
-('Topes Rojos', 50, 4.99, 5, 3, 'Topes rojos. Ideales para evitar que los discos se salgan de la barra al entrenar. Distribuido por la marca Kraft Boost.', 'images/productos/accesorios/topes_rojos_kraftboost.png'),
+('Topes Rojos Kraftboost', 50, 4.99, 5, 3, 'Topes rojos. Ideales para evitar que los discos se salgan de la barra al entrenar. Distribuido por la marca Kraft Boost.', 'images/productos/accesorios/topes_rojos_kraftboost.png'),
 ('Mancuerna 45kg Maniak', 50, 174.99, 4, 5, 'Mancuerna de 45 kilogramos. Ideal para el entrenamiento profesional. Distribuido por la marca Maniak.', 'images/productos/mancuernas/mancuerna_45kg_maniak.png'),
 ('Banda 60kg', 50, 29.99, 6, 4, 'Banda elástica de 60 kilogramos. Ideal para entrenamientos dinámicos y de fuerza . Distribuido por la marca Corength.', 'images/productos/bandas elasticas/banda_60kg.png'),
 ('Megatron Kraftboost', 50, 399.99, 8, 3, 'Megatron. Ideal para realizar todo tipo de ejercicios aislados en polea. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/megatron_kraftboost.png'),
-('Disco 25kg Maniak', 50, 49.99, 3, 5, 'Disco de acero de 25 kilogramos. Ideal para el entreno. Distribuido por la marca Maniak.', 'images/productos/discos/disco_25kg_maniak.png');
+('Kettlebell Gorilla 40kg Kraftboost', 50, 99.99, 7, 3, 'Kettlebell de 40 kilogramos. Ideal para entrenamientos funcionales o CrossFit. Distribuido por la marca Kraft Boost.', 'images/productos/kettlebells/kettlebell_gorilla_40kg_kraftboost.png');

@@ -12,7 +12,7 @@ def home():
     #Creamos las diferentes variables con los datos de la db
     productos_nuevos=ModelProduct.mostrar_productos(db,'id')
 
-    top_ventas=ModelProduct.mostrar_productos(db,'id')
+    top_ventas=ModelProduct.mostrar_productos(db,'ventas')
 
     categorias=ModelCategory.mostrar_categorias(db)
 
