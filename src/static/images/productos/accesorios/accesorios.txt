@@ -1,7 +1,0 @@
-cinturon_lastre_corength.png
-cinturon_lumbar_corength.png
-coderas_corength.png
-rodilleras_thor_corength.png
-straps_tunturi.png
-topes_clasicos_domyos.png
-topes_rojos_kraftboost.png
