@@ -1,4 +1,4 @@
-from entities.Product import Product
+from models.entities.Product import Product
 
 class ModelProduct():
     
@@ -6,15 +6,27 @@ class ModelProduct():
     @classmethod
     def mostrar_productos(cls,db,order):
         try:
+            print(1)
             #Se abre un cursor con la conexion a la db y se crea la consulta sql
             cursor=db.connection.cursor()
-            sql='SELECT id,nombre,precio,imagen FROM productos ORDER BY %s DESC LIMIT 8'
+
             
             #En este caso, en home, se mostrarán productos mas venidos y 
-            # mas nuevos por tanto, la variable order tendrá el id o el número
-            # de ventas, para poder filtrar y sacar los productos requeridos
-            cursor.execute(sql,order)
+            # mas nuevos por tanto, la variable order tendrá id o
+            # ventas, para poder filtrar y sacar los productos requeridos
+            if order=='id':
+                sql='SELECT id,nombre,precio,imagen FROM productos ORDER BY id DESC LIMIT 8'
+            elif order=='ventas':
+                sql='SELECT id,nombre,precio,imagen FROM productos ORDER BY ventas DESC LIMIT 8'
+            else:
+                cursor.close()
+                return None
+
+            
+            #Ejecutamos la consulta
+            cursor.execute(sql)
             resultados=cursor.fetchall()
+           
 
             #Si la consulta devuelve datos, creamos una lista, recorremos los datos 
             # y creamos un objeto con cada producto, metiendolos en la lista

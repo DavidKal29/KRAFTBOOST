@@ -1,4 +1,4 @@
-from entities.Category import Category
+from models.entities.Category import Category
 
 class ModelCategory():
     
