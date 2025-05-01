@@ -6,6 +6,7 @@ from flask_mysqldb import MySQL
 
 #Blueprints
 from routes.home import home_bp
+from routes.shop import shop_bp
 
 
 
@@ -28,6 +29,7 @@ print('El db desde app.py:',db)
 
 #Registro de blueprints
 app.register_blueprint(home_bp)
+app.register_blueprint(shop_bp)
 
 
 if __name__=='__main__':
