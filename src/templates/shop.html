@@ -1,1 +1,56 @@
-<h1>Listo para empezar</h1>
+{% extends './layout.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+<!-- Secccion -->
+<section class="flex flex-col py-8">
+
+    <!-- Productos -->
+    <div class="mx-auto md:mx-4 lg:mx-12 text-center px-4 mt-[100px]">
+        <!-- Título de la sección -->
+        <h2 class="text-4xl font-bold text-white mb-8">Tienda</h2>
+            
+        <!-- Contenedor de tarjetas -->
+        <div class="grid grid-cols-2 min-[568px]:grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            
+            {% for producto in productos %}  
+                
+            <!-- Tarjeta de producto -->
+            <a href="#" class="relative bg-[#1B1A1A] border-2 border-[#C40C0C] rounded-lg p-4 lg:w-full h-full flex flex-col">
+                <div class="flex flex-col justify-between items-center flex-1">
+                    <img src="{{url_for('static',filename=producto.imagen)}}" alt="{{producto.nombre}}" class="w-full h-full sm:h-52 md:h-52 mt-4 mb-4 lg:h-56 xl:h-72">
+                    <h3 class="text-[15px] sm:text-[20px] font-semibold mb-2 text-white text-center">{{producto.nombre}}</h3>
+                    <p class="text-lg text-[#C40C0C]">{{producto.precio}}€</p>
+                </div>
+            </a>
+
+                
+            {% endfor %}
+
+        </div>
+    </div>
+
+    
+
+      
+  </section>
+
+  <div class="w-full flex justify-between ">
+    <!-- Personaje Izquierdo -->
+    <img 
+      src="{{url_for('static',filename='images/footer_personajes/rino_footer.png')}}" 
+      alt="Personaje Izquierdo"
+      class="bottom-[270px] right-0 translate-y-[30%] w-[20vh] min-[568px]:w-[60vh] sm:w-[60vh] landscape:md:w-[60vh] md:w-[30vh] md:mb-[55px] landscape:lg:w-[50vh] landscape:lg:h-[55vh]  landscape:lg:mb-[90px] max-[320px]:mb-[25px] mb-[40px] z-[-1]"
+    />
+
+    <!-- Personaje Derecho -->
+    <img 
+      src="{{url_for('static',filename='images/footer_personajes/oso_footer.png')}}" 
+      alt="Personaje Derecho"
+      class="bottom-[270px] right-0 translate-y-[30%] w-[20vh] min-[568px]:w-[60vh] sm:w-[60vh] landscape:md:w-[60vh] md:w-[30vh] md:mb-[55px] landscape:lg:w-[50vh] landscape:lg:h-[55vh]  landscape:lg:mb-[90px] max-[320px]:mb-[25px] mb-[40px] z-[-1]"
+    />
+  </div>
+
+{% endblock %}

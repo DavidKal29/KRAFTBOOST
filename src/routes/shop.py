@@ -40,4 +40,4 @@ def shop():
         #Obtenemos los productos con los filtros de la paginacion
         productos=ModelProduct.mostrar_productos_paginacion(db,page,productos_por_pagina)
 
-        return render_template('shop.html')
+        return render_template('shop.html',paginas=pagina_maxima,productos=productos)
