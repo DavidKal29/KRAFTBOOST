@@ -9,6 +9,8 @@ shop_bp=Blueprint('shop',__name__)
 @shop_bp.route('/shop')
 def shop():
 
+    print('Los parametros de la ruta:',len(request.args))
+
     #Si no hay page, redirijimos a page 1
     if not request.args.get('page'):
         return redirect(url_for('shop.shop', page=1))
