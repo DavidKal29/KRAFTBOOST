@@ -37,7 +37,12 @@ def shop():
         return redirect(url_for('shop.shop', page=1))
     
     else:
+
+        #Obtenemos todas las marcas y categorias
+        marcas=current_app.config['marcas']
+        categorias=current_app.config['categorias']
+
         #Obtenemos los productos con los filtros de la paginacion
         productos=ModelProduct.mostrar_productos_paginacion(db,page,productos_por_pagina)
 
-        return render_template('shop.html',paginas=pagina_maxima,productos=productos,page=page)
+        return render_template('shop.html',paginas=pagina_maxima,productos=productos,page=page,marcas=marcas,categorias=categorias)

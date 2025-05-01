@@ -57,7 +57,7 @@ class ModelProduct():
 
     
 
-    #Metodo para /shop, donde se mostraran los productos y se filtraran con LIMIT y OFFSET
+    #Funcion para /shop, donde se mostraran los productos y se filtraran con LIMIT y OFFSET
     # para que se muestren asi con la paginacion
     @classmethod
     def mostrar_productos_paginacion(cls,db,page,productos_por_pagina):
