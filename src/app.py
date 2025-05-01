@@ -24,12 +24,31 @@ db=MySQL(app)
 #Añadimos la db al config de app
 app.config['db']=db
 
-print('El db desde app.py:',db)
-
 
 #Registro de blueprints
 app.register_blueprint(home_bp)
 app.register_blueprint(shop_bp)
+
+
+
+
+#Utilizamos el contexto de la app porque estamos haciendo una consulta fuera de las rutas
+with app.app_context():
+    #Obtenemos el numero de productos totales
+    try: 
+        cursor = db.connection.cursor()
+        cursor.execute('SELECT COUNT(*) FROM productos')
+        
+        total = cursor.fetchone()[0]
+        cursor.close()
+
+        #Lo guardamos en config para que desde los bp se pueda acceder
+        app.config['total_productos'] = total
+
+    except Exception as error:
+        print('Error a la hora de obtener el numero de productos:',error)
+
+
 
 
 if __name__=='__main__':

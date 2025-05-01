@@ -16,18 +16,7 @@ def shop():
     #Obtenemos el db de la app
     db=current_app.config['db']
 
-    #Obtenemos el numero de productos
-    try:
-        
-        cursor=db.connection.cursor()
-        cursor.execute('SELECT COUNT(*) FROM productos')
-        
-        total=cursor.fetchone()
-        total=total[0]
-        
-        cursor.close()
-    except Exception as error:
-        print(error)
+    total=current_app.config['total_productos']
 
 
     #Definimos el numero de paginas
