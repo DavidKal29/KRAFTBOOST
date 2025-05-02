@@ -30,17 +30,17 @@ let boton_eliminar=document.getElementById('boton_eliminar')
 
 //Recorremos cada boton de filtrado
 botones_filtro.forEach(btn => {
-  //Si pulsa uno de los botones, recorre todos, les pone el mismo color
-  // y al pulsado le pone el color rojo de que ha sido pulsado
-  btn.addEventListener('click', ()=>{
-    botones_filtro.forEach(b => {
-      b.classList.remove('bg-[#C40C0C]','text-white')
-      b.classList.add('bg-white','text-[#C40C0C]')
-    })
+    //Si pulsa uno de los botones, recorre todos, les pone el mismo color
+    // y al pulsado le pone el color rojo de que ha sido pulsado
+    btn.addEventListener('click', ()=>{
+        botones_filtro.forEach(b => {
+            b.classList.remove('bg-[#C40C0C]','text-white')
+            b.classList.add('bg-white','text-[#C40C0C]')
+        })
 
-    btn.classList.remove('bg-white','text-[#C40C0C]')
-    btn.classList.add('bg-[#C40C0C]','text-white')
-  })
+        btn.classList.remove('bg-white','text-[#C40C0C]')
+        btn.classList.add('bg-[#C40C0C]','text-white')
+    })
 })
 
 
