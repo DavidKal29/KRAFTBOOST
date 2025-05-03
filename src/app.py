@@ -42,15 +42,33 @@ with app.app_context():
         
         total=cursor.fetchone()[0]
 
+        #Obtenemos de los models, listas con estos objetos
         marcas=ModelBrand.mostrar_marcas(db)
         categorias=ModelCategory.mostrar_categorias(db)
         
         cursor.close()
 
+        #Creamos los precios que habrán para filtrar
+        precios={
+            "1-5":"1€ - 5€",
+            "5-10":"5€ - 10€",
+            "10-15":"10€ - 15€",
+            "15-20":"15€ - 20€",
+            "20-25":"20€ - 25€",
+            "25-30":"25€ - 30€",
+            "30-35":"30€ - 35€",
+            "35-50":"35€ - 50€",
+            "50-100":"50€ - 100€",
+            "100-200":"100€ - 200€",
+            "200-400":"200€ - 400€"
+        }
+
+
         #Lo guardamos en config para que desde los bp se pueda acceder
         app.config['total_productos']=total
         app.config['marcas']=marcas
         app.config['categorias']=categorias
+        app.config['precios']=precios
 
 
     except Exception as error:
@@ -60,4 +78,4 @@ with app.app_context():
 
 
 if __name__=='__main__':
-    app.run(host='192.168.1.131')
+    app.run()

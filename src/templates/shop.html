@@ -18,21 +18,23 @@
                 <!-- Select Marca -->
                 <div class="flex items-start flex-col w-full">
                     <label for="select_marca" class="text-white font-bold mb-1">Marca:</label>
-                    <select id="select_marca" class="w-full rounded px-4 h-10 font-bold bg-[#1B1A1A] text-white">
-                        <option value="0">Elige marca</option>
+                    <select name="select_marca" id="select_marca" class="w-full rounded px-4 h-10 font-bold bg-[#1B1A1A] text-white">
+                        <option value="0" {% if not parametros['marca'] %}selected{% endif %}>Cualquiera</option>
                         {% for marca in marcas %}
-                        <option value="{{marca.id}}">{{marca.nombre}}</option>
+                            <option value="{{ marca.id }}" {% if marca.id==parametros['marca'] %}selected{% endif %}>{{ marca.nombre }}</option>
                         {% endfor %}
+                        
+                        
                     </select>
                 </div>
           
                 <!-- Select Categoría -->
                 <div class="flex items-start flex-col w-full">
                     <label for="select_categoria" class="text-white font-bold mb-1">Categoría:</label>
-                    <select id="select_categoria" class="w-full rounded px-4 h-10 font-bold bg-[#1B1A1A] text-white">
-                        <option value="0">Elige categoria</option>
+                    <select name="select_categoria" id="select_categoria" class="w-full rounded px-4 h-10 font-bold bg-[#1B1A1A] text-white">
+                        <option value="0" {% if not parametros['categoria'] %}selected{% endif %}>Cualquiera</option>
                         {% for categoria in categorias %}
-                        <option value="{{categoria.id}}">{{categoria.nombre}}</option>
+                            <option value="{{ categoria.id }}" {% if categoria.id==parametros['categoria'] %}selected{% endif %}>{{ categoria.nombre }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -40,19 +42,11 @@
                 <!-- Select Precio -->
                 <div class="flex items-start flex-col w-full">
                     <label for="select_precio" class="text-white font-bold mb-1">Precio:</label>
-                    <select id="select_precio" class="w-full rounded px-4 h-10 font-bold bg-[#1B1A1A] text-white">
-                        <option value="0">Elige precio</option>
-                        <option value="1-5">1€ - 5€</option>
-                        <option value="5-10">5€ - 10€</option>
-                        <option value="10-15">10€ - 15€</option>
-                        <option value="15-20">15€ - 20€</option>
-                        <option value="20-25">20€ - 25€</option>
-                        <option value="25-30">25€ - 30€</option>
-                        <option value="30-35">30€ - 35€</option>
-                        <option value="35-50">35€ - 50€</option>
-                        <option value="50-100">50€ - 100€</option>
-                        <option value="100-200">100€ - 200€</option>
-                        <option value="200-400">200€ - 400€</option>
+                    <select name="select_precio" id="select_precio" class="w-full rounded px-4 h-10 font-bold bg-[#1B1A1A] text-white">
+                        <option value="0" {% if not parametros['precio'] %}selected{% endif %}>Cualquiera</option>
+                        {% for clave,valor in precios.items() %}
+                        <option value="{{clave}}" {% if parametros['precio']==clave %}selected{% endif %}>{{valor}}</option>
+                        {% endfor %}
                     </select>
                 </div>
           
@@ -102,7 +96,7 @@
         <div class="flex justify-center items-center gap-2 mt-4 lg:mt-6 gap-4 flex-wrap">
             {% for i in range(paginas) %}
 
-            <a href="{{url_for('shop.shop', page=i+1)}}" >
+            <a href="{{url_for('shop.shop', page=i+1, **parametros)}}" >
                 {% if i+1==page %}
                 <div class="bg-white text-[#C40C0C] px-3 py-2 sm:px-5 sm:py-3 rounded-[5px] font-bold" >
                     {{i+1}}
