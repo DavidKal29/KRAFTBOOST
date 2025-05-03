@@ -5,20 +5,17 @@ import math
 shop_bp=Blueprint('shop',__name__)
 
 
-
-   
-
-
-
 #Al redirijir a shop, usaré shop.shop que es basicamente 
 # el name del bluerpint y el nombre de la funcion de la ruta
 @shop_bp.route('/shop', methods=['GET','POST'])
 def shop():
     if request.method=='GET':
-        #Marcamos los parámetros validos
-        parametros_validos=['page','marca','categoria','precio']
+        #Variable que mirará si alguien puso algo raro en los filtros desde las rutas
+        bugs=False
         
-
+        #Marcamos los parámetros validos
+        parametros_validos=['page','marca','categoria','precio','orden']
+        
         #Obtenemos el db de la app
         db=current_app.config['db']
 
@@ -31,8 +28,8 @@ def shop():
         precios=current_app.config['precios']
 
 
-
         #Obtenemos los parametros de filtrado
+        orden=request.args.get('orden')
         marca=request.args.get('marca')
         categoria=request.args.get('categoria')
         precio=request.args.get('precio')
@@ -41,10 +38,7 @@ def shop():
         #Creamos un diccionario y vemos si estos valores existen en la url
         parametros={}
         
-        #Variable que mirará si alguien puso algo raro en los filtros desde las rutas
-        bugs=False
-
-
+        
         #Si la marca existe, es un numero y esta en el rango de len(marcas), 
         # se añade a parametros, sino se activa a True los bugs
         if marca:
@@ -78,27 +72,23 @@ def shop():
 
         
         #Miramos si no hay parametros que no deberian estar o hay parametros duplicados 
-        # y si hay redirijimos a page=1 con los parametros válidos
         for i in request.args.keys():
             if i not in parametros_validos or len(request.args.getlist(i))>1:
-                return redirect(url_for('shop.shop',page=1,**parametros))
-            
-            
-        #Si hay bugs en los parametros validos redirijimos a page 1 con los parametros que si sean validos
-        if bugs:
-            return redirect(url_for('shop.shop',page=1,**parametros))
-        
+                bugs=True
         
 
-        print('Los parametros:',parametros)
+        #Si el orden no existe o es un numero, filtramos por los mas recientes
+        if not orden or not orden.isalpha() or orden not in ['masRecientes','topVentas']:
+            orden='masRecientes'
+            bugs=True
 
         
         #Si no hay page, redirijimos a page 1
         if not request.args.get('page'):
-            return redirect(url_for('shop.shop', page=1,**parametros))
+            bugs=True
+            page=1
         
         
-       
         #Definimos el numero de paginas
         productos_por_pagina=12
         
@@ -113,18 +103,25 @@ def shop():
         #Caerá aquí si el page contiene letras
         except Exception as error:
             print(error)
-            return redirect(url_for('shop.shop',page=1, **parametros))
+            page=1
+            bugs=True
 
 
          
         #Si el page es mayor a la pagina maxima, redirije a la pagina maxima
         if page>pagina_maxima:
-            return redirect(url_for('shop.shop',page=pagina_maxima, **parametros))
+            page=pagina_maxima
+            bugs=True
         
         #Si es menor a 1, lo lleva a 1
         elif page<1:
-            return redirect(url_for('shop.shop',page=1, **parametros))
+            page=1
+            bugs=True
         
+
+        #Si hay bugs en los parametros validos redirijimos a page 1 con los parametros que si sean validos
+        if bugs:
+            return redirect(url_for('shop.shop',page=page,orden=orden,**parametros))
 
         #Si porfin todo sale bien
         else:
@@ -134,11 +131,12 @@ def shop():
             return render_template('shop.html',
                                    paginas=pagina_maxima,productos=productos,
                                    page=page, parametros=parametros,
-                                   marcas=marcas,categorias=categorias,precios=precios)
+                                   marcas=marcas,categorias=categorias,precios=precios,orden=orden)
     
     
     elif request.method=='POST':
         #Obtenemos los parametros de los select
+        orden=request.form.get('select_orden')
         marca=request.form.get('select_marca')
         categoria=request.form.get('select_categoria')
         precio=request.form.get('select_precio')
@@ -156,12 +154,8 @@ def shop():
             parametros['categoria']=categoria
 
         if precio!='0':
-            
             parametros['precio']=precio
 
 
         #Redirijimos con los parametros
-        return redirect(url_for('shop.shop',page=page,**parametros))
-
-
-    
+        return redirect(url_for('shop.shop',page=page,orden=orden,**parametros))

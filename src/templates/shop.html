@@ -50,26 +50,27 @@
                     </select>
                 </div>
           
-                <!-- Botones de orden -->
+                <!-- Select Orden -->
+                <div class="flex items-start flex-col w-full">
+                    <label for="select_orden" class="text-white font-bold mb-1">Orden:</label>
+                    <select name="select_orden" id="select_orden" class="w-full rounded px-4 h-10 font-bold bg-[#1B1A1A] text-white">
+                        <option value="masRecientes" {% if orden=='masRecientes' %}selected{% endif %}>Recientes</option>
+                        <option value="topVentas" {% if orden=='topVentas' %}selected{% endif %}>Top Ventas</option>
+                    </select>
+                </div>
               
-                <div class="flex items-start flex-col w-full">
-                    <label class="opacity-0 mb-1">Label</label>
-                    <button id="boton_mas_vendidos" type="button" class="boton_filtro w-full bg-white text-[#C40C0C] rounded px-4 h-10 font-bold">Más vendidos</button>
-                </div>
 
-                <div class="flex items-start flex-col w-full">
-                    <label class="opacity-0 mb-1">Label</label>
-                    <button id="boton_mas_recientes" type="button" class="boton_filtro w-full bg-white text-[#C40C0C] rounded px-4 h-10 font-bold">Más recientes</button>
-                </div>
-
-                <div class="flex items-start flex-col w-full">
-                    <label class="opacity-0 mb-1">Label</label>
+                <div class="flex items-start flex-col w-full mt-2 lg:mt-0">
+                    <label class="hidden lg:block opacity-0 mb-1">Label</label>
                     <button  type="submit" class="w-full bg-white text-[#C40C0C] rounded px-4 h-10 font-bold">Filtrar</button>
+                </div>
+
+                <div class="flex items-start flex-col w-full mt-2 lg:mt-0">
+                    <label class="hidden lg:block opacity-0 mb-1">Label</label>
+                    <button  type="reset" class="w-full text-white bg-[#C40C0C] rounded px-4 h-10 font-bold">Restart</button>
                 </div>
               
             </div>
-          
-            <button type="reset" id="boton_eliminar" class="h-10 text-white bg-[#C40C0C] rounded px-4 sm:px-10 h-10 font-bold lg:px-8 lg:h-10">Eliminar filtros</button>
           
         </form>
           
@@ -96,7 +97,7 @@
         <div class="flex justify-center items-center gap-2 mt-4 lg:mt-6 gap-4 flex-wrap">
             {% for i in range(paginas) %}
 
-            <a href="{{url_for('shop.shop', page=i+1, **parametros)}}" >
+            <a href="{{url_for('shop.shop',page=i+1, orden=orden, **parametros)}}" >
                 {% if i+1==page %}
                 <div class="bg-white text-[#C40C0C] px-3 py-2 sm:px-5 sm:py-3 rounded-[5px] font-bold" >
                     {{i+1}}
