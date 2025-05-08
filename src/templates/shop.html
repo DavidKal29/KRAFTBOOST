@@ -1,0 +1,155 @@
+{% extends './layout.html' %}
+
+{% block title %}Tienda{% endblock %}
+
+{% block body %}
+
+<!-- Secccion -->
+<section class="flex flex-col py-8">
+
+    <!-- Productos -->
+    <div class="mx-auto md:mx-4 lg:mx-12 text-center px-4 mt-[100px]">
+        <!-- Título de la sección -->
+        <h2 class="text-4xl font-bold text-white mb-8">Tienda</h2>
+
+        <form method="post" action="{{url_for('shop.shop')}}" class="flex flex-col  justify-center items-center mb-6 gap-4 lg:gap-8">
+            <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 justify-center items-center gap-2 sm:gap-3 w-full sm:w-[80%] lg:w-[60%] xl:w-[90%]">
+              
+                <!-- Select Marca -->
+                <div class="flex items-start flex-col w-full">
+                    <label for="select_marca" class="text-white font-bold mb-1">Marca:</label>
+                    <select name="select_marca" id="select_marca" class="w-full rounded px-4 h-10 font-bold bg-[#1B1A1A] text-white">
+                        <option value="0" {% if not parametros['marca'] %}selected{% endif %}>Cualquiera</option>
+                        {% for marca in marcas %}
+                            <option value="{{ marca.id }}" {% if marca.id==parametros['marca'] %}selected{% endif %}>{{ marca.nombre }}</option>
+                        {% endfor %}
+                        
+                        
+                    </select>
+                </div>
+          
+                <!-- Select Categoría -->
+                <div class="flex items-start flex-col w-full">
+                    <label for="select_categoria" class="text-white font-bold mb-1">Categoría:</label>
+                    <select name="select_categoria" id="select_categoria" class="w-full rounded px-4 h-10 font-bold bg-[#1B1A1A] text-white">
+                        <option value="0" {% if not parametros['categoria'] %}selected{% endif %}>Cualquiera</option>
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria.id }}" {% if categoria.id==parametros['categoria'] %}selected{% endif %}>{{ categoria.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+          
+                <!-- Select Precio -->
+                <div class="flex items-start flex-col w-full">
+                    <label for="select_precio" class="text-white font-bold mb-1">Precio:</label>
+                    <select name="select_precio" id="select_precio" class="w-full rounded px-4 h-10 font-bold bg-[#1B1A1A] text-white">
+                        <option value="0" {% if not parametros['precio'] %}selected{% endif %}>Cualquiera</option>
+                        {% for clave,valor in precios.items() %}
+                        <option value="{{clave}}" {% if parametros['precio']==clave %}selected{% endif %}>{{valor}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+          
+                <!-- Select Orden -->
+                <div class="flex items-start flex-col w-full">
+                    <label for="select_orden" class="text-white font-bold mb-1">Orden:</label>
+                    <select name="select_orden" id="select_orden" class="w-full rounded px-4 h-10 font-bold bg-[#1B1A1A] text-white">
+                        <option value="masRecientes" {% if orden=='masRecientes' %}selected{% endif %}>Recientes</option>
+                        <option value="topVentas" {% if orden=='topVentas' %}selected{% endif %}>Top Ventas</option>
+                    </select>
+                </div>
+              
+
+                <div class="flex items-start flex-col w-full mt-2 lg:mt-0">
+                    <label class="hidden lg:block opacity-0 mb-1">Label</label>
+                    <button  type="submit" class="w-full bg-white text-[#C40C0C] rounded px-4 h-10 font-bold">Filtrar</button>
+                </div>
+
+                <div class="flex items-start flex-col w-full mt-2 lg:mt-0">
+                    <label class="hidden lg:block opacity-0 mb-1">Label</label>
+                    <a href="{{url_for('shop.shop')}}" class="w-full text-white bg-[#C40C0C] rounded px-4 h-10 font-bold flex items-center justify-center">
+                    Restart
+                    </a>
+                </div>
+              
+            </div>
+          
+        </form>
+          
+        {% if productos %}
+        <!-- Contenedor de tarjetas -->
+        <div class="grid grid-cols-2 min-[568px]:grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-10 ">
+            
+            {% for producto in productos %}  
+                
+            <!-- Tarjeta de producto -->
+            <a href="#" class="relative bg-[#1B1A1A] border-2 border-[#C40C0C] rounded-lg p-4 lg:w-full h-full flex flex-col">
+                <div class="flex flex-col justify-between items-center flex-1">
+                    <img src="{{url_for('static',filename=producto.imagen)}}" alt="{{producto.nombre}}" class="w-full h-full sm:h-52 md:h-52 mt-4 mb-4 lg:h-56 xl:h-72">
+                    <h3 class="text-[15px] sm:text-[20px] font-semibold mb-2 text-white text-center">{{producto.nombre}}</h3>
+                    <p class="text-lg text-[#C40C0C]">{{producto.precio}}€</p>
+                </div>
+            </a>
+
+                
+            {% endfor %}
+
+        </div>
+
+       {% if paginas>1 %}
+        <div class="flex justify-center items-center gap-2 mt-4 lg:mt-6 gap-4 flex-wrap">
+            {% for i in range(paginas) %}
+
+            <a href="{{url_for('shop.shop',page=i+1, orden=orden, **parametros)}}" >
+                {% if i+1==page %}
+                <div class="bg-[#C40C0C] text-white px-3 py-2 sm:px-5 sm:py-3 rounded-[5px] font-bold" >
+                    {{i+1}}
+                </div>
+                {% else %}
+                <div class="bg-white text-[#C40C0C] px-3 py-2 sm:px-5 sm:py-3 rounded-[5px] font-bold" >
+                    {{i+1}}
+                </div>
+                {% endif %}
+            </a>
+
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% else %}
+        <div class="flex flex-col justify-center items-center gap-2 mt-12  md:mt-24">
+            <p class="text-[80px] sm:text-[100px] text-[#C40C0C] rounded-full">
+                <i class="fa-solid fa-xmark"></i>
+            </p>
+            <p class="text-white text-center text-[30px] font-semibold">
+                No se encontraron productos
+            </p>
+        </div>
+        
+        
+        {% endif %}
+
+    </div>
+
+    
+
+      
+  </section>
+
+  <div class="w-full flex justify-between ">
+    <!-- Personaje Izquierdo -->
+    <img 
+      src="{{url_for('static',filename='images/footer_personajes/rino_footer.png')}}" 
+      alt="Personaje Izquierdo"
+      class="bottom-[270px] right-0 translate-y-[30%] w-[20vh] min-[568px]:w-[60vh] sm:w-[60vh] landscape:md:w-[60vh] md:w-[30vh] md:mb-[55px] landscape:lg:w-[50vh] landscape:lg:h-[55vh]  landscape:lg:mb-[90px] max-[320px]:mb-[25px] mb-[40px] z-[-1]"
+    />
+
+    <!-- Personaje Derecho -->
+    <img 
+      src="{{url_for('static',filename='images/footer_personajes/oso_footer.png')}}" 
+      alt="Personaje Derecho"
+      class="bottom-[270px] right-0 translate-y-[30%] w-[20vh] min-[568px]:w-[60vh] sm:w-[60vh] landscape:md:w-[60vh] md:w-[30vh] md:mb-[55px] landscape:lg:w-[50vh] landscape:lg:h-[55vh]  landscape:lg:mb-[90px] max-[320px]:mb-[25px] mb-[40px] z-[-1]"
+    />
+  </div>
+
+{% endblock %}

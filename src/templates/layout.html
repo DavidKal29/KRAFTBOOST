@@ -21,10 +21,10 @@
     <!-- Css -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body class="bg-black">
+<body class="bg-black overflow-x-hidden">
     <header class="bg-[#1B1A1A] z-50 flex justify-between items-center py-[10px] px-[15px] sm:px-[35px] fixed top-0 w-full h-[80px] md:h-[100px] ">
         <!-- Logo -->
-        <a href="#" class="w-[16%] min-[568px]:w-[10%] sm:w-[10%] lg:w-[7%] xl:w-[5%]">
+        <a href="{{url_for('home.home')}}" class="w-[16%] min-[568px]:w-[10%] sm:w-[10%] lg:w-[7%] xl:w-[5%]">
             <img class="w-full" src="{{ url_for('static', filename='images/logos/logo.png') }}" alt="Logo">
         </a>
         
@@ -40,7 +40,7 @@
         </form>
 
         <!-- Icono tienda -->
-        <a href="#" class="hidden lg:flex text-white text-[25px] duration-[0.5s] hover:text-[#C40C0C]"><i class="fa-solid fa-shop"></i></a>
+        <a href="{{url_for('shop.shop')}}" class="hidden lg:flex text-white text-[25px] duration-[0.5s] hover:text-[#C40C0C]"><i class="fa-solid fa-shop"></i></a>
         
 
         <!-- botones -->
@@ -67,7 +67,7 @@
         <!-- Menu hamburguesa -->
         <nav id="menu_hamburguesa" class="fixed right-[-100%] top-[80px] md:top-[100px] w-[60%] h-screen overflow-y-auto scrollbar-hide bg-gradient-to-b from-[#1B1A1A] to-[#C40C0C] shadow-lg flex flex-col items-start pl-[20px] pt-[30px] gap-[40px] max-[320px]:gap-[20px] duration-300 lg:hidden overflow-y-scroll min-[568px]:flex-row min-[568px]:w-[100%] min-[568px]:justify-center min-[568px]:items-center min-[568px]:h-[80px] min-[568px]:gap-[20px] sm:h-[100px] sm:gap-[30px] md:h-[100px] md:gap-[35px]">
     
-            <a href="#" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
+            <a href="{{url_for('shop.shop')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
                 <i class="fa-solid fa-shop"></i> Tienda
             </a>
             <a href="#" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
