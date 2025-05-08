@@ -147,6 +147,10 @@ def shop():
     
     
     elif request.method=='POST':
+        search=request.form.get('search')
+        print('El search:',search)
+
+
         #Obtenemos los parametros de los select
         orden=request.form.get('select_orden')
         marca=request.form.get('select_marca')
