@@ -27,6 +27,7 @@ def shop():
 
         #Obtenemos los parametros de filtrado
         orden=request.args.get('orden')
+        search=request.args.get('search')
         marca=request.args.get('marca')
         categoria=request.args.get('categoria')
         precio=request.args.get('precio')
@@ -35,6 +36,11 @@ def shop():
         #Creamos un diccionario y vemos si estos valores existen en la url
         parametros={}
         
+
+        #Si el search existe,lo añadimos y au
+        if search:
+            parametros['search']=search
+
 
         #Si la marca existe, es un numero y esta en el rango de len(marcas), 
         # se añade a parametros, sino se activa a True los bugs
@@ -147,38 +153,52 @@ def shop():
     
     
     elif request.method=='POST':
+        #Lo mismo, creamos un diccionario y vemos si los parametros han sido seleccionados
+        parametros={}
+        
+        #Obtenemos el search del formulario
         search=request.form.get('search')
-        print('El search:',search)
 
 
-        # #Obtenemos los parametros de los select
-        # orden=request.form.get('select_orden')
-        # marca=request.form.get('select_marca')
-        # categoria=request.form.get('select_categoria')
-        # precio=request.form.get('select_precio')
+        #Si está la metemos en los parametros
+        if search:
+            parametros['search']=search
+        
+        #Si no está quiere decir que el post 
+        # viene de los selects para filtrar
+        else:
+            #Obtenemos de la ruta para ver si alguien 
+            # está aplicando filtros a lo que ha buscado
+            search=request.args.get('search')
 
+            #Si es asi, mete en parametros el search, sino, search no existe
+            if search:
+                parametros['search']=search
+                
 
         #Obtenemos los parametros de los select
-        orden='topVentas'
-        marca=1
-        categoria=1
-        precio='4.99-10'
+        orden=request.form.get('select_orden')
+        marca=request.form.get('select_marca')
+        categoria=request.form.get('select_categoria')
+        precio=request.form.get('select_precio')
+
         
         #Obtenemos el page
         page=request.args.get('page')
 
-        #Lo mismo, creamos un diccionario y vemos si los parametros han sido seleccionados
-        parametros={}
-
+        
         #Validamos que no sean values 0
-        if marca!='0':
+        if marca and marca!='0':
             parametros['marca']=marca
         
-        if categoria!='0':
+        if categoria and categoria!='0':
             parametros['categoria']=categoria
 
-        if precio!='0':
+        if precio and precio!='0':
             parametros['precio']=precio
+
+
+        print('Los parametrillos:',parametros)
 
 
         #Redirijimos con los parametros
