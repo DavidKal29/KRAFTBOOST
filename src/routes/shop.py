@@ -10,6 +10,7 @@ shop_bp=Blueprint('shop',__name__)
 @shop_bp.route('/shop', methods=['GET','POST'])
 def shop():
     if request.method=='GET':
+        print('Los parametrillos:',request.args)
         #Variable que mirará si alguien puso algo raro en los filtros desde las rutas
         bugs=False
         
@@ -38,8 +39,17 @@ def shop():
         
 
         #Si el search existe,lo añadimos y au
-        if search:
+        if search=='':
+            bugs=True
+
+        elif search:
+            
+            
+
+
             parametros['search']=search
+                
+        
 
 
         #Si la marca existe, es un numero y esta en el rango de len(marcas), 
@@ -161,20 +171,16 @@ def shop():
 
 
         #Si está la metemos en los parametros
-        if search:
-            parametros['search']=search
-        
-        #Si no está quiere decir que el post 
-        # viene de los selects para filtrar
-        else:
-            #Obtenemos de la ruta para ver si alguien 
-            # está aplicando filtros a lo que ha buscado
+        if not  search:
             search=request.args.get('search')
 
-            #Si es asi, mete en parametros el search, sino, search no existe
-            if search:
-                parametros['search']=search
-                
+        if search:
+            search=search.strip()
+            search=search.lower()
+
+            parametros['search']=search
+
+            
 
         #Obtenemos los parametros de los select
         orden=request.form.get('select_orden')

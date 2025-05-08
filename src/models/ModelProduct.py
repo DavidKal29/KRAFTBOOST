@@ -74,6 +74,7 @@ class ModelProduct():
             #Si hay parametros va mirando cada posible parametro, y añade 
             # a la lista un string que luego meteremos en la consulta
             if parametros:
+
                 if 'marca' in parametros:
                     condiciones.append("id_marca={}".format(parametros['marca']))
 
@@ -87,6 +88,16 @@ class ModelProduct():
                     precio_max=rangos[1]
 
                     condiciones.append("precio>={} AND precio<={}".format(precio_min,precio_max))
+
+                
+                if 'search' in parametros:
+                    if len(parametros['search'])==1 and not parametros['search'].isdigit():
+                        condiciones.append("nombre LIKE '{}%%'".format(parametros['search']))
+                    
+                    else:
+                        condiciones.append("nombre LIKE '%%{}%%'".format(parametros['search']))
+
+                    
 
             
             #si hay condiciones, mete un WHERE y luego, los 
@@ -164,6 +175,16 @@ class ModelProduct():
                     precio_max=rangos[1]
 
                     condiciones.append("precio>={} AND precio<={}".format(precio_min,precio_max))
+
+
+                if 'search' in parametros:
+                    if len(parametros['search'])==1 and not parametros['search'].isdigit():
+                        condiciones.append("nombre LIKE '{}%%'".format(parametros['search']))
+                    
+                    else:
+                        condiciones.append("nombre LIKE '%%{}%%'".format(parametros['search']))
+
+                    
 
             
             #si hay condiciones, mete un WHERE y luego, los 
