@@ -29,9 +29,9 @@
         </a>
         
         <!-- Buscador -->
-        <form name="search" action="{{url_for('shop.shop')}}" method="post">
+        <form action="{{url_for('shop.shop')}}" method="post">
             <div class="relative w-full">
-                <input type="search" class="font-bold outline-none p-2 w-[200px] max-[320px]:w-[160px] min-[568px]:w-[350px] sm:w-[450px] md:w-[500px] lg:w-[420px] min-[1180px]:w-[500px] min-[1280px]:w-[600px] min-[1281px]:w-[700px] h-[30px] min-[568px]:h-[35px] sm:h-[40px] text-gray-900  bg-gray-50 rounded-[5px] rounded-r-lg border border-gray-300 text-[12px]  max-[320px]:text-[10px] sm:text-[15px]" placeholder="Busca tu producto" required />
+                <input name="search" class="font-bold outline-none p-2 w-[200px] max-[320px]:w-[160px] min-[568px]:w-[350px] sm:w-[450px] md:w-[500px] lg:w-[420px] min-[1180px]:w-[500px] min-[1280px]:w-[600px] min-[1281px]:w-[700px] h-[30px] min-[568px]:h-[35px] sm:h-[40px] text-gray-900  bg-gray-50 rounded-[5px] rounded-r-lg border border-gray-300 text-[12px]  max-[320px]:text-[10px] sm:text-[15px]" placeholder="Busca tu producto" required />
                 
                 <button type="submit" class="h-[30px] min-[568px]:h-[35px] sm:h-[40px] absolute right-0 px-1.5 sm:px-3 md:px-3 bg-[#C40C0C] text-white rounded-r-lg border border-red-700">
                     <i class="fa-solid fa-magnifying-glass text-lg md:text-xl"></i>

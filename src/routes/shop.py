@@ -14,7 +14,7 @@ def shop():
         bugs=False
         
         #Marcamos los parámetros validos
-        parametros_validos=['page','marca','categoria','precio','orden']
+        parametros_validos=['page','marca','categoria','precio','orden','search']
         
         #Obtenemos el db de la app
         db=current_app.config['db']
@@ -151,11 +151,18 @@ def shop():
         print('El search:',search)
 
 
+        # #Obtenemos los parametros de los select
+        # orden=request.form.get('select_orden')
+        # marca=request.form.get('select_marca')
+        # categoria=request.form.get('select_categoria')
+        # precio=request.form.get('select_precio')
+
+
         #Obtenemos los parametros de los select
-        orden=request.form.get('select_orden')
-        marca=request.form.get('select_marca')
-        categoria=request.form.get('select_categoria')
-        precio=request.form.get('select_precio')
+        orden='topVentas'
+        marca=1
+        categoria=1
+        precio='4.99-10'
         
         #Obtenemos el page
         page=request.args.get('page')
