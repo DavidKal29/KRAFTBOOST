@@ -67,16 +67,18 @@
 
                 <div class="flex items-start flex-col w-full mt-2 lg:mt-0">
                     <label class="hidden lg:block opacity-0 mb-1">Label</label>
-                    <button  type="reset" class="w-full text-white bg-[#C40C0C] rounded px-4 h-10 font-bold">Restart</button>
+                    <a href="{{url_for('shop.shop')}}" class="w-full text-white bg-[#C40C0C] rounded px-4 h-10 font-bold flex items-center justify-center">
+                    Restart
+                    </a>
                 </div>
               
             </div>
           
         </form>
           
-            
+        {% if productos %}
         <!-- Contenedor de tarjetas -->
-        <div class="grid grid-cols-2 min-[568px]:grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-2 min-[568px]:grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-10 ">
             
             {% for producto in productos %}  
                 
@@ -94,6 +96,7 @@
 
         </div>
 
+       {% if paginas>1 %}
         <div class="flex justify-center items-center gap-2 mt-4 lg:mt-6 gap-4 flex-wrap">
             {% for i in range(paginas) %}
 
@@ -111,6 +114,21 @@
 
             {% endfor %}
         </div>
+        {% endif %}
+        
+        {% else %}
+        <div class="flex flex-col justify-center items-center gap-2 mt-12  md:mt-24">
+            <p class="text-[80px] sm:text-[100px] text-[#C40C0C] rounded-full">
+                <i class="fa-solid fa-xmark"></i>
+            </p>
+            <p class="text-white text-center text-[30px] font-semibold">
+                No se encontraron productos
+            </p>
+        </div>
+        
+        
+        {% endif %}
+
     </div>
 
     

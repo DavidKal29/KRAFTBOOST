@@ -19,10 +19,7 @@ def shop():
         #Obtenemos el db de la app
         db=current_app.config['db']
 
-        #Obtenemos todos los productos
-        total=current_app.config['total_productos']
-
-        #Obtenemos todas las marcas y categorias
+        #Obtenemos las marcas, categorias y precios
         marcas=current_app.config['marcas']
         categorias=current_app.config['categorias']
         precios=current_app.config['precios']
@@ -38,7 +35,7 @@ def shop():
         #Creamos un diccionario y vemos si estos valores existen en la url
         parametros={}
         
-        
+
         #Si la marca existe, es un numero y esta en el rango de len(marcas), 
         # se añade a parametros, sino se activa a True los bugs
         if marca:
@@ -77,7 +74,7 @@ def shop():
                 bugs=True
         
 
-        #Si el orden no existe o es un numero, filtramos por los mas recientes
+        #Si el orden no existe, es un numero, o tiene un valor invalido, filtramos por los mas recientes
         if not orden or not orden.isalpha() or orden not in ['masRecientes','topVentas']:
             orden='masRecientes'
             bugs=True
@@ -91,11 +88,7 @@ def shop():
         
         #Definimos el numero de paginas
         productos_por_pagina=12
-        
-        #Defino la pagina maxima(total de paginas), y redondeo al mayor por si da decimal
-        pagina_maxima=math.ceil(total/productos_por_pagina)
 
-        
         #Intento obtener el page en forma de int
         try:
             page=int(request.args['page'])
@@ -106,32 +99,51 @@ def shop():
             page=1
             bugs=True
 
+        #Comprobamos por primera vez si no hay bugs
+        if bugs:
+            return redirect(url_for('shop.shop',page=page,orden=orden,**parametros))
+        
+        
+        #Obtenemos el numero total de productos segun los parametros
+        total=ModelProduct.mostrar_contador_productos(db,parametros)
+        
+        
 
-         
+        #Si el numero total es un numero establecemos la pagina 
+        # maxima a ese numero entre los productos por pagina 
+        # redondeando al mayor por si da 1.5 o cosas asi, sino 1
+        if total:
+            pagina_maxima=math.ceil(total/productos_por_pagina)
+        else:
+            pagina_maxima=1
+
+            
         #Si el page es mayor a la pagina maxima, redirije a la pagina maxima
         if page>pagina_maxima:
             page=pagina_maxima
             bugs=True
-        
+            
         #Si es menor a 1, lo lleva a 1
         elif page<1:
             page=1
             bugs=True
-        
+            
 
-        #Si hay bugs en los parametros validos redirijimos a page 1 con los parametros que si sean validos
+        #Comprobamos por segunda vez si hay bugs
         if bugs:
             return redirect(url_for('shop.shop',page=page,orden=orden,**parametros))
 
         #Si porfin todo sale bien
         else:
             #Obtenemos los productos con los filtros de la paginacion
-            productos=ModelProduct.mostrar_productos_paginacion(db,page,productos_por_pagina)
+            productos=ModelProduct.mostrar_productos_paginacion(db,page,productos_por_pagina,orden,parametros)
+        
 
-            return render_template('shop.html',
-                                   paginas=pagina_maxima,productos=productos,
-                                   page=page, parametros=parametros,
-                                   marcas=marcas,categorias=categorias,precios=precios,orden=orden)
+        return render_template('shop.html',
+                                paginas=pagina_maxima,productos=productos,
+                                page=page, parametros=parametros,
+                                marcas=marcas,categorias=categorias,precios=precios,orden=orden)
+        
     
     
     elif request.method=='POST':
@@ -140,6 +152,7 @@ def shop():
         marca=request.form.get('select_marca')
         categoria=request.form.get('select_categoria')
         precio=request.form.get('select_precio')
+        
         #Obtenemos el page
         page=request.args.get('page')
 

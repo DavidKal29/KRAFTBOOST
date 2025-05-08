@@ -38,9 +38,6 @@ with app.app_context():
     #Obtenemos el numero de productos totales
     try: 
         cursor=db.connection.cursor()
-        cursor.execute('SELECT COUNT(*) FROM productos')
-        
-        total=cursor.fetchone()[0]
 
         #Obtenemos de los models, listas con estos objetos
         marcas=ModelBrand.mostrar_marcas(db)
@@ -65,7 +62,6 @@ with app.app_context():
 
 
         #Lo guardamos en config para que desde los bp se pueda acceder
-        app.config['total_productos']=total
         app.config['marcas']=marcas
         app.config['categorias']=categorias
         app.config['precios']=precios
