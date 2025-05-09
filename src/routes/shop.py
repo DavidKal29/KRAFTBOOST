@@ -45,12 +45,10 @@ def shop():
             search=None
 
         elif search:
-            #Quitar espacios, hacer todo en minusculas y quitar tildes
             search=search.strip()
             search=search.lower()
             search=' '.join(search.split())
             search=unidecode.unidecode(search)
-            
             parametros['search']=search
                 
         
@@ -125,7 +123,7 @@ def shop():
         
         
         #Obtenemos el numero total de productos segun los parametros
-        total=ModelProduct.mostrar_contador_productos(db,parametros)
+        total=ModelProduct.mostrar_contador_productos(db,parametros,categorias)
         
         
 
@@ -156,7 +154,7 @@ def shop():
         #Si porfin todo sale bien
         else:
             #Obtenemos los productos con los filtros de la paginacion
-            productos=ModelProduct.mostrar_productos_paginacion(db,page,productos_por_pagina,orden,parametros)
+            productos=ModelProduct.mostrar_productos_paginacion(db,page,productos_por_pagina,orden,parametros,categorias)
         
 
         return render_template('shop.html',

@@ -3,14 +3,11 @@ from models.entities.Product import Product
 
 class ModelProduct():
 
-
     #Metodo estatico para convertir la busqueda que es un string, 
     # en una lista de terminos para filtrar en la consulta
     @staticmethod
-    def procesar_search(search):
+    def procesar_search(search,categorias):
         import unidecode
-
-        #Limpiar otra vez el search por si las moscas
         
         #Quitar espacios, hacer todo en minusculas y quitar tildes
         search=search.strip()
@@ -25,8 +22,29 @@ class ModelProduct():
         #Si hay palabras escritas de otra manera, cambiarlas 
         # por palabras que esten en los nombres de los productos
         for i in range(len(terminos)):
+            terminos[i]=terminos[i].replace(',','.')
+                
+            
+            #Reemplazamos todas las cosas relacionadas con kilos y metemos kg en la lista
+            if 'kgs' in terminos[i]:
+                terminos[i]=terminos[i].replace('kgs','')
+                terminos.append('kg')
+            
+            if 'kg' in terminos[i]:
+                terminos[i]=terminos[i].replace('kg','')
+                terminos.append('kg')
+
+            if 'kilo' in terminos[i]:
+                terminos[i]=terminos[i].replace('kg','')
+                terminos.append('kg')
+ 
             if 'kilo' in terminos[i]:
                 terminos[i]='kg'
+
+
+
+            #Sustituir terminos cuyos que deberian dar resultados 
+            # pero por la forma en la que se escriben no saldria nada
             
             if 'rodill' in terminos[i]:
                 terminos[i]='rodilleras'
@@ -37,10 +55,17 @@ class ModelProduct():
             if 'tope' in terminos[i] or 'cierre' in terminos[i] or 'seguro' in terminos[i]:
                 terminos[i]='topes'
 
-            #Si alguna palabra tiene algo de peso o pesa, añadir terminos relaciondos con el peso
-            if 'pesa' in terminos[i] or 'peso' in terminos[i]:
-                terminos.append('mancuerna')
 
+            #Si alguna palabra tiene algo de peso o pesa, añadir terminos relaciondo con las mancuernas
+            if 'pesa' in terminos[i] or 'peso' in terminos[i]:
+                terminos[i]='mancuerna'
+
+
+            #Si pone discos o mancuernas, que el nombre sea disco o mancuerna
+            for categoria in categorias:
+                if terminos[i]==categoria.nombre.lower():
+                    terminos[i]=categoria.nombre.lower()[:-1]
+        
 
         #Si hay palabras inutiles que molestan a la hora de filtrar, las borramos
         for i in range(len(terminos)-1,-1,-1):
@@ -126,7 +151,7 @@ class ModelProduct():
     #Funcion para /shop para devolver el total de productos que se 
     # necesitará para hacer lo de la paginacion
     @classmethod
-    def mostrar_contador_productos(cls,db,parametros):
+    def mostrar_contador_productos(cls,db,parametros,categorias):
         try:
             #Se abre un cursor con la conexion a la db
             cursor=db.connection.cursor()
@@ -156,35 +181,44 @@ class ModelProduct():
                     condiciones.append("precio>={} AND precio<={}".format(precio_min,precio_max))
 
                 
+                #En caso de que el usuario buscó algo
                 if 'search' in parametros:
-                    if len(parametros['search'])==1 and not parametros['search'].isdigit():
-                        condiciones.append("nombre LIKE '{}%%'".format(parametros['search']))
-                    
-                    else:
-                        terminos=cls.procesar_search(parametros['search'])
+                    #Obtiene una lista de eso que buscó usando el metodo estatico
+                    terminos=cls.procesar_search(parametros['search'],categorias)
 
-                        condiciones_normales=[]
-                        condiciones_numeros=[]
+                    #Crea condiciones para numeros y para palabras en general
+                    condiciones_normales=[]
+                    condiciones_numeros=[]
 
-                        for termino in terminos:
-                            if termino.isdigit():
-                                condiciones_numeros.append("nombre LIKE '%%{}%%'".format(termino))
+                    #Recorre lso terminos
+                    for termino in terminos:
+                        #Si es un número, le añade el kg
+                        if termino.isdigit():
+                            condiciones_numeros.append("nombre LIKE '%% {}kg%%'".format(termino))
                             
-                            else:
+
+                        else:
+                            try:
+                                #Intenta pasarlo a float para ver si es un decimal
+                                termino_float=float(termino)
+                                
+                                #Si es un decimal se añade como si fuera un numero mas, con el kg
+                                condiciones_numeros.append("nombre LIKE '%% {}kg%%'".format(termino))
+                                
+                            #Si falla significa que estamos ante una palabra por lo que la mete en las condiciones normales    
+                            except Exception as error:
                                 condiciones_normales.append("nombre LIKE '%%{}%%'".format(termino))
+                
+                    #Revisa si hay condiciones de los dos tipos y las fusiona con 
+                    # ands y las mete en las condiciones de todo            
+                    if condiciones_normales:
+                        condiciones.append(' AND '.join(condiciones_normales))
 
-
-
-                        if condiciones_normales:
-                            condiciones.append(' OR '.join(condiciones_normales))
-
-                        if condiciones_numeros:
-                            condiciones.append(' OR '.join(condiciones_numeros))
+                    if condiciones_numeros:
+                        condiciones.append(' AND '.join(condiciones_numeros))
                             
 
-                    
 
-            
             #si hay condiciones, mete un WHERE y luego, los 
             # strings separados por ands usando el join
             if condiciones:
@@ -223,7 +257,7 @@ class ModelProduct():
     #Funcion para /shop, donde se mostraran los productos y se filtraran con LIMIT y OFFSET
     # para que se muestren asi con la paginacion
     @classmethod
-    def mostrar_productos_paginacion(cls,db,page,productos_por_pagina,orden,parametros):
+    def mostrar_productos_paginacion(cls,db,page,productos_por_pagina,orden,parametros,categorias):
         try:
             #Se abre un cursor con la conexion a la db
             cursor=db.connection.cursor()
@@ -262,41 +296,49 @@ class ModelProduct():
                     condiciones.append("precio>={} AND precio<={}".format(precio_min,precio_max))
 
 
+                #En caso de que el usuario buscó algo
                 if 'search' in parametros:
-                    if len(parametros['search'])==1 and not parametros['search'].isdigit():
-                        condiciones.append("nombre LIKE '{}%%'".format(parametros['search']))
-                    
-                    else:
-                        terminos=cls.procesar_search(parametros['search'])
+                    #Obtiene una lista de eso que buscó usando el metodo estatico
+                    terminos=cls.procesar_search(parametros['search'],categorias)
 
-                        condiciones_normales=[]
-                        condiciones_numeros=[]
+                    #Crea condiciones para numeros y para palabras en general
+                    condiciones_normales=[]
+                    condiciones_numeros=[]
 
-                        for termino in terminos:
-                            if termino.isdigit():
-                                condiciones_numeros.append("nombre LIKE '%%{}%%'".format(termino))
+                    #Recorre lso terminos
+                    for termino in terminos:
+                        #Si es un número, le añade el kg
+                        if termino.isdigit():
+                            condiciones_numeros.append("nombre LIKE '%% {}kg%%'".format(termino))
                             
-                            else:
+
+                        else:
+                            try:
+                                #Intenta pasarlo a float para ver si es un decimal
+                                termino_float=float(termino)
+                                
+                                #Si es un decimal se añade como si fuera un numero mas, con el kg
+                                condiciones_numeros.append("nombre LIKE '%% {}kg%%'".format(termino))
+                                
+                            #Si falla significa que estamos ante una palabra por lo que la mete en las condiciones normales    
+                            except Exception as error:
                                 condiciones_normales.append("nombre LIKE '%%{}%%'".format(termino))
+                
+                    #Revisa si hay condiciones de los dos tipos y las fusiona con 
+                    # ands y las mete en las condiciones de todo            
+                    if condiciones_normales:
+                        condiciones.append(' AND '.join(condiciones_normales))
 
-
-
-                        if condiciones_normales:
-                            condiciones.append(' OR '.join(condiciones_normales))
-
-                        if condiciones_numeros:
-                            condiciones.append(' OR '.join(condiciones_numeros))
+                    if condiciones_numeros:
+                        condiciones.append(' AND '.join(condiciones_numeros))
 
                         
 
-
-                    
+      
             #si hay condiciones, mete un WHERE y luego, los 
             # strings separados por ands usando el join
             if condiciones:
                 sql+=' WHERE '+' AND '.join(condiciones)
-
-            print('sql')
 
             #Mira el orden por el que filtrar
             if orden=='masRecientes':
@@ -311,7 +353,6 @@ class ModelProduct():
 
             print(sql)
 
-            
             values=(limit,offset)
             
             # #Ejecutamos la consulta
