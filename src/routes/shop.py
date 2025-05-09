@@ -41,12 +41,12 @@ def shop():
         #Si el search existe,lo añadimos y au
         if search=='':
             bugs=True
+            search=None
 
         elif search:
-            
-            
-
-
+            search=search.strip()
+            search=search.lower()
+            search=' '.join(search.split())
             parametros['search']=search
                 
         
@@ -177,6 +177,7 @@ def shop():
         if search:
             search=search.strip()
             search=search.lower()
+            search=' '.join(search.split())
 
             parametros['search']=search
 
