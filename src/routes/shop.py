@@ -1,6 +1,7 @@
 from flask import Blueprint,redirect,request,url_for,current_app,render_template
 from models.ModelProduct import ModelProduct
 import math
+import unidecode
 
 shop_bp=Blueprint('shop',__name__)
 
@@ -44,9 +45,12 @@ def shop():
             search=None
 
         elif search:
+            #Quitar espacios, hacer todo en minusculas y quitar tildes
             search=search.strip()
             search=search.lower()
             search=' '.join(search.split())
+            search=unidecode.unidecode(search)
+            
             parametros['search']=search
                 
         
@@ -175,10 +179,12 @@ def shop():
             search=request.args.get('search')
 
         if search:
+            #Quitar espacios, hacer todo en minusculas y quitar tildes
             search=search.strip()
             search=search.lower()
             search=' '.join(search.split())
-
+            search=unidecode.unidecode(search)
+            
             parametros['search']=search
 
             

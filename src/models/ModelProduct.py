@@ -1,6 +1,66 @@
 from models.entities.Product import Product
 
+
 class ModelProduct():
+
+
+    #Metodo estatico para convertir la busqueda que es un string, 
+    # en una lista de terminos para filtrar en la consulta
+    @staticmethod
+    def procesar_search(search):
+        import unidecode
+
+        #Limpiar otra vez el search por si las moscas
+        
+        #Quitar espacios, hacer todo en minusculas y quitar tildes
+        search=search.strip()
+        search=search.lower()
+        search=' '.join(search.split())
+        search=unidecode.unidecode(search)
+
+        #Dividiremos el search en palabras que usaremos para 
+        # buscar el nombre del producto utilizando likes
+        terminos=search.split()
+
+        #Si hay palabras escritas de otra manera, cambiarlas 
+        # por palabras que esten en los nombres de los productos
+        for i in range(len(terminos)):
+            if 'kilo' in terminos[i]:
+                terminos[i]='kg'
+            
+            if 'rodill' in terminos[i]:
+                terminos[i]='rodilleras'
+            
+            if 'cod' in terminos[i]:
+                terminos[i]='coderas'
+            
+            if 'tope' in terminos[i] or 'cierre' in terminos[i] or 'seguro' in terminos[i]:
+                terminos[i]='topes'
+
+            #Si alguna palabra tiene algo de peso o pesa, añadir terminos relaciondos con el peso
+            if 'pesa' in terminos[i] or 'peso' in terminos[i]:
+                terminos.append('mancuerna')
+                terminos.append('kettlebell')
+                terminos.append('disco')
+
+        hay_numeros=False
+        
+        #Si hay numeros, quitamos el termino kg, para que no 
+        # muestre todos los productos con kg en su nombre
+        for i in range(len(terminos)):
+            if terminos[i].isdigit():
+                hay_numeros=True
+                break
+
+        
+        if hay_numeros:
+            for i in range(len(terminos)):
+                if terminos[i]=='kg':
+                    del terminos[i]
+                    break
+                
+        return terminos
+    
     
     #Función para mostrar los productos
     @classmethod
