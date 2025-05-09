@@ -40,13 +40,19 @@ class ModelProduct():
             #Si alguna palabra tiene algo de peso o pesa, añadir terminos relaciondos con el peso
             if 'pesa' in terminos[i] or 'peso' in terminos[i]:
                 terminos.append('mancuerna')
-                terminos.append('kettlebell')
-                terminos.append('disco')
 
-        hay_numeros=False
-        
+
+        #Si hay palabras inutiles que molestan a la hora de filtrar, las borramos
+        for i in range(len(terminos)-1,-1,-1):
+            if terminos[i] in ['de', 'en', 'la', 'el', 'los', 'las', 'y', 'a', 'para', 'por', 'con', 'un', 'una', 'unos', 'unas']:
+                del terminos[i]
+
+                
+
         #Si hay numeros, quitamos el termino kg, para que no 
         # muestre todos los productos con kg en su nombre
+        hay_numeros=False
+        
         for i in range(len(terminos)):
             if terminos[i].isdigit():
                 hay_numeros=True
@@ -155,7 +161,26 @@ class ModelProduct():
                         condiciones.append("nombre LIKE '{}%%'".format(parametros['search']))
                     
                     else:
-                        condiciones.append("nombre LIKE '%%{}%%'".format(parametros['search']))
+                        terminos=cls.procesar_search(parametros['search'])
+
+                        condiciones_normales=[]
+                        condiciones_numeros=[]
+
+                        for termino in terminos:
+                            if termino.isdigit():
+                                condiciones_numeros.append("nombre LIKE '%%{}%%'".format(termino))
+                            
+                            else:
+                                condiciones_normales.append("nombre LIKE '%%{}%%'".format(termino))
+
+
+
+                        if condiciones_normales:
+                            condiciones.append(' OR '.join(condiciones_normales))
+
+                        if condiciones_numeros:
+                            condiciones.append(' OR '.join(condiciones_numeros))
+                            
 
                     
 
@@ -242,11 +267,30 @@ class ModelProduct():
                         condiciones.append("nombre LIKE '{}%%'".format(parametros['search']))
                     
                     else:
-                        condiciones.append("nombre LIKE '%%{}%%'".format(parametros['search']))
+                        terminos=cls.procesar_search(parametros['search'])
+
+                        condiciones_normales=[]
+                        condiciones_numeros=[]
+
+                        for termino in terminos:
+                            if termino.isdigit():
+                                condiciones_numeros.append("nombre LIKE '%%{}%%'".format(termino))
+                            
+                            else:
+                                condiciones_normales.append("nombre LIKE '%%{}%%'".format(termino))
+
+
+
+                        if condiciones_normales:
+                            condiciones.append(' OR '.join(condiciones_normales))
+
+                        if condiciones_numeros:
+                            condiciones.append(' OR '.join(condiciones_numeros))
+
+                        
+
 
                     
-
-            
             #si hay condiciones, mete un WHERE y luego, los 
             # strings separados por ands usando el join
             if condiciones:
