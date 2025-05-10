@@ -103,7 +103,7 @@ INSERT INTO categorias (nombre, imagen) VALUES
 ('Discos', 'images/productos/discos/disco_20kg_domyos.png'),
 ('Mancuernas', 'images/productos/mancuernas/mancuerna_50kg_maniak.png'),
 ('Accesorios', 'images/productos/accesorios/cinturon_lastre_corength.png'),
-('Bandas elasticas', 'images/productos/bandas elasticas/banda_60kg.png'),
+('Bandas', 'images/productos/bandas elasticas/banda_60kg.png'),
 ('Kettlebells', 'images/productos/kettlebells/kettlebell_32kg_tunturi.png'),
 ('Estructuras', 'images/productos/estructuras/paralelas_kraftboost.png');
 
@@ -111,32 +111,32 @@ INSERT INTO categorias (nombre, imagen) VALUES
 -- Barras (categoria 1, todos marca domyos)
 INSERT INTO productos (nombre, stock, precio, id_categoria, id_marca, descripcion, imagen)
 VALUES
-('Agarre Abierto Neutro', 50, 24.99, 1, 1, 'Agarre abierto neutro de hierro. Ideal para el entreno. Fabricado en la fabrica de
+('Agarre Abierto Neutro Domyos', 50, 24.99, 1, 1, 'Agarre abierto neutro de hierro. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/agarre_abierto_neutro.png'),
-('Agarre con Cuerda', 50, 9.99, 1, 1, 'Agarre con cuerda. Ideal para el entreno. Fabricado en la fabrica de
+('Agarre con Cuerda Domyos', 50, 9.99, 1, 1, 'Agarre con cuerda. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/agarre_con_cuerda.png'),
-('Agarre Estrecho Metal', 50, 19.99, 1, 1, 'Agarre estrecho de metal. Ideal para el entreno. Fabricado en la fabrica de
+('Agarre Estrecho Metal Domyos', 50, 19.99, 1, 1, 'Agarre estrecho de metal. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/agarre_estrecho_metal.png'),
-('Agarre Gironda', 50, 19.99, 1, 1, 'Agarre gironda de hierro. Ideal para el entreno. Fabricado en la fabrica de
+('Agarre Gironda Domyos', 50, 19.99, 1, 1, 'Agarre gironda de hierro. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/agarre_gironda.png'),
-('Agarre Medio Neutro', 50, 39.99, 1, 1, 'Agarre medio neutro. Ideal para el entreno. Fabricado en la fabrica de
+('Agarre Medio Neutro Domyos', 50, 39.99, 1, 1, 'Agarre medio neutro. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/agarre_medio_neutro.png'),
-('Agarre Unilateral Metálico', 50, 4.99, 1, 1, 'Agarre unilateral metálico. Ideal para el entreno. Fabricado en la fabrica de
+('Agarre Unilateral Metálico Domyos', 50, 4.99, 1, 1, 'Agarre unilateral metálico. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/agarre_unilateral_metalico.png'),
-('Barra Exagonal', 50, 29.99, 1, 1, 'Barra exagonal de hierro. Ideal para el entreno. Fabricado en la fabrica de
+('Barra Exagonal Domyos', 50, 29.99, 1, 1, 'Barra exagonal de hierro. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/barra_exagonal.png'),
-('Barra Olímpica', 50, 69.99, 1, 1, 'Barra Olímpica de hierro. Ideal para el entreno. Fabricado en la fabrica de
+('Barra Olímpica Domyos', 50, 69.99, 1, 1, 'Barra Olímpica de hierro. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/barra_olimpica.png'),
-('Barra para Mancuernas', 50, 9.99, 1, 1, 'Barra para mancuernas de hierro. Ideal para el entreno. Fabricado en la fabrica de
+('Barra para Mancuernas Domyos', 50, 9.99, 1, 1, 'Barra para mancuernas de hierro. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/barra_para_mancuernas.png'),
-('Barra Z', 50, 29.99, 1, 1, 'Barra Z de hierro. Ideal para el entreno. Fabricado en la fabrica de
+('Barra Z Domyos', 50, 29.99, 1, 1, 'Barra Z de hierro. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/barra_z.png');
 
 
 -- Bancos (categoria 2)
 INSERT INTO productos (nombre, stock, precio, id_categoria, id_marca, descripcion, imagen)
 VALUES
-('Banco con Soportes', 50, 99.99, 2, 2, 'Banco plano con soportes. Ideal para press de banca. Distribuido por la marca Tunturi.', 'images/productos/bancos/banco_con_soportes_tunturi.png'),
+('Banco con Soportes Tunturi', 50, 99.99, 2, 2, 'Banco plano con soportes. Ideal para press de banca. Distribuido por la marca Tunturi.', 'images/productos/bancos/banco_con_soportes_tunturi.png'),
 ('Banco Inclinado Domyos', 50, 149.99, 2, 1, 'Banco inclinado. Ideal para press de banca inclinado. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/bancos/banco_inclinado_domyos.png'),
 ('Banco Inclinado Tunturi', 50, 99.99, 2, 2, 'Banco inclinado. Ideal para press de banca inclinado. Distribuido por la marca Tunturi.', 'images/productos/bancos/banco_inclinado_tunturi.png'),
@@ -146,15 +146,15 @@ Oxylane, distribuido por la marca Domyos.', 'images/productos/bancos/banco_incli
 -- Discos (categoria 3)
 INSERT INTO productos (nombre, stock, precio, id_categoria, id_marca, descripcion, imagen)
 VALUES
-('Disco 1.25kg Goma', 50, 9.99, 3, 1, 'Disco de goma de 1.25 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
+('Disco 1.25kg Goma Domyos', 50, 9.99, 3, 1, 'Disco de goma de 1.25 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_1.25kg_goma_domyos.png'),
-('Disco 2.5kg Goma', 50, 14.99, 3, 1, 'Disco de goma de 2.5 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
+('Disco 2.5kg Goma Domyos', 50, 14.99, 3, 1, 'Disco de goma de 2.5 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_2.5kg_goma_domyos.png'),
-('Disco 5kg Goma', 50, 19.99, 3, 1, 'Disco de goma de 5 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
+('Disco 5kg Goma Domyos', 50, 19.99, 3, 1, 'Disco de goma de 5 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_5kg_goma_domyos.png'),
-('Disco 10kg Goma', 50, 24.99, 3, 1, 'Disco de goma de 10 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
+('Disco 10kg Goma Domyos', 50, 24.99, 3, 1, 'Disco de goma de 10 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_10kg_goma_domyos.png'),
-('Disco 20kg Goma', 50, 29.99, 3, 1, 'Disco de goma de 20 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
+('Disco 20kg Goma Domyos', 50, 29.99, 3, 1, 'Disco de goma de 20 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_20kg_goma_domyos.png'),
 
 ('Disco 1kg Domyos', 50, 2.99, 3, 1, 'Disco de hierro de 1 kilogramo. Ideal para el entreno. Fabricado en la fabrica de
@@ -219,22 +219,22 @@ VALUES
 -- Accesorios (categoria 5)
 INSERT INTO productos (nombre, stock, precio, id_categoria, id_marca, descripcion, imagen)
 VALUES
-('Cinturón Lastre', 50, 19.99, 5, 4, 'Cinturón de Lastre. Ideal para entrenar con peso lastrado. Distribuido por la marca Corength.', 'images/productos/accesorios/cinturon_lastre_corength.png'),
-('Cinturón Lumbar', 50, 19.99, 5, 4, 'Cinturón Lumbar. Ideal para entrenar seguro y evitar lesiones lumbares y abdominales. Distribuido por la marca Corength.', 'images/productos/accesorios/cinturon_lumbar_corength.png'),
-('Coderas Corength', 50, 9.99, 5, 4, 'Coderas. Ideal para entrenar y evitar lesiones en los codos. Distribuido por la marca Corength.', 'images/productos/accesorios/coderas_corength.png'),
-('Rodilleras', 50, 9.99, 5, 4, 'Cinturón de Lastre. Ideal para entrenar con peso lastrado. Distribuido por la marca Corength.', 'images/productos/accesorios/rodilleras_corength.png'),
-('Straps Tunturi', 50, 4.99, 5, 2, 'Straps. Ideal para que el agarre no limiten el entrenamiento. Distribuido por la marca Tunturi.', 'images/productos/accesorios/straps_tunturi.png'),
-('Topes', 50, 0.99, 5, 1, 'Topes. Ideales para evitar que los discos se salgan de la barra al entrenar. Fabricado en la fabrica de
+('Cinturón Lastre Accesorio Corength', 50, 19.99, 5, 4, 'Cinturón de Lastre. Ideal para entrenar con peso lastrado. Distribuido por la marca Corength.', 'images/productos/accesorios/cinturon_lastre_corength.png'),
+('Cinturón Lumbar Accesorio Corength', 50, 19.99, 5, 4, 'Cinturón Lumbar. Ideal para entrenar seguro y evitar lesiones lumbares y abdominales. Distribuido por la marca Corength.', 'images/productos/accesorios/cinturon_lumbar_corength.png'),
+('Coderas Accesorio Corength', 50, 9.99, 5, 4, 'Coderas. Ideal para entrenar y evitar lesiones en los codos. Distribuido por la marca Corength.', 'images/productos/accesorios/coderas_corength.png'),
+('Rodilleras Accesorio Corength', 50, 9.99, 5, 4, 'Cinturón de Lastre. Ideal para entrenar con peso lastrado. Distribuido por la marca Corength.', 'images/productos/accesorios/rodilleras_corength.png'),
+('Straps Accesorio Tunturi', 50, 4.99, 5, 2, 'Straps. Ideal para que el agarre no limiten el entrenamiento. Distribuido por la marca Tunturi.', 'images/productos/accesorios/straps_tunturi.png'),
+('Topes Accesorio Domyos', 50, 0.99, 5, 1, 'Topes. Ideales para evitar que los discos se salgan de la barra al entrenar. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/accesorios/topes_domyos.png');
 
 -- Bandas Elásticas (categoria 6)
 INSERT INTO productos (nombre, stock, precio, id_categoria, id_marca, descripcion, imagen)
 VALUES
-('Banda 5kg', 50, 4.99, 6, 4, 'Banda elástica de 5 kilogramos. Ideal para el calentamiento. Distribuido por la marca Corength.', 'images/productos/bandas elasticas/banda_5kg.png'),
-('Banda 15kg', 50, 9.99, 6, 4, 'Banda elástica de 15 kilogramos. Ideal para entrenamientos dinámicos y calentamiento. Distribuido por la marca Corength.', 'images/productos/bandas elasticas/banda_15kg.png'),
-('Banda 25kg', 50, 14.99, 6, 4, 'Banda elástica de 25 kilogramos. Ideal para entrenamientos dinámicos y calentamiento. Distribuido por la marca Corength.', 'images/productos/bandas elasticas/banda_25kg.png'),
-('Banda 35kg', 50, 19.99, 6, 4, 'Banda elástica de 35 kilogramos. Ideal para entrenamientos dinámicos y de fuerza. Distribuido por la marca Corength.', 'images/productos/bandas elasticas/banda_35kg.png'),
-('Banda 45kg', 50, 24.99, 6, 4, 'Banda elástica de 45 kilogramos. Ideal para entrenamientos dinámicos y de fuerza. Distribuido por la marca Corength.', 'images/productos/bandas elasticas/banda_45kg.png');
+('Banda 5kg Corength', 50, 4.99, 6, 4, 'Banda elástica de 5 kilogramos. Ideal para el calentamiento. Distribuido por la marca Corength.', 'images/productos/bandas elasticas/banda_5kg.png'),
+('Banda 15kg Corength', 50, 9.99, 6, 4, 'Banda elástica de 15 kilogramos. Ideal para entrenamientos dinámicos y calentamiento. Distribuido por la marca Corength.', 'images/productos/bandas elasticas/banda_15kg.png'),
+('Banda 25kg Corength', 50, 14.99, 6, 4, 'Banda elástica de 25 kilogramos. Ideal para entrenamientos dinámicos y calentamiento. Distribuido por la marca Corength.', 'images/productos/bandas elasticas/banda_25kg.png'),
+('Banda 35kg Corength', 50, 19.99, 6, 4, 'Banda elástica de 35 kilogramos. Ideal para entrenamientos dinámicos y de fuerza. Distribuido por la marca Corength.', 'images/productos/bandas elasticas/banda_35kg.png'),
+('Banda 45kg Corength', 50, 24.99, 6, 4, 'Banda elástica de 45 kilogramos. Ideal para entrenamientos dinámicos y de fuerza. Distribuido por la marca Corength.', 'images/productos/bandas elasticas/banda_45kg.png');
 
 
 
@@ -264,11 +264,11 @@ VALUES
 -- Estructuras (categoria 8)
 INSERT INTO productos (nombre, stock, precio, id_categoria, id_marca, descripcion, imagen)
 VALUES
-('Barra Dominadas Kraftboost', 50, 99.99, 8, 3, 'Barra de dominadas. Ideal para hacer dominadas y muscle ups. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/barra_dominadas_kraftboost.png'),
-('Máquina Poleas Kraftboost', 50, 299.99, 8, 3, 'Máquina de poleas. Ideal para hacer ejercicios aislados en polea. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/maquina_poleas_kraftboost.png'),
-('Multiestación Kraftboost', 50, 149.99, 8, 3, 'Multiestación. Ideal para realizar todo tipo de ejercicios aislados en polea. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/multiestacion_kraftboost.png'),
-('Multipower Kraftboost', 50, 344.99, 8, 3, 'Multipower. Ideal para hacer ejericios asistidos con barra multipower. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/multipower_kraftboost.png'),
-('Paralelas Kraftboost', 50, 99.99, 8, 3, 'Paralelas. Ideal para hacer fondos y presses invertidos. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/paralelas_kraftboost.png');
+('Barra Dominadas Estructura Kraftboost', 50, 99.99, 8, 3, 'Barra de dominadas. Ideal para hacer dominadas y muscle ups. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/barra_dominadas_kraftboost.png'),
+('Máquina Poleas Estructura Kraftboost', 50, 299.99, 8, 3, 'Máquina de poleas. Ideal para hacer ejercicios aislados en polea. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/maquina_poleas_kraftboost.png'),
+('Multiestación Estructura Kraftboost', 50, 149.99, 8, 3, 'Multiestación. Ideal para realizar todo tipo de ejercicios aislados en polea. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/multiestacion_kraftboost.png'),
+('Multipower Estructura Kraftboost', 50, 344.99, 8, 3, 'Multipower. Ideal para hacer ejericios asistidos con barra multipower. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/multipower_kraftboost.png'),
+('Paralelas Estructura Kraftboost', 50, 99.99, 8, 3, 'Paralelas. Ideal para hacer fondos y presses invertidos. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/paralelas_kraftboost.png');
 
 
 
@@ -276,12 +276,20 @@ VALUES
 -- Productos nuevos (Apareceran en la sección de productos nuevos del inicio)
 INSERT INTO productos (nombre, stock, precio, id_categoria, id_marca, descripcion, imagen)
 VALUES
-('Banco Multifunción', 50, 174.99, 2, 1, 'Banco con multifunción. Ideal para todo tipo de ejercicios en banco o sentado. Fabricado en la fabrica de
+('Banco Multifunción Estructura Domyos', 50, 174.99, 2, 1, 'Banco con multifunción. Ideal para todo tipo de ejercicios en banco o sentado. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/bancos/banco_multifuncion_domyos.png'),
-('Torre Paralelas y Dominadas', 50, 149.99, 8, 3, 'Torre de paralelas y dominadas. Ideal para hacer dominadas, muscle ups, fondos y demás ejercicios. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/torre_paralelas_dominadas_kraftboost.png'),
+('Torre Paralelas y Dominadas Estructura Kraftboost', 50, 149.99, 8, 3, 'Torre de paralelas y dominadas. Ideal para hacer dominadas, muscle ups, fondos y demás ejercicios. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/torre_paralelas_dominadas_kraftboost.png'),
 ('Kettlebell 28kg Tunturi', 50, 34.99, 7, 2, 'Kettlebell de 28 kilogramos. Ideal para entrenamientos funcionales o CrossFit. Distribuido por la marca Tunturi.', 'images/productos/kettlebells/kettlebell_28kg_tunturi.png'),
-('Topes Rojos Kraftboost', 50, 4.99, 5, 3, 'Topes rojos. Ideales para evitar que los discos se salgan de la barra al entrenar. Distribuido por la marca Kraft Boost.', 'images/productos/accesorios/topes_rojos_kraftboost.png'),
+('Topes Rojos Accesorio Kraftboost', 50, 4.99, 5, 3, 'Topes rojos. Ideales para evitar que los discos se salgan de la barra al entrenar. Distribuido por la marca Kraft Boost.', 'images/productos/accesorios/topes_rojos_kraftboost.png'),
 ('Mancuerna 45kg Maniak', 50, 174.99, 4, 5, 'Mancuerna de 45 kilogramos. Ideal para el entrenamiento profesional. Distribuido por la marca Maniak.', 'images/productos/mancuernas/mancuerna_45kg_maniak.png'),
-('Banda 60kg', 50, 29.99, 6, 4, 'Banda elástica de 60 kilogramos. Ideal para entrenamientos dinámicos y de fuerza . Distribuido por la marca Corength.', 'images/productos/bandas elasticas/banda_60kg.png'),
-('Megatron Kraftboost', 50, 399.99, 8, 3, 'Megatron. Ideal para realizar todo tipo de ejercicios aislados en polea. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/megatron_kraftboost.png'),
-('Kettlebell Gorilla 40kg Kraftboost', 50, 99.99, 7, 3, 'Kettlebell de 40 kilogramos. Ideal para entrenamientos funcionales o CrossFit. Distribuido por la marca Kraft Boost.', 'images/productos/kettlebells/kettlebell_gorilla_40kg_kraftboost.png');
+('Kettlebell Gorilla 40kg Kraftboost', 50, 99.99, 7, 3, 'Kettlebell de 40 kilogramos. Ideal para entrenamientos funcionales o CrossFit. Distribuido por la marca Kraft Boost.', 'images/productos/kettlebells/kettlebell_gorilla_40kg_kraftboost.png'),
+('Megatron Estructura Kraftboost', 50, 399.99, 8, 3, 'Megatron. Ideal para realizar todo tipo de ejercicios aislados en polea. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/megatron_kraftboost.png'),
+('Banda 60kg Corength', 50, 29.99, 6, 4, 'Banda elástica de 60 kilogramos. Ideal para entrenamientos dinámicos y de fuerza . Distribuido por la marca Corength.', 'images/productos/bandas elasticas/banda_60kg.png');
+
+
+
+
+
+
+
+

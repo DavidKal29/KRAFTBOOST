@@ -1,6 +1,7 @@
 from flask import Blueprint,redirect,request,url_for,current_app,render_template
 from models.ModelProduct import ModelProduct
 import math
+import unidecode
 
 shop_bp=Blueprint('shop',__name__)
 
@@ -14,12 +15,12 @@ def shop():
         bugs=False
         
         #Marcamos los parámetros validos
-        parametros_validos=['page','marca','categoria','precio','orden']
+        parametros_validos=['page','marca','categoria','precio','orden','search']
         
         #Obtenemos el db de la app
         db=current_app.config['db']
 
-        #Obtenemos las marcas, categorias y precios
+        #Obtenemos las marcas, categorias y precios de app
         marcas=current_app.config['marcas']
         categorias=current_app.config['categorias']
         precios=current_app.config['precios']
@@ -27,6 +28,7 @@ def shop():
 
         #Obtenemos los parametros de filtrado
         orden=request.args.get('orden')
+        search=request.args.get('search')
         marca=request.args.get('marca')
         categoria=request.args.get('categoria')
         precio=request.args.get('precio')
@@ -35,6 +37,21 @@ def shop():
         #Creamos un diccionario y vemos si estos valores existen en la url
         parametros={}
         
+
+        #Si el search existe y no es vacio,lo añadimos y au
+        if search=='':
+            bugs=True
+            search=None
+
+        elif search:
+            search=search.strip()
+            search=search.lower()
+            search=' '.join(search.split())
+            search=unidecode.unidecode(search)
+            parametros['search']=search
+                
+        
+
 
         #Si la marca existe, es un numero y esta en el rango de len(marcas), 
         # se añade a parametros, sino se activa a True los bugs
@@ -105,10 +122,9 @@ def shop():
         
         
         #Obtenemos el numero total de productos segun los parametros
-        total=ModelProduct.mostrar_contador_productos(db,parametros)
+        total=ModelProduct.mostrar_contador_productos(db,parametros,categorias)
         
         
-
         #Si el numero total es un numero establecemos la pagina 
         # maxima a ese numero entre los productos por pagina 
         # redondeando al mayor por si da 1.5 o cosas asi, sino 1
@@ -136,7 +152,7 @@ def shop():
         #Si porfin todo sale bien
         else:
             #Obtenemos los productos con los filtros de la paginacion
-            productos=ModelProduct.mostrar_productos_paginacion(db,page,productos_por_pagina,orden,parametros)
+            productos=ModelProduct.mostrar_productos_paginacion(db,page,productos_por_pagina,orden,parametros,categorias)
         
 
         return render_template('shop.html',
@@ -147,28 +163,50 @@ def shop():
     
     
     elif request.method=='POST':
+        #Lo mismo, creamos un diccionario y vemos si los parametros han sido seleccionados
+        parametros={}
+        
+        #Obtenemos el search del formulario
+        search=request.form.get('search')
+
+
+        #Si está la metemos en los parametros
+        if not  search:
+            search=request.args.get('search')
+
+        if search:
+            #Quitar espacios, hacer todo en minusculas y quitar tildes
+            search=search.strip()
+            search=search.lower()
+            search=' '.join(search.split())
+            search=unidecode.unidecode(search)
+            
+            parametros['search']=search
+
+            
+
         #Obtenemos los parametros de los select
         orden=request.form.get('select_orden')
         marca=request.form.get('select_marca')
         categoria=request.form.get('select_categoria')
         precio=request.form.get('select_precio')
+
         
         #Obtenemos el page
         page=request.args.get('page')
 
-        #Lo mismo, creamos un diccionario y vemos si los parametros han sido seleccionados
-        parametros={}
-
+        
         #Validamos que no sean values 0
-        if marca!='0':
+        if marca and marca!='0':
             parametros['marca']=marca
         
-        if categoria!='0':
+        if categoria and categoria!='0':
             parametros['categoria']=categoria
 
-        if precio!='0':
+        if precio and precio!='0':
             parametros['precio']=precio
 
+        print('Los parametrillos:',parametros)
 
         #Redirijimos con los parametros
         return redirect(url_for('shop.shop',page=page,orden=orden,**parametros))
