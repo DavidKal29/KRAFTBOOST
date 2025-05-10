@@ -11,7 +11,6 @@ shop_bp=Blueprint('shop',__name__)
 @shop_bp.route('/shop', methods=['GET','POST'])
 def shop():
     if request.method=='GET':
-        print('Los parametrillos:',request.args)
         #Variable que mirará si alguien puso algo raro en los filtros desde las rutas
         bugs=False
         
@@ -21,7 +20,7 @@ def shop():
         #Obtenemos el db de la app
         db=current_app.config['db']
 
-        #Obtenemos las marcas, categorias y precios
+        #Obtenemos las marcas, categorias y precios de app
         marcas=current_app.config['marcas']
         categorias=current_app.config['categorias']
         precios=current_app.config['precios']
@@ -39,7 +38,7 @@ def shop():
         parametros={}
         
 
-        #Si el search existe,lo añadimos y au
+        #Si el search existe y no es vacio,lo añadimos y au
         if search=='':
             bugs=True
             search=None
@@ -126,7 +125,6 @@ def shop():
         total=ModelProduct.mostrar_contador_productos(db,parametros,categorias)
         
         
-
         #Si el numero total es un numero establecemos la pagina 
         # maxima a ese numero entre los productos por pagina 
         # redondeando al mayor por si da 1.5 o cosas asi, sino 1
@@ -208,9 +206,7 @@ def shop():
         if precio and precio!='0':
             parametros['precio']=precio
 
-
         print('Los parametrillos:',parametros)
-
 
         #Redirijimos con los parametros
         return redirect(url_for('shop.shop',page=page,orden=orden,**parametros))
