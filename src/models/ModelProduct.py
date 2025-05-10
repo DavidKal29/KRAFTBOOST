@@ -146,6 +146,92 @@ class ModelProduct():
             return None
         
 
+    @classmethod
+    def construir_where(cls,parametros,categorias):
+        #Creamos la lista donde van las condiciones del where
+        condiciones=[]
+
+        #Si hay parametros va mirando cada posible parametro, y añade 
+        # a la lista un string que luego meteremos en la consulta
+        if parametros:
+
+            if 'marca' in parametros:
+                condiciones.append("id_marca={}".format(parametros['marca']))
+
+
+            if 'categoria' in parametros:
+                condiciones.append("id_categoria={}".format(parametros['categoria']))
+
+
+            if 'precio' in parametros:
+                rangos=parametros['precio'].split('-')
+                precio_min=rangos[0]
+                precio_max=rangos[1]
+
+                condiciones.append("precio>={} AND precio<={}".format(precio_min,precio_max))
+
+
+            #En caso de que el usuario buscó algo
+            if 'search' in parametros:
+    
+                #Obtiene una lista de eso que buscó usando el metodo estatico
+                terminos=cls.procesar_search(parametros['search'],categorias)
+
+    
+
+                #Crea condiciones para numeros y para palabras en general
+                condiciones_normales=[]
+                condiciones_numeros=[]
+
+    
+
+                #Recorre lso terminos
+                for termino in terminos:
+                    #Si es un número, le añade el kg
+                    if termino.isdigit():
+                    
+                        condiciones_numeros.append("nombre LIKE '%% {}kg%%'".format(termino))
+                    
+
+                    else:
+                        try:
+                
+                            #Intenta pasarlo a float para ver si es un decimal
+                            termino_float=float(termino)
+                                
+                            #Si es un decimal se añade como si fuera un numero mas, con el kg
+                            condiciones_numeros.append("nombre LIKE '%% {}kg%%'".format(termino))
+        
+                                
+                        #Si falla significa que estamos ante una palabra por lo que la mete en las condiciones normales    
+                        except Exception as error:
+        
+                            condiciones_normales.append("nombre LIKE '%%{}%%'".format(termino))
+                
+                #Revisa si hay condiciones de los dos tipos y las fusiona con 
+                # ands y las mete en las condiciones de todo            
+                if condiciones_normales:
+
+                    condiciones.append(' AND '.join(condiciones_normales))
+
+                if condiciones_numeros:
+
+                    condiciones.append(' AND '.join(condiciones_numeros))
+            
+            
+            #si hay condiciones, mete un WHERE y luego, los 
+            # strings separados por ands usando el join
+            if condiciones:
+
+                condiciones=' WHERE '+' AND '.join(condiciones)
+
+                print('Las condiciones ya procesadas:',condiciones)
+
+                return condiciones
+                
+            return ''
+        
+        return ''
 
 
     #Funcion para /shop para devolver el total de productos que se 
@@ -159,75 +245,12 @@ class ModelProduct():
             #Creamos la consulta base
             sql='SELECT COUNT(*) FROM productos'
 
-            #Creamos la lista que contendrá las condiciones
-            condiciones=[]
-
-            #Si hay parametros va mirando cada posible parametro, y añade 
-            # a la lista un string que luego meteremos en la consulta
-            if parametros:
-
-                if 'marca' in parametros:
-                    condiciones.append("id_marca={}".format(parametros['marca']))
-
-                if 'categoria' in parametros:
-                    condiciones.append("id_categoria={}".format(parametros['categoria']))
-
-                if 'precio' in parametros:
-                    #si es 5-10, quedaria 5 y 10
-                    rangos=parametros['precio'].split('-')
-                    precio_min=rangos[0]
-                    precio_max=rangos[1]
-
-                    condiciones.append("precio>={} AND precio<={}".format(precio_min,precio_max))
-
-                
-                #En caso de que el usuario buscó algo
-                if 'search' in parametros:
-                    #Obtiene una lista de eso que buscó usando el metodo estatico
-                    terminos=cls.procesar_search(parametros['search'],categorias)
-
-                    #Crea condiciones para numeros y para palabras en general
-                    condiciones_normales=[]
-                    condiciones_numeros=[]
-
-                    #Recorre lso terminos
-                    for termino in terminos:
-                        #Si es un número, le añade el kg
-                        if termino.isdigit():
-                            condiciones_numeros.append("nombre LIKE '%% {}kg%%'".format(termino))
-                            
-
-                        else:
-                            try:
-                                #Intenta pasarlo a float para ver si es un decimal
-                                termino_float=float(termino)
-                                
-                                #Si es un decimal se añade como si fuera un numero mas, con el kg
-                                condiciones_numeros.append("nombre LIKE '%% {}kg%%'".format(termino))
-                                
-                            #Si falla significa que estamos ante una palabra por lo que la mete en las condiciones normales    
-                            except Exception as error:
-                                condiciones_normales.append("nombre LIKE '%%{}%%'".format(termino))
-                
-                    #Revisa si hay condiciones de los dos tipos y las fusiona con 
-                    # ands y las mete en las condiciones de todo            
-                    if condiciones_normales:
-                        condiciones.append(' AND '.join(condiciones_normales))
-
-                    if condiciones_numeros:
-                        condiciones.append(' AND '.join(condiciones_numeros))
-                            
-
-
-            #si hay condiciones, mete un WHERE y luego, los 
-            # strings separados por ands usando el join
-            if condiciones:
-                sql+=' WHERE '+' AND '.join(condiciones)
-
-
-            #No meto el parametro orden porque da error al querer sacar un count
-
-
+            print(sql)
+            
+            #Añado al sql, las condiciones del where
+            las_condicioncillas=cls.construir_where(parametros, categorias)
+            print('Las putisimas condicioncillas:',las_condicioncillas)
+            sql+=las_condicioncillas
             #Ejecutamos la consulta
             cursor.execute(sql)
             resultados=cursor.fetchall()
@@ -235,12 +258,15 @@ class ModelProduct():
 
             #Si hay resultados obtendrémos el count
             if resultados:
+
                 cursor.close()
                 return resultados[0][0]
+            
+            
                 
             #Si no hay resultados, retornamos None    
             else:
-                print(17)
+
                 cursor.close()
                 return None
         
@@ -274,71 +300,11 @@ class ModelProduct():
             #Montamos la consulta base
             sql='SELECT id,nombre,precio,imagen FROM productos'
 
-            
-            #Creamos la lista donde van las condiciones del where
-            condiciones=[]
+            #Añado al sql, las condiciones del where
+            las_condicioncillas=cls.construir_where(parametros, categorias)
+            print('Las putisimas condicioncillas:',las_condicioncillas)
+            sql+=las_condicioncillas
 
-
-            #Si hay parametros va mirando cada posible parametro, y añade 
-            # a la lista un string que luego meteremos en la consulta
-            if parametros:
-                if 'marca' in parametros:
-                    condiciones.append("id_marca={}".format(parametros['marca']))
-
-                if 'categoria' in parametros:
-                    condiciones.append("id_categoria={}".format(parametros['categoria']))
-
-                if 'precio' in parametros:
-                    rangos=parametros['precio'].split('-')
-                    precio_min=rangos[0]
-                    precio_max=rangos[1]
-
-                    condiciones.append("precio>={} AND precio<={}".format(precio_min,precio_max))
-
-
-                #En caso de que el usuario buscó algo
-                if 'search' in parametros:
-                    #Obtiene una lista de eso que buscó usando el metodo estatico
-                    terminos=cls.procesar_search(parametros['search'],categorias)
-
-                    #Crea condiciones para numeros y para palabras en general
-                    condiciones_normales=[]
-                    condiciones_numeros=[]
-
-                    #Recorre lso terminos
-                    for termino in terminos:
-                        #Si es un número, le añade el kg
-                        if termino.isdigit():
-                            condiciones_numeros.append("nombre LIKE '%% {}kg%%'".format(termino))
-                            
-
-                        else:
-                            try:
-                                #Intenta pasarlo a float para ver si es un decimal
-                                termino_float=float(termino)
-                                
-                                #Si es un decimal se añade como si fuera un numero mas, con el kg
-                                condiciones_numeros.append("nombre LIKE '%% {}kg%%'".format(termino))
-                                
-                            #Si falla significa que estamos ante una palabra por lo que la mete en las condiciones normales    
-                            except Exception as error:
-                                condiciones_normales.append("nombre LIKE '%%{}%%'".format(termino))
-                
-                    #Revisa si hay condiciones de los dos tipos y las fusiona con 
-                    # ands y las mete en las condiciones de todo            
-                    if condiciones_normales:
-                        condiciones.append(' AND '.join(condiciones_normales))
-
-                    if condiciones_numeros:
-                        condiciones.append(' AND '.join(condiciones_numeros))
-
-                        
-
-      
-            #si hay condiciones, mete un WHERE y luego, los 
-            # strings separados por ands usando el join
-            if condiciones:
-                sql+=' WHERE '+' AND '.join(condiciones)
 
             #Mira el orden por el que filtrar
             if orden=='masRecientes':
