@@ -83,7 +83,7 @@
             {% for producto in productos %}  
                 
             <!-- Tarjeta de producto -->
-            <a href="#" class="relative bg-[#1B1A1A] border-2 border-[#C40C0C] rounded-lg p-4 lg:w-full h-full flex flex-col">
+            <a href="{{url_for('product.product',id=producto.id)}}" class="relative bg-[#1B1A1A] border-2 border-[#C40C0C] rounded-lg p-4 lg:w-full h-full flex flex-col">
                 <div class="flex flex-col justify-between items-center flex-1">
                     <img src="{{url_for('static',filename=producto.imagen)}}" alt="{{producto.nombre}}" class="w-full h-full sm:h-52 md:h-52 mt-4 mb-4 lg:h-56 xl:h-72">
                     <h3 class="text-[15px] sm:text-[20px] font-semibold mb-2 text-white text-center">{{producto.nombre}}</h3>

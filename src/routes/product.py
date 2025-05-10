@@ -8,4 +8,4 @@ product_bp=Blueprint('product',__name__)
 def product(id):
 
 
-    return 'Pagina del producto. Aqui el id:{}'.format(id)
+    return render_template('product.html',id=id)
