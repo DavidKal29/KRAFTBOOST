@@ -432,3 +432,60 @@ class ModelProduct():
         except Exception as error:
             print(error)
             return None
+        
+    
+
+    @classmethod
+    def mostrar_producto_info(db,id):
+
+        try:
+            #Abrimos como siempre el cursor
+            cursor=db.connection.cursor()
+
+            #Montamos una consulta con joins para obtener el nombre de la categoria y marca
+            sql='''
+                SELECT p.nombre as nombre_producto,p.precio,p.descripcion,p.imagen,
+                m.nombre as nombre_marca,
+                c.nombre as nombre_categoria
+                FROM productos p
+                INNER JOIN marcas m ON p.id_marca=m.id
+                INNER JOIN categorias c ON p.id_categoria=c.id
+                WHERE p.id=%s;
+            '''
+
+            #Ejecutamos
+            cursor.execute(sql,id)
+            resultado=cursor.fetchall()
+           
+
+            #SI hay resultado, metemos todos los campos devueltos en el objeto Product y retornamos eso
+            if resultado:
+                
+                nombre_producto=resultado[0][0]
+                precio=resultado[1][0]
+                descripcion=resultado[2][0]
+                imagen=resultado[3][0]
+                nombre_marca=resultado[0][0]
+                nombre_categoria=resultado[0][0]
+
+
+                producto=Product(id,nombre_producto, precio, nombre_categoria, nombre_marca, descripcion, imagen)
+
+            
+                cursor.close()
+                return producto
+                
+            #Si no hay resultados, retornamos None    
+            else:
+                cursor.close()
+                return None
+        
+        
+        #Si hay errores, devolvemos None tambien
+        except Exception as error:
+            print(error)
+            return None
+
+
+
+
