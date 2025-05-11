@@ -4,7 +4,7 @@ class Product():
         self.id=id
         self.nombre=nombre
         self.precio=precio
-        self.id_categoria=categoria
-        self.id_marca=marca
+        self.nombre_marca=marca
+        self.nombre_categoria=categoria
         self.descripcion=descripcion
         self.imagen=imagen

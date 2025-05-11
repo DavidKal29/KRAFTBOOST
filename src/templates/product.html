@@ -10,7 +10,7 @@
   <!-- Tarjeta de producto -->
   <div class="flex justify-center items-center bg-[#1B1A1A] border-4 border-[#C40C0C] rounded-[8px] p-4">
     <div class="flex justify-center items-center">
-      <img src="{{url_for('static',filename='images/productos/discos/disco_20kg_domyos.png')}}" alt="Disco 20kg Hierro Domyos" class="w-full h-full my-8">
+      <img src="{{url_for('static',filename=producto.imagen)}}" alt="{{producto.nombre}}" class="w-full h-full my-8">
     </div>
   </div>
 
@@ -19,9 +19,9 @@
 
     <!-- Info del producto -->
     <div class="flex flex-col gap-1">
-      <span class="text-[#999999] font-semibold text-[20px]">Discos-Domyos</span>
-      <span class="text-white font-bold text-[22px]">Disco 20kg Hierro Domyos</span>
-      <span class="text-[#C40C0C] font-semibold text-[20px]">49.99€</span>
+      <span class="text-[#999999] font-semibold text-[20px]">{{producto.nombre_marca}} - {{producto.nombre_categoria}}</span>
+      <span class="text-white font-bold text-[22px]">{{producto.nombre}}</span>
+      <span class="text-[#C40C0C] font-semibold text-[20px]">{{producto.precio}}€</span>
     </div>
 
     <!-- Envíos -->
@@ -41,7 +41,7 @@
 
     <!-- Descripción -->
     <p class="text-white font-bold text-[20px] text-justify">
-      Disco de hierro de 20 kilogramos o 44 libras. Ideal para el entreno. Fabricado en la fabrica de Oxylane, distribuido por la marca domyos.
+      {{producto.descripcion}}
     </p>
 
   </div>

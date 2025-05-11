@@ -436,7 +436,7 @@ class ModelProduct():
     
 
     @classmethod
-    def mostrar_producto_info(db,id):
+    def mostrar_producto_info(cls,db,id):
 
         try:
             #Abrimos como siempre el cursor
@@ -454,22 +454,24 @@ class ModelProduct():
             '''
 
             #Ejecutamos
-            cursor.execute(sql,id)
+            cursor.execute(sql,(id,))
             resultado=cursor.fetchall()
            
 
             #SI hay resultado, metemos todos los campos devueltos en el objeto Product y retornamos eso
             if resultado:
+
+                print('Er resultado:',resultado)
                 
                 nombre_producto=resultado[0][0]
-                precio=resultado[1][0]
-                descripcion=resultado[2][0]
-                imagen=resultado[3][0]
-                nombre_marca=resultado[0][0]
-                nombre_categoria=resultado[0][0]
+                precio=resultado[0][1]
+                descripcion=resultado[0][2]
+                imagen=resultado[0][3]
+                nombre_marca=resultado[0][4]
+                nombre_categoria=resultado[0][5]
 
 
-                producto=Product(id,nombre_producto, precio, nombre_categoria, nombre_marca, descripcion, imagen)
+                producto=Product(id, nombre_producto, precio, nombre_marca, nombre_categoria, descripcion, imagen)
 
             
                 cursor.close()
