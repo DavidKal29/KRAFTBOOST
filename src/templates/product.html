@@ -4,8 +4,64 @@
 
 {% block body %}
 
-<div>
-    
+
+<section class="flex justify-center flex-col min-[568px]:flex-row gap-6 px-4 mt-28 sm:mt-32 mb-10 sm:px-6 xl:gap-12">
+
+  <!-- Tarjeta de producto -->
+  <div class="flex justify-center items-center bg-[#1B1A1A] border-4 border-[#C40C0C] rounded-[8px] p-4">
+    <div class="flex justify-center items-center">
+      <img src="{{url_for('static',filename='images/productos/discos/disco_20kg_domyos.png')}}" alt="Disco 20kg Hierro Domyos" class="w-full h-full my-8">
+    </div>
+  </div>
+
+  <!-- Detalles y acciones -->
+  <div class="flex flex-col gap-4 w-full max-w-sm xl:max-w-xl">
+
+    <!-- Info del producto -->
+    <div class="flex flex-col gap-1">
+      <span class="text-[#999999] font-semibold text-[20px]">Discos-Domyos</span>
+      <span class="text-white font-bold text-[22px]">Disco 20kg Hierro Domyos</span>
+      <span class="text-[#C40C0C] font-semibold text-[20px]">49.99€</span>
+    </div>
+
+    <!-- Envíos -->
+    <p class="text-center border-4 border-[#C40C0C] text-[#C40C0C] font-bold text-[20px] py-3">
+      ENVIOS EN 24 HORAS
+    </p>
+
+    <!-- Botones -->
+    <div class="flex flex-col gap-4 xl:flex-row">
+      <button class="w-full bg-[#C40C0C] text-white rounded py-3 font-bold text-[16px]">
+        Añadir al carrito <i class="fa-solid fa-cart-plus"></i>
+      </button>
+      <button class="w-full bg-white text-[#C40C0C] rounded py-3 font-bold text-[16px]">
+        Añadir a favoritos <i class="fa-solid fa-heart"></i>
+      </button>
+    </div>
+
+    <!-- Descripción -->
+    <p class="text-white font-bold text-[20px] text-justify">
+      Disco de hierro de 20 kilogramos o 44 libras. Ideal para el entreno. Fabricado en la fabrica de Oxylane, distribuido por la marca domyos.
+    </p>
+
+  </div>
+</section>
+
+<div class="w-full flex justify-between ">
+    <!-- Personaje Izquierdo -->
+    <img 
+      src="{{url_for('static',filename='images/footer_personajes/rino_footer.png')}}" 
+      alt="Personaje Izquierdo"
+      class="bottom-[270px] right-0 translate-y-[30%] w-[20vh] min-[568px]:w-[60vh] sm:w-[60vh] landscape:md:w-[60vh] md:w-[30vh] md:mb-[55px] landscape:lg:w-[50vh] landscape:lg:h-[55vh]  landscape:lg:mb-[90px] max-[320px]:mb-[25px] mb-[40px] z-[-1]"
+    />
+
+    <!-- Personaje Derecho -->
+    <img 
+      src="{{url_for('static',filename='images/footer_personajes/oso_footer.png')}}" 
+      alt="Personaje Derecho"
+      class="bottom-[270px] right-0 translate-y-[30%] w-[20vh] min-[568px]:w-[60vh] sm:w-[60vh] landscape:md:w-[60vh] md:w-[30vh] md:mb-[55px] landscape:lg:w-[50vh] landscape:lg:h-[55vh]  landscape:lg:mb-[90px] max-[320px]:mb-[25px] mb-[40px] z-[-1]"
+    />
 </div>
 
 {% endblock %}
+
