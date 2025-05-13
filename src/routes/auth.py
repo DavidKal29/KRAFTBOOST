@@ -1,4 +1,4 @@
-from flask import Blueprint,redirect,url_for
+from flask import Blueprint,redirect,url_for,render_template
 
 auth_bp=Blueprint('auth',__name__,url_prefix='/auth')
 
@@ -9,10 +9,10 @@ def auth():
 
 @auth_bp.route('/login',methods=['GET','POST'])
 def login():
-    return 'Este es el login de auth'
+    return render_template('auth/login.html')
 
 @auth_bp.route('/register',methods=['GET','POST'])
 def register():
-    return 'Este es el register de auth'
+    return render_template('auth/register.html')
 
 
