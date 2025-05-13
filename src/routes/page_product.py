@@ -1,4 +1,4 @@
-from flask import Blueprint,redirect,request,url_for,current_app,render_template
+from flask import Blueprint,redirect,request,url_for,current_app,render_template,abort
 from models.ModelProduct import ModelProduct
 
 
@@ -12,4 +12,9 @@ def product(id):
 
     producto=ModelProduct.mostrar_producto_info(db,id)
 
-    return render_template('product.html',id=id,producto=producto)
+    if not producto:
+        abort(404)
+    
+    else:
+
+        return render_template('product.html',id=id,producto=producto)
