@@ -11,6 +11,7 @@ from models.ModelCategory import ModelCategory
 #Blueprints
 from routes.home import home_bp
 from routes.shop import shop_bp
+from routes.page_product import product_bp
 
 
 
@@ -32,6 +33,7 @@ app.config['db']=db
 #Registro de blueprints
 app.register_blueprint(home_bp)
 app.register_blueprint(shop_bp)
+app.register_blueprint(product_bp)
 
 #Utilizamos el contexto de la app porque estamos haciendo una consulta fuera de las rutas
 with app.app_context():
