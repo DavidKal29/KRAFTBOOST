@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,render_template
 from os import getenv
 from config import config
 from dotenv import load_dotenv
@@ -34,6 +34,15 @@ app.config['db']=db
 app.register_blueprint(home_bp)
 app.register_blueprint(shop_bp)
 app.register_blueprint(product_bp)
+
+
+#Pagina 404
+def error_404(error):
+    return render_template('404.html')
+
+#Registramos en el manejador de errores el 404 en flask
+app.register_error_handler(404,error_404)
+
 
 #Utilizamos el contexto de la app porque estamos haciendo una consulta fuera de las rutas
 with app.app_context():
