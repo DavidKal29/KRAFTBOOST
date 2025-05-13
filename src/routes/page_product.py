@@ -10,11 +10,23 @@ def product(id):
 
     db=current_app.config['db']
 
-    producto=ModelProduct.mostrar_producto_info(db,id)
+    try:
+        #Intentamos pasar el id a entero para evitar que nos pongan strings en la ruta
+        id=int(id)
 
-    if not producto:
-        abort(404)
+        #Hacemos la consulta a través del método mostrar_producto_info
+        producto=ModelProduct.mostrar_producto_info(db,id)
+
+        #Si no hay producto, mandamos al 404
+        if not producto:
+            abort(404)
+        
+        #Si está, cargamos el html con los datos del producto
+        else:
+
+            return render_template('product.html',id=id,producto=producto)
     
-    else:
-
-        return render_template('product.html',id=id,producto=producto)
+    #Cualquier error siginifca que no existe tal producto, asique 404 tambien
+    except Exception as err:
+        print(err)
+        abort(404)
