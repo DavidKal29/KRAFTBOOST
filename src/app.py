@@ -11,7 +11,7 @@ from models.ModelCategory import ModelCategory
 #Blueprints
 from routes.home import home_bp
 from routes.shop import shop_bp
-from routes.product import product_bp
+from routes.page_product import product_bp
 
 
 
