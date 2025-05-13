@@ -12,6 +12,7 @@ from models.ModelCategory import ModelCategory
 from routes.home import home_bp
 from routes.shop import shop_bp
 from routes.page_product import product_bp
+from routes.auth import auth_bp
 
 
 
@@ -34,6 +35,7 @@ app.config['db']=db
 app.register_blueprint(home_bp)
 app.register_blueprint(shop_bp)
 app.register_blueprint(product_bp)
+app.register_blueprint(auth_bp)
 
 
 #Pagina 404
