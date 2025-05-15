@@ -1,6 +1,9 @@
-from flask import Blueprint,redirect,url_for,render_template,request,current_app
+from flask import Blueprint,redirect,url_for,render_template,request,current_app,flash
 from models.ModelUser import ModelUser
 from models.entities.User import User
+
+#Formularios WTF
+from formularios_WTF.forms import Register
 
 auth_bp=Blueprint('auth',__name__,url_prefix='/auth')
 
@@ -9,38 +12,48 @@ auth_bp=Blueprint('auth',__name__,url_prefix='/auth')
 def auth():
     return redirect(url_for('auth.login'))
 
+
+
 @auth_bp.route('/login',methods=['GET','POST'])
 def login():
     return render_template('auth/login.html')
+
+
 
 @auth_bp.route('/register',methods=['GET','POST'])
 def register():
     db=current_app.config['db']
 
-    if request.method=='GET':
-        return render_template('auth/register.html')
-    
-    elif request.method=='POST':
+    form=Register()
+
+    if form.validate() and request.method=='POST':
+        print('Caiste en el post')
         nombre=request.form.get('nombre')
         apellidos=request.form.get('apellidos')
         email=request.form.get('email')
         username=request.form.get('username')
-        telefono=request.form.get('telefono')
-        fecha_nacimiento=request.form.get('fecha_nacimiento')
         password=request.form.get('password')
 
-        print(nombre,apellidos,email,username,telefono,fecha_nacimiento,password)
+        print(nombre,apellidos,email,username,password)
 
+        user=User(None,nombre,apellidos,email,username,password,rol='client')
 
-        user=User(None,nombre,apellidos,email,username,telefono,fecha_nacimiento,password,rol='client')
+        registered_user=ModelUser.register(db,user)
 
+        print('El user:',registered_user)
 
+        if registered_user:
+            return render_template('auth/login.html')
+ 
+        else:
+            flash('Username or Email in use')
+            return render_template('auth/register.html',form=form)
+            
 
-        ModelUser.register(db,user)
-
-
-        return render_template('auth/register.html')
-
+    else:
+        print('Caiste en el get')
+        return render_template('auth/register.html',form=form)
+    
 
         
 

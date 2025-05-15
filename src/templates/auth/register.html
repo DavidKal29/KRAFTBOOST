@@ -9,57 +9,104 @@
     
     <form action="{{url_for('auth.register')}}" method="post" class="flex flex-col justify-center items-center gap-6 text-white px-4">
 
-        <div class="flex flex-row justify-center items-center gap-2">
+        
+        {{form.hidden_tag()}}  
+
+        
+         {% with messages=get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                    <span class="text-[#C40C0C] text-md font-semibold">{{msg}}</span>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+         
+        
+         <div class="flex flex-row justify-center items-center gap-2">
             <div class="flex justify-center items-start flex-col w-1/2">
-                <label for="" class="font-bold">*Nombre</label>
-                <input name="nombre" type="text" placeholder="Antonio" class="bg-[#1B1A1A] text-white placeholder-white px-8 pl-4 py-2 lg:px-12 lg:pl-2 xl:py-3 xl:pl-4 xl:px-24 rounded text-left outline-none w-full">
+                {{form.nombre.label(class="font-bold")}}
+                {{form.nombre(placeholder='Nombre',class="bg-[#1B1A1A] text-white px-8 pl-4 py-2 lg:px-12 lg:pl-2 xl:py-2 xl:pl-4 xl:px-24 rounded text-left outline-none w-full")}}
+
+                {% if form.nombre.errors %}
+                    <p class="text-[12px] text-[#C40C0C] mt-1">{{form.nombre.errors[0]}}</p>
+                {% elif form.apellidos.errors %}
+                <!-- Lo pongo para que no se descuadren los inputs -->
+                    <p class="text-[12px] text-black mt-1 opacity-0">This field is required</p>
+                {% endif %}
             </div>
+            
 
             <div class="flex justify-center items-start flex-col w-1/2">
-                <label for="" class="font-bold">*Apellidos</label>
-                <input name="apellidos" type="text" placeholder="Gutiérrez" class="bg-[#1B1A1A] text-white placeholder-white px-8 pl-4 py-2 lg:px-12 lg:pl-2 xl:py-3 xl:pl-4 xl:px-24 rounded text-left outline-none w-full">
+                {{form.apellidos.label(class="font-bold")}}
+                {{form.apellidos(placeholder='Apellidos',class="bg-[#1B1A1A] text-white px-8 pl-4 py-2 lg:px-12 lg:pl-2 xl:py-2 xl:pl-4 xl:px-24 rounded text-left outline-none w-full")}}
+
+                {% if form.apellidos.errors %}
+                    <p class="text-[12px] text-[#C40C0C] mt-1">{{form.apellidos.errors[0]}}</p>
+                {% elif form.nombre.errors %}
+                <!-- Lo pongo para que no se descuadren los inputs -->
+                    <p class="text-[12px] text-black mt-1 opacity-0">This field is required</p>
+                {% endif %}
             </div>
+        
+        </div>
+        
+
+        <div class="flex justify-center items-start flex-col w-full">
+            {{form.email.label(class="font-bold")}}
+            {{form.email(placeholder='Correo electrónico',class="bg-[#1B1A1A] text-white px-8 pl-4 py-2 lg:px-12 lg:pl-2 xl:py-2 xl:pl-4 xl:px-24 rounded text-left outline-none w-full")}}
+
+            {% if form.email.errors %}
+                <p class="text-[12px] text-[#C40C0C] mt-1">{{form.email.errors[0]}}</p>
+            {% endif %}
         </div>
 
         <div class="flex justify-center items-start flex-col w-full">
-            <label for="" class="font-bold">*Correo electrónico</label>
-            <input name="email" type="email" placeholder="ejemplo@ejemplo.es" class="bg-[#1B1A1A] text-white placeholder-white px-8 pl-4 py-2 lg:px-12 lg:pl-2 xl:py-3 xl:pl-4 xl:px-24 rounded text-left outline-none w-full">
+            {{form.username.label(class="font-bold")}}
+            {{form.username(placeholder='Username',class="bg-[#1B1A1A] text-white px-8 pl-4 py-2 lg:px-12 lg:pl-2 xl:py-2 xl:pl-4 xl:px-24 rounded text-left outline-none w-full")}}
+
+            {% if form.username.errors %}
+                <p class="text-[12px] text-[#C40C0C] mt-1">{{form.username.errors[0]}}</p>
+            {% endif %}
         </div>
 
-        <div class="flex flex-row justify-center items-center gap-2">
-            <div class="flex justify-center items-start flex-col w-1/2">
-                <label for="" class="font-bold">*Username</label>
-                <input name="username" type="text" placeholder="Jose05" class="bg-[#1B1A1A] text-white placeholder-white px-8 pl-4 py-2 lg:px-12 lg:pl-2 xl:py-3 xl:pl-4 xl:px-24 rounded text-left outline-none w-full">
-            </div>
-
-            <div class="flex justify-center items-start flex-col w-1/2">
-                <label for="" class="font-bold">Teléfono</label>
-                <input name="telefono" type="tel" placeholder="99999999" class="bg-[#1B1A1A] text-white placeholder-white px-8 pl-4 py-2 lg:px-12 lg:pl-2 xl:py-3 xl:pl-4 xl:px-24 rounded text-left outline-none w-full">
-            </div>
-        </div>
-
-        <div class="flex justify-center items-start flex-col w-full">
-            <label for="" class="font-bold">*Fecha de nacimiento</label>
-            <input name="fecha_nacimiento" type="date" placeholder="dd/mm/aaaa" class="bg-[#1B1A1A] text-white placeholder-white px-8 pl-4 py-2 lg:px-12 lg:pl-2 xl:py-3 xl:pl-4 xl:px-24 rounded text-left outline-none w-full">
-        </div>
 
         
         <div class="flex flex-row justify-center items-center gap-2">
             <div class="flex justify-center items-start flex-col w-1/2">
-            <label for="" class="font-bold">*Contraseña</label>
-            <input name="password" type="password" placeholder="Tu contraseña" class="bg-[#1B1A1A] text-white placeholder-white px-8 pl-4 py-2 lg:px-12 lg:pl-2 xl:py-3 xl:pl-4 xl:px-24 rounded text-left outline-none w-full">
-        </div>
+                {{form.password.label(class="font-bold")}}
+                {{form.password(placeholder='Contraseña',class="bg-[#1B1A1A] text-white px-8 pl-4 py-2 lg:px-12 lg:pl-2 xl:py-2 xl:pl-4 xl:px-24 rounded text-left outline-none w-full")}}
 
-        <div class="flex justify-center items-start flex-col w-1/2">
-            <label for="" class="font-bold">*Confirmar</label>
-            <input name="confirm_password" type="password" placeholder="Confirma" class="bg-[#1B1A1A] text-white placeholder-white px-8 pl-4 py-2 lg:px-12 lg:pl-2 xl:py-3 xl:pl-4 xl:px-24 rounded text-left outline-none w-full">
-        </div>
+                {% if form.password.errors %}
+                    <p class="text-[12px] text-[#C40C0C] mt-1">{{form.password.errors[0]}}</p>
+                {% elif form.confirm.errors %}
+                <!-- Lo pongo para que no se descuadren los inputs -->
+                    <p class="text-[12px] text-black mt-1 opacity-0">This field is required</p>
+                {% endif %}
+            </div>
+            
 
+            <div class="flex justify-center items-start flex-col w-1/2">
+                {{form.confirm.label(class="font-bold")}}
+                {{form.confirm(placeholder='Confirma',class="bg-[#1B1A1A] text-white px-8 pl-4 py-2 lg:px-12 lg:pl-2 xl:py-2 xl:pl-4 xl:px-24 rounded text-left outline-none w-full")}}
+
+                {% if form.confirm.errors %}
+                    <p class="text-[12px] text-[#C40C0C] mt-1">{{form.confirm.errors[0]}}</p>
+                {% elif form.password.errors %}
+                <!-- Lo pongo para que no se descuadren los inputs -->
+                    <p class="text-[12px] text-black mt-1 opacity-0">This field is required</p>
+                {% endif %}
+            </div>
+        
         </div>
         
         <p class="text-white font-semibold">¿Ya tienes cuenta? <a href="{{url_for('auth.login')}}" class="text-[#C40C0C]">Iniciar Sesión</a></p>
 
-        <button type="submit" class="text-white font-bold text-center bg-[#C40C0C] rounded text-white px-8 py-3 text-center w-full">Crear Cuenta</button>
+        
+
+        {{form.submit(class="cursor-pointer text-white font-bold text-center bg-[#C40C0C] rounded text-white px-8 py-3 text-center w-full") }}
+
+       
     </form>
 </section>
 
