@@ -1,4 +1,5 @@
 from flask import Flask,render_template
+from flask_login import LoginManager
 from os import getenv
 from config import config
 from dotenv import load_dotenv
@@ -7,6 +8,7 @@ from flask_mysqldb import MySQL
 #Modelos
 from models.ModelBrand import ModelBrand
 from models.ModelCategory import ModelCategory
+from models.ModelUser import ModelUser
 
 #Blueprints
 from routes.home import home_bp
@@ -30,6 +32,15 @@ db=MySQL(app)
 
 #Añadimos la db al config de app
 app.config['db']=db
+
+
+#Creamos el login manager
+login_manager=LoginManager(app)
+
+#Creamos la función que se encarge de cargar al usuario a través de su id
+@login_manager.user_loader
+def load_user(id):
+    return ModelUser.get_by_id(db,id)
 
 
 #Registro de blueprints
