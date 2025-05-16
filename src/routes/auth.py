@@ -46,7 +46,7 @@ def register():
             return render_template('auth/login.html')
  
         else:
-            flash('Username or Email in use')
+            flash('Email o Username ya están en uso')
             return render_template('auth/register.html',form=form)
             
 
