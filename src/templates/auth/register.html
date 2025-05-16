@@ -14,7 +14,7 @@
         {% with messages=get_flashed_messages() %}
             {% if messages %}
                 {% for msg in messages %}
-                    <span class="text-[#C40C0C] text-md font-semibold">¡{{msg}}!</span>
+                    <span class="text-[#C40C0C] text-md font-semibold">1{{msg}}!</span>
                 {% endfor %}
             {% endif %}
         {% endwith %}
@@ -24,7 +24,7 @@
             <!-- Nombre -->
             <div class="flex flex-col w-full">
                 {{ form.nombre.label(class="font-bold") }}
-                {{ form.nombre(placeholder='Nombre', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                {{ form.nombre(placeholder='Ej: Antonio', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
                 {% if form.nombre.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.nombre.errors[0]}}</p>
@@ -37,7 +37,7 @@
             <!-- Apellidos -->
             <div class="flex flex-col w-full">
                 {{ form.apellidos.label(class="font-bold") }}
-                {{ form.apellidos(placeholder='Apellidos', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                {{ form.apellidos(placeholder='Ej: Gutierrez', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
                 {% if form.apellidos.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.apellidos.errors[0]}}</p>
@@ -53,7 +53,7 @@
             <!-- Email -->
             <div class="flex flex-col w-full">
                 {{ form.email.label(class="font-bold") }}
-                {{ form.email(placeholder='Correo electrónico', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                {{ form.email(placeholder='Ej: ejemplo@ejemplo.es', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
                 {% if form.email.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.email.errors[0]}}</p>
@@ -66,7 +66,7 @@
             <!-- Username -->
             <div class="flex flex-col w-full">
                 {{ form.username.label(class="font-bold") }}
-                {{ form.username(placeholder='Username', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                {{ form.username(placeholder='Ej: Tonio09', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
                 {% if form.username.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.username.errors[0]}}</p>
@@ -82,7 +82,7 @@
             <!-- Password -->
             <div class="flex flex-col w-full">
                 {{ form.password.label(class="font-bold") }}
-                {{ form.password(placeholder='Contraseña', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                {{ form.password(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
                 {% if form.password.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.password.errors[0]}}</p>
