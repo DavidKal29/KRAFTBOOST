@@ -13,6 +13,7 @@ from routes.home import home_bp
 from routes.shop import shop_bp
 from routes.page_product import product_bp
 from routes.auth import auth_bp
+from routes.profile import profile_bp
 
 
 
@@ -36,6 +37,7 @@ app.register_blueprint(home_bp)
 app.register_blueprint(shop_bp)
 app.register_blueprint(product_bp)
 app.register_blueprint(auth_bp)
+app.register_blueprint(profile_bp)
 
 
 #Pagina 404
