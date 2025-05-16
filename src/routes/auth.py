@@ -43,7 +43,7 @@ def register():
         print('El user:',registered_user)
 
         if registered_user:
-            return render_template('auth/login.html')
+            return redirect(url_for('auth.login'))
  
         else:
             flash('Email o Username ya están en uso')
