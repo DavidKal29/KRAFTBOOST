@@ -58,3 +58,18 @@ class Register(FlaskForm):
     submit=SubmitField('Crear Cuenta')
 
 
+#Formulario de login
+class Login(FlaskForm):
+
+    email=EmailField('Correo electrónico',validators=[
+        DataRequired(message="Este campo es obligatorio"),
+        Length(min=10,max=150,message='10-150 caracteres requeridos'),
+        Email()
+    ])
+
+    password=PasswordField('Contraseña',validators=[
+        DataRequired(message="Este campo es obligatorio"),
+        Length(min=8,max=100,message='8-100 caracteres requeridos')
+    ])
+
+    submit=SubmitField('Iniciar Sesión')

@@ -3,7 +3,7 @@ from models.ModelUser import ModelUser
 from models.entities.User import User
 
 #Formularios WTF
-from formularios_WTF.forms import Register
+from formularios_WTF.forms import Register,Login
 
 auth_bp=Blueprint('auth',__name__,url_prefix='/auth')
 
@@ -16,7 +16,9 @@ def auth():
 
 @auth_bp.route('/login',methods=['GET','POST'])
 def login():
-    return render_template('auth/login.html')
+    form=Login()
+
+    return render_template('auth/login.html', form=form)
 
 
 
