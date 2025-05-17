@@ -9,16 +9,17 @@ class ModelUser():
         try:
             #Se abe el cursor d ela db
             cursor=db.connection.cursor()
-            
+
             #Se crea la consulta esql
             sql='SELECT * FROM usuarios WHERE email=%s'
 
             #Ejecutamos la cosulta
-            cursor.execute(sql,user.email,)
+            cursor.execute(sql,(user.email,))
             row=cursor.fetchone()
 
             #Si hay resultados, creamos el objeto logged_user y lo devolvemos
             if row:
+                print('Usuario encontrado')
                 id=row[0]
                 nombre=row[1]
                 apellidos=row[2]
@@ -28,7 +29,9 @@ class ModelUser():
                 rol=row[6]
 
                 logged_user=User(id,nombre,apellidos,email,username,password,rol)
-                
+
+                print('El user logueado:',logged_user)
+
                 cursor.close()
              
                 return logged_user
@@ -40,6 +43,7 @@ class ModelUser():
         
         #Cualquier otro error, devolvemos None
         except Exception as error:
+            print('Usuario no ha sido logueado')
             print(error)
             return None
 
@@ -62,10 +66,11 @@ class ModelUser():
 
             print('Usuario metido con exito')
 
+            #Obtenemos al usuario para poder iniciar sesión facilmente
             cursor.execute('SELECT id,nombre,apellidos,email,username,password,rol FROM usuarios WHERE email=%s',(user.email,))
             row=cursor.fetchone()
 
-
+            #Si hay resultado metemos los datos obtenidos en el logged userr y lo devolvemos
             if row:
                 id=row[0]
                 nombre=row[1]
@@ -80,10 +85,12 @@ class ModelUser():
                 cursor.close()
                 return user
             
+            #Sino, devolvemos None
             else:
                 cursor.close()
                 return None
 
+        #Si hay errores, devolvemos None
         except Exception as error:
             print(error)
             print('Usuario no ha sido registrado')
@@ -106,6 +113,7 @@ class ModelUser():
             
             #Si hay resultados, creamos el objeto user, sin el password, y lo devolvemos
             if row:
+                print('Usuario encontrado con su id')
                 id=row[0]
                 nombre=row[1]
                 apellidos=row[2]
@@ -127,6 +135,7 @@ class ModelUser():
 
         #Cualquier error distitno, None también        
         except Exception as error:
+            print('Error al obtener el id del usuario')
             print(error)
             return None
     

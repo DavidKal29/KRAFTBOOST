@@ -6,8 +6,21 @@
 
 <section class="flex flex-col justify-center items-center mt-[80px] md:mt-[120px] mb-12 gap-4">
     <h1 class="text-[#C40C0C] font-bold text-[30px] xl:text-[40px]">KRAFTBOOST</h1>
+
     
-    <form action="" class="flex flex-col justify-center items-center gap-6 text-white px-4 w-full max-w-[600px]">
+    <form action="{{url_for('auth.login')}}" method="post" class="flex flex-col justify-center items-center gap-6 text-white px-4 w-full max-w-[600px]">
+        
+        {{ form.hidden_tag() }}
+
+        {% with messages=get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                    <span class="text-[#C40C0C] text-md font-semibold">¡{{msg}}!</span>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    
+        
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.email.label(class="font-bold") }}
             {{ form.email(placeholder='Ej: ejemplo@ejemplo.es', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
