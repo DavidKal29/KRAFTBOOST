@@ -3,6 +3,9 @@ from flask_login import login_user,current_user
 from models.ModelUser import ModelUser
 from models.entities.User import User
 
+#Enviador de Correos
+from utils.MailSender import MailSender
+
 #Formularios WTF
 from formularios_WTF.forms import Register,Login
 
@@ -105,10 +108,11 @@ def register():
 
             #Si el usuario se registró con éxito
             if registered_user:
-                #Como el usuario acaba de ser registrado e inciamos sesión 
-                # directamente, jamás habrá un email o password incorrecto, 
-                # por lo que siempre inciará sesión salvo que hayan errores 
-                # controlados con el except
+                
+                #Enviamos el correo de bienvenida
+                MailSender.welcome_message(current_app,registered_user.username,registered_user.email)
+
+                #Logueamos al usuario obtenido de la db directamente
                 login_user(registered_user)
                 return redirect(url_for('profile.profile'))
 

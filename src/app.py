@@ -37,6 +37,9 @@ mail=Mail(app)
 #Añadimos la db al config de app
 app.config['db']=db
 
+#Añadimos el mail al config de app
+app.config['mail']=mail
+
 
 #Creamos el login manager
 login_manager=LoginManager(app)
