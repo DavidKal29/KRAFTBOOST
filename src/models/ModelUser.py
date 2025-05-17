@@ -135,7 +135,7 @@ class ModelUser():
 
         #Cualquier error distitno, None también        
         except Exception as error:
-            print('Error al obtener el id del usuario')
+            print('Error al obtener el id')
             print(error)
             return None
     
@@ -175,7 +175,32 @@ class ModelUser():
 
         #Cualquier error distitno, None también        
         except Exception as error:
-            print('Error al obtener el id del usuario')
+            print('Error al obtener el email')
+            print(error)
+            return None
+        
+    @classmethod
+    def change_password(cls,db,email,new_password):
+        try:
+
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+
+            #Encriptamos la contraseña para mandarla encriptada a la db
+            new_password=generate_password_hash(new_password)
+            
+            #Montamos el update, ejecutamos y commiteamos
+            sql='UPDATE usuarios SET password=%s WHERE email=%s'
+            cursor.execute(sql,(new_password,email))
+            db.connection.commit()
+
+            #Devolvemos true si todo sale bien
+            return True
+
+            
+        #Cualquier error distitno, None también        
+        except Exception as error:
+            print('Error al cambiar password')
             print(error)
             return None
 

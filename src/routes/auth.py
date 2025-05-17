@@ -7,7 +7,7 @@ from models.entities.User import User
 from utils.MailSender import MailSender
 
 #Formularios WTF
-from formularios_WTF.forms import Register,Login,EmailRecuperacion
+from formularios_WTF.forms import Register,Login,EmailRecuperacion,ChangePassword
 
 auth_bp=Blueprint('auth',__name__,url_prefix='/auth')
 
@@ -145,7 +145,7 @@ def register():
 @auth_bp.route('/forgot_password',methods=['GET','POST'])
 def forgot_password():
     try:
-        #Obtenemos el cursor de la db, y el formulario de login
+        #Obtenemos el cursor de la db, y el formulario para enviar email
         db=current_app.config['db']
         form=EmailRecuperacion()
 
@@ -187,6 +187,55 @@ def forgot_password():
         print('ERROR DETECTADO EN LA CONSOLA')
         print(error)
         return redirect(url_for('home.home'))
+    
+
+
+@auth_bp('/reset_password/<token>',methods=['GET','POST'])
+def reset_password(token):
+    try:
+        #Obtenemos el cursor de la db, y el formulario de reset password
+        db=current_app.config['db']
+        form=ChangePassword()
+
+        #Si el metodo es post y se valida el formulario
+        if form.validate() and request.method=='POST':
+            
+            #Obtenemos el email y el password
+            email=request.form.get('email')
+            
+            print(email)
+
+            #Validamos el email para ver si existe en la db
+            validation=ModelUser.validate_email(db,email)
+
+            #Si hay validacion avisa que se envió el correo
+            if validation:
+                flash('Correo Enviado con Éxito')
+                return render_template('auth/forgot_password.html',form=form)
+            
+            #Sino, avisa que el correo no existe
+            else:
+                flash('Correo No Encontrado en los Registros')
+                return render_template('auth/forgot_password.html',form=form)
+                
+            
+        #Si cae en get 
+        else:
+            #Si estamos logueados
+            if current_user.is_authenticated:
+                #Redirijir a perfil
+                return redirect(url_for('profile.profile'))
+            #Sino
+            else:
+                #Redirijir a forgot password otra vez
+                return render_template('auth/reset_password.html',form=form)
+    
+    #Cualquier otro error, al home
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        return redirect(url_for('home.home'))
+
 
             
     
