@@ -73,3 +73,15 @@ class Login(FlaskForm):
     ])
 
     submit=SubmitField('Iniciar Sesión')
+
+
+#Formulario de enviar email para recuperar contraseña
+class EmailRecuperacion(FlaskForm):
+
+    email=EmailField('Correo electrónico',validators=[
+        DataRequired(message="Este campo es obligatorio"),
+        Length(min=10,max=150,message='10-150 caracteres requeridos'),
+        Email()
+    ])
+
+    submit=SubmitField('Enviar Email')

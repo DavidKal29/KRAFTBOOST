@@ -140,4 +140,44 @@ class ModelUser():
             return None
     
 
+    @classmethod
+    def validate_email(cls,db,email):
+        try:
+
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+            
+            #Montamos la consulta y la ejecutamos
+            sql='SELECT email FROM usuarios WHERE email=%s'
+            cursor.execute(sql,(email,))
+
+            #Variable para ver si el email existe o no
+            validation=False
+
+            row=cursor.fetchone()
+            
+            #Si hay resultados, cambiamos validation a True
+            if row:
+                print('Email encontrado')
+                validation=True
+
+                cursor.close()
+
+                return validation
+            
+            #Si no hay resultado, devolvemos None
+            else:
+                print('Email no encontrado')
+
+                cursor.close()
+                
+                return validation
+
+        #Cualquier error distitno, None también        
+        except Exception as error:
+            print('Error al obtener el id del usuario')
+            print(error)
+            return None
+
+
 
