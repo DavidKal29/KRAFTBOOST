@@ -46,8 +46,8 @@
         <!-- botones -->
         <div class="hidden lg:flex items-center">
             <div id="botones" class="flex space-x-4">
-                <a href="#"><button class="bg-white text-[#C40C0C] rounded px-[16px] py-[8px] font-bold text-[14px]">Iniciar Sesión</button></a>
-                <a href="#"><button class="bg-[#C40C0C] text-white rounded px-[16px] py-[8px] font-bold text-[14px]">Crear cuenta</button></a>
+                <a href="{{url_for('auth.login')}}"><button class="bg-white text-[#C40C0C] rounded px-[16px] py-[8px] font-bold text-[14px]">Iniciar Sesión</button></a>
+                <a href="{{url_for('auth.register')}}"><button class="bg-[#C40C0C] text-white rounded px-[16px] py-[8px] font-bold text-[14px]">Crear cuenta</button></a>
             </div>
   
         </div>
@@ -70,10 +70,10 @@
             <a href="{{url_for('shop.shop')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
                 <i class="fa-solid fa-shop"></i> Tienda
             </a>
-            <a href="#" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
+            <a href="{{url_for('auth.login')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
                 <i class="fa-solid fa-user"></i> Iniciar Sesión
             </a>
-            <a href="#" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
+            <a href="{{url_for('auth.register')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
                 <i class="fa-solid fa-user-plus"></i> Crear Cuenta
             </a>
             <a href="#" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">

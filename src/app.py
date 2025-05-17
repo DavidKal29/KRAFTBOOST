@@ -1,4 +1,5 @@
 from flask import Flask,render_template
+from flask_login import LoginManager
 from os import getenv
 from config import config
 from dotenv import load_dotenv
@@ -7,11 +8,14 @@ from flask_mysqldb import MySQL
 #Modelos
 from models.ModelBrand import ModelBrand
 from models.ModelCategory import ModelCategory
+from models.ModelUser import ModelUser
 
 #Blueprints
 from routes.home import home_bp
 from routes.shop import shop_bp
 from routes.page_product import product_bp
+from routes.auth import auth_bp
+from routes.profile import profile_bp
 
 
 
@@ -30,10 +34,21 @@ db=MySQL(app)
 app.config['db']=db
 
 
+#Creamos el login manager
+login_manager=LoginManager(app)
+
+#Creamos la función que se encarge de cargar al usuario a través de su id
+@login_manager.user_loader
+def load_user(id):
+    return ModelUser.get_by_id(db,id)
+
+
 #Registro de blueprints
 app.register_blueprint(home_bp)
 app.register_blueprint(shop_bp)
 app.register_blueprint(product_bp)
+app.register_blueprint(auth_bp)
+app.register_blueprint(profile_bp)
 
 
 #Pagina 404
@@ -87,4 +102,4 @@ with app.app_context():
 
 
 if __name__=='__main__':
-    app.run()
+    app.run(host='192.168.1.136')

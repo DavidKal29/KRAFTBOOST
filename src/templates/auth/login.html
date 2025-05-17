@@ -1,0 +1,71 @@
+{% extends './layout.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+
+<section class="flex flex-col justify-center items-center mt-[80px] md:mt-[120px] mb-12 gap-4">
+    <h1 class="text-[#C40C0C] font-bold text-[30px] xl:text-[40px]">KRAFTBOOST</h1>
+
+    
+    <form action="{{url_for('auth.login')}}" method="post" class="flex flex-col justify-center items-center gap-6 text-white px-4 w-full max-w-[600px]">
+        
+        {{ form.hidden_tag() }}
+
+        {% with messages=get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                    <span class="text-[#C40C0C] text-md font-semibold">¡{{msg}}!</span>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    
+        
+        <div class="flex justify-center items-start flex-col w-full">
+            {{ form.email.label(class="font-bold") }}
+            {{ form.email(placeholder='Ej: ejemplo@ejemplo.es', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                
+            {% if form.email.errors %}
+                <p class="text-[12px] text-[#C40C0C] mt-1">{{form.email.errors[0]}}</p>
+            {% endif %}
+        </div>
+
+        <div class="flex justify-center items-start flex-col w-full">
+            {{ form.password.label(class="font-bold") }}
+            {{ form.password(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                
+            {% if form.password.errors %}
+                <p class="text-[12px] text-[#C40C0C] mt-1">{{form.password.errors[0]}}</p>
+            {% endif %}
+        </div>
+        
+        <p class="text-white font-semibold max-[320px]:text-[15px]">¿No tienes una cuenta? <a href="{{url_for('auth.register')}}" class="text-[#C40C0C]">Registrarme</a></p>
+        
+
+        <button type="submit" class="bg-[#C40C0C] rounded text-white px-8 py-2 text-center w-full font-bold">Iniciar Sesión</button>
+
+        <p class="text-white font-semibold max-[320px]:text-[15px]">¿Olvidaste contraseña? <a href="#" class="text-[#C40C0C]">Recuperarla</a></p>
+        
+    </form>
+</section>
+
+
+<div class="w-full flex justify-between max-[320px]:mt-0 mt-12 sm:mt-0">
+    <!-- Personaje Izquierdo -->
+    <img 
+      src="{{url_for('static',filename='images/footer_personajes/oso_polar_login.png')}}" 
+      alt="Personaje Izquierdo"
+      class="bottom-[270px] right-0 translate-y-[30%] md:translate-y-[10%] lg:translate-y-[-10%] xl:translate-y-[-70%] max-[320px]:w-[28vh] w-[22vh] min-[568px]:w-[60vh] sm:w-[60vh] landscape:md:w-[60vh] md:w-[30vh] md:mb-[20px] landscape:lg:w-[45vh] landscape:lg:h-[50vh]  landscape:lg:mb-[-105px] landscape:xl:mb-[-310px] max-[320px]:mb-[25px] mb-[40px] z-[-1]"
+    />
+
+    <!-- Personaje Derecho -->
+    <img 
+      src="{{url_for('static',filename='images/footer_personajes/oso_negro_login.png')}}" 
+      alt="Personaje Derecho"
+      class="bottom-[270px] right-0 translate-y-[30%] md:translate-y-[10%] lg:translate-y-[-10%] xl:translate-y-[-70%] max-[320px]:w-[28vh] w-[22vh] min-[568px]:w-[60vh] sm:w-[60vh] landscape:md:w-[60vh] md:w-[30vh] md:mb-[20px] landscape:lg:w-[45vh] landscape:lg:h-[50vh]  landscape:lg:mb-[-105px] landscape:xl:mb-[-310px] max-[320px]:mb-[25px] mb-[40px] z-[-1]"
+    />
+</div>
+
+
+
+{% endblock %}

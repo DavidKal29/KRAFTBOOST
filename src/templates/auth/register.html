@@ -1,0 +1,137 @@
+{% extends './layout.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+
+<section class="flex flex-col justify-center items-center mt-[80px] md:mt-[120px] mb-12 gap-4">
+    <h1 class="text-[#C40C0C] font-bold text-[30px] xl:text-[40px]">KRAFTBOOST</h1>
+
+    <form action="{{url_for('auth.register')}}" method="post" class="flex flex-col justify-center items-center gap-6 text-white px-4 w-full max-w-3xl">
+
+        {{ form.hidden_tag() }}
+
+        {% with messages=get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                    <span class="text-[#C40C0C] text-md font-semibold">¡{{msg}}!</span>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Nombre y Apellidos -->
+        <div class="flex flex-col min-[568px]:flex-row justify-center items-center gap-4 min-[568px]:gap-2 w-full">
+            <!-- Nombre -->
+            <div class="flex flex-col w-full">
+                {{ form.nombre.label(class="font-bold") }}
+                {{ form.nombre(placeholder='Ej: Antonio', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                
+                {% if form.nombre.errors %}
+                    <p class="text-[12px] text-[#C40C0C] mt-1">{{form.nombre.errors[0]}}</p>
+                {% elif form.apellidos.errors %}
+                <!-- Lo pongo para que no se descuadren los inputs -->
+                    <p class="text-[12px] mt-1 invisible">This field is required</p>
+                {% endif %}
+            </div>
+
+            <!-- Apellidos -->
+            <div class="flex flex-col w-full">
+                {{ form.apellidos.label(class="font-bold") }}
+                {{ form.apellidos(placeholder='Ej: Gutierrez', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                
+                {% if form.apellidos.errors %}
+                    <p class="text-[12px] text-[#C40C0C] mt-1">{{form.apellidos.errors[0]}}</p>
+                {% elif form.nombre.errors %}
+                <!-- Lo pongo para que no se descuadren los inputs -->
+                    <p class="text-[12px] text-black mt-1 opacity-0">This field is required</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Email y Username -->
+        <div class="flex flex-col min-[568px]:flex-row justify-center items-center gap-4 min-[568px]:gap-2 w-full">
+            <!-- Email -->
+            <div class="flex flex-col w-full">
+                {{ form.email.label(class="font-bold") }}
+                {{ form.email(placeholder='Ej: ejemplo@ejemplo.es', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                
+                {% if form.email.errors %}
+                    <p class="text-[12px] text-[#C40C0C] mt-1">{{form.email.errors[0]}}</p>
+                {% elif form.username.errors %}
+                <!-- Lo pongo para que no se descuadren los inputs -->
+                    <p class="text-[12px] mt-1 invisible">This field is required</p>
+                {% endif %}
+            </div>
+
+            <!-- Username -->
+            <div class="flex flex-col w-full">
+                {{ form.username.label(class="font-bold") }}
+                {{ form.username(placeholder='Ej: Tonio09', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                
+                {% if form.username.errors %}
+                    <p class="text-[12px] text-[#C40C0C] mt-1">{{form.username.errors[0]}}</p>
+                {% elif form.email.errors %}
+                <!-- Lo pongo para que no se descuadren los inputs -->
+                    <p class="text-[12px] text-black mt-1 opacity-0">This field is required</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Password y Confirm -->
+        <div class="flex flex-col min-[568px]:flex-row justify-center items-center gap-4 min-[568px]:gap-2 w-full">
+            <!-- Password -->
+            <div class="flex flex-col w-full">
+                {{ form.password.label(class="font-bold") }}
+                {{ form.password(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                
+                {% if form.password.errors %}
+                    <p class="text-[12px] text-[#C40C0C] mt-1">{{form.password.errors[0]}}</p>
+                {% elif form.confirm.errors %}
+                <!-- Lo pongo para que no se descuadren los inputs -->
+                    <p class="text-[12px] text-black mt-1 opacity-0">This field is required</p>
+                {% endif %}
+            </div>
+
+            <!-- Confirm -->
+            <div class="flex flex-col w-full">
+                {{ form.confirm.label(class="font-bold") }}
+                {{ form.confirm(placeholder='Confirmar', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                
+                {% if form.confirm.errors %}
+                    <p class="text-[12px] text-[#C40C0C] mt-1">{{form.confirm.errors[0]}}</p>
+                {% elif form.password.errors %}
+                <!-- Lo pongo para que no se descuadren los inputs -->
+                    <p class="text-[12px] text-black mt-1 opacity-0">This field is required</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Link Login -->
+        <p class="text-white font-semibold text-center">¿Ya tienes cuenta?
+            <a href="{{url_for('auth.login')}}" class="text-[#C40C0C]">Iniciar Sesión</a>
+        </p>
+
+        <!-- Submit -->
+        {{ form.submit(class="cursor-pointer text-white font-bold bg-[#C40C0C] rounded px-8 py-3 w-full max-w-[800px]") }}
+    </form>
+</section>
+
+<div class="w-full flex justify-between max-[320px]:mt-0 mt-12 sm:mt-0">
+    <!-- Personaje Izquierdo -->
+    <img 
+      src="{{url_for('static',filename='images/footer_personajes/leopardo_register.png')}}" 
+      alt="Personaje Izquierdo"
+      class="bottom-[270px] right-0 translate-y-[30%] md:translate-y-[10%] lg:translate-y-[-10%] xl:translate-y-[-100%] max-[320px]:w-[28vh] w-[22vh] min-[568px]:w-[60vh] sm:w-[60vh] landscape:md:w-[60vh] md:w-[30vh] md:mb-[20px] landscape:lg:w-[40vh] landscape:lg:h-[45vh]  landscape:lg:mb-[-45px] landscape:xl:mb-[-505px] max-[320px]:mb-[25px] mb-[40px] z-[-1]"
+    />
+
+    <!-- Personaje Derecho -->
+    <img 
+      src="{{url_for('static',filename='images/footer_personajes/tigre_register.png')}}" 
+      alt="Personaje Derecho"
+      class="bottom-[270px] right-0 translate-y-[30%] md:translate-y-[10%] lg:translate-y-[-10%] xl:translate-y-[-100%] max-[320px]:w-[28vh] w-[22vh] min-[568px]:w-[60vh] sm:w-[60vh] landscape:md:w-[60vh] md:w-[30vh] md:mb-[20px] landscape:lg:w-[40vh] landscape:lg:h-[45vh]  landscape:lg:mb-[-45px] landscape:xl:mb-[-505px] max-[320px]:mb-[25px] mb-[40px] z-[-1]"
+    />
+</div>
+
+
+
+{% endblock %}

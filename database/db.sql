@@ -8,8 +8,6 @@ CREATE TABLE usuarios (
     apellidos VARCHAR (100) NOT NULL,
     email VARCHAR (150) NOT NULL UNIQUE,
     username VARCHAR (25) NOT NULL UNIQUE,
-    telefono VARCHAR (20) NOT NULL,
-    fecha_nacimiento DATE NOT NULL,
     password VARCHAR (255) NOT NULL,
 	fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     rol VARCHAR (50) NOT NULL
@@ -123,20 +121,20 @@ Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/agarre_giro
 Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/agarre_medio_neutro.png'),
 ('Agarre Unilateral Metálico Domyos', 50, 4.99, 1, 1, 'Agarre unilateral metálico. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/agarre_unilateral_metalico.png'),
-('Barra Exagonal Domyos', 50, 29.99, 1, 1, 'Barra exagonal de hierro. Ideal para el entreno. Fabricado en la fabrica de
+('Barra 10kg Exagonal Domyos', 50, 29.99, 1, 1, 'Barra exagonal de hierro. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/barra_exagonal.png'),
-('Barra Olímpica Domyos', 50, 69.99, 1, 1, 'Barra Olímpica de hierro. Ideal para el entreno. Fabricado en la fabrica de
+('Barra 20kg Olímpica Domyos', 50, 69.99, 1, 1, 'Barra Olímpica de hierro. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/barra_olimpica.png'),
-('Barra para Mancuernas Domyos', 50, 9.99, 1, 1, 'Barra para mancuernas de hierro. Ideal para el entreno. Fabricado en la fabrica de
+('Barra 2kg para Mancuernas Domyos', 50, 9.99, 1, 1, 'Barra para mancuernas de hierro. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/barra_para_mancuernas.png'),
-('Barra Z Domyos', 50, 29.99, 1, 1, 'Barra Z de hierro. Ideal para el entreno. Fabricado en la fabrica de
+('Barra 8kg Z Domyos', 50, 29.99, 1, 1, 'Barra Z de hierro. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/barras/barra_z.png');
 
 
 -- Bancos (categoria 2)
 INSERT INTO productos (nombre, stock, precio, id_categoria, id_marca, descripcion, imagen)
 VALUES
-('Banco con Soportes Tunturi', 50, 99.99, 2, 2, 'Banco plano con soportes. Ideal para press de banca. Distribuido por la marca Tunturi.', 'images/productos/bancos/banco_con_soportes_tunturi.png'),
+('Banco Plano con Soportes Tunturi', 50, 99.99, 2, 2, 'Banco plano con soportes. Ideal para press de banca. Distribuido por la marca Tunturi.', 'images/productos/bancos/banco_con_soportes_tunturi.png'),
 ('Banco Inclinado Domyos', 50, 149.99, 2, 1, 'Banco inclinado. Ideal para press de banca inclinado. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/bancos/banco_inclinado_domyos.png'),
 ('Banco Inclinado Tunturi', 50, 99.99, 2, 2, 'Banco inclinado. Ideal para press de banca inclinado. Distribuido por la marca Tunturi.', 'images/productos/bancos/banco_inclinado_tunturi.png'),
@@ -157,15 +155,15 @@ Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_10kg_
 ('Disco 20kg Goma Domyos', 50, 29.99, 3, 1, 'Disco de goma de 20 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_20kg_goma_domyos.png'),
 
-('Disco 1kg Domyos', 50, 2.99, 3, 1, 'Disco de hierro de 1 kilogramo. Ideal para el entreno. Fabricado en la fabrica de
+('Disco 1kg Hierro Domyos', 50, 2.99, 3, 1, 'Disco de hierro de 1 kilogramo. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_1kg_domyos.png'),
-('Disco 2kg Domyos', 50, 4.99, 3, 1, 'Disco de hierro de 2 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
+('Disco 2kg Hierro Domyos', 50, 4.99, 3, 1, 'Disco de hierro de 2 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_2kg_domyos.png'),
-('Disco 5kg Domyos', 50, 9.99, 3, 1, 'Disco de hierro de 5 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
+('Disco 5kg Hierro Domyos', 50, 9.99, 3, 1, 'Disco de hierro de 5 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_5kg_domyos.png'),
-('Disco 10kg Domyos', 50, 15.99, 3, 1, 'Disco de hierro de 10 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
+('Disco 10kg Hierro Domyos', 50, 15.99, 3, 1, 'Disco de hierro de 10 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_10kg_domyos.png'),
-('Disco 20kg Domyos', 50, 15.99, 3, 1, 'Disco de hierro de 20 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
+('Disco 20kg Hierro Domyos', 50, 15.99, 3, 1, 'Disco de hierro de 20 kilogramos. Ideal para el entreno. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/discos/disco_20kg_domyos.png'),
 
 
@@ -196,7 +194,7 @@ VALUES
 ('Mancuerna 5kg Corength', 50, 9.99, 4, 4, 'Mancuerna de 5 kilogramos. Ideal para el entrenamiento serio. Distribuido por la marca Corength.', 'images/productos/mancuernas/mancuerna_5kg_corength.png'),
 ('Mancuerna 7.5kg Corength', 50, 14.99, 4, 4, 'Mancuerna de 7.5 kilogramos. Ideal para el entrenamiento serio. Distribuido por la marca Corength.', 'images/productos/mancuernas/mancuerna_7.5kg_corength.png'),
 ('Mancuerna 10kg Corength', 50, 19.99, 4, 4, 'Mancuerna de 10 kilogramos. Ideal para el entrenamiento serio. Distribuido por la marca Corength.', 'images/productos/mancuernas/mancuerna_10kg_corength.png'),
-('Mancuerna 12kg Corength', 50, 24.99, 4, 4, 'Mancuerna de 12 kilogramos. Ideal para el entrenamiento serio. Distribuido por la marca Corength.', 'images/productos/mancuernas/mancuerna_12.5kg_corength.png'),
+('Mancuerna 12.5kg Corength', 50, 24.99, 4, 4, 'Mancuerna de 12 kilogramos. Ideal para el entrenamiento serio. Distribuido por la marca Corength.', 'images/productos/mancuernas/mancuerna_12.5kg_corength.png'),
 ('Mancuerna 15kg Corength', 50, 29.99, 4, 4, 'Mancuerna de 15 kilogramos. Ideal para el entrenamiento serio. Distribuido por la marca Corength.', 'images/productos/mancuernas/mancuerna_15kg_corength.png'),
 ('Mancuerna 17.5kg Corength', 50, 34.99, 4, 4, 'Mancuerna de 17.5 kilogramos. Ideal para el entrenamiento serio. Distribuido por la marca Corength.', 'images/productos/mancuernas/mancuerna_17.5kg_corength.png'),
 ('Mancuerna 20kg Corength', 50, 39.99, 4, 4, 'Mancuerna de 20 kilogramos. Ideal para el entrenamiento serio. Distribuido por la marca Corength.', 'images/productos/mancuernas/mancuerna_20kg_corength.png'),
@@ -276,7 +274,7 @@ VALUES
 -- Productos nuevos (Apareceran en la sección de productos nuevos del inicio)
 INSERT INTO productos (nombre, stock, precio, id_categoria, id_marca, descripcion, imagen)
 VALUES
-('Banco Multifunción Estructura Domyos', 50, 174.99, 2, 1, 'Banco con multifunción. Ideal para todo tipo de ejercicios en banco o sentado. Fabricado en la fabrica de
+('Banco Multifunción Domyos', 50, 174.99, 2, 1, 'Banco con multifunción. Ideal para todo tipo de ejercicios en banco o sentado. Fabricado en la fabrica de
 Oxylane, distribuido por la marca Domyos.', 'images/productos/bancos/banco_multifuncion_domyos.png'),
 ('Torre Paralelas y Dominadas Estructura Kraftboost', 50, 149.99, 8, 3, 'Torre de paralelas y dominadas. Ideal para hacer dominadas, muscle ups, fondos y demás ejercicios. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/torre_paralelas_dominadas_kraftboost.png'),
 ('Kettlebell 28kg Tunturi', 50, 34.99, 7, 2, 'Kettlebell de 28 kilogramos. Ideal para entrenamientos funcionales o CrossFit. Distribuido por la marca Tunturi.', 'images/productos/kettlebells/kettlebell_28kg_tunturi.png'),
