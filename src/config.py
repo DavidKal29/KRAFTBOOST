@@ -14,6 +14,10 @@ class Config():
     MAIL_USERNAME=os.getenv('CORREO')
     MAIL_PASSWORD=os.getenv('PASSWORD_DEL_CORREO')
 
+    #Secret Keys Tokens
+    JWT_SECRET_KEY_RESET_PASSWORD=os.getenv('JWT_SECRET_KEY_RESET_PASSWORD')
+    JWT_SECRET_KEY_RESET_CART=os.getenv('JWT_SECRET_KEY_RESET_CART')
+
 
 
 class Development(Config):
