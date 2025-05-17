@@ -85,3 +85,23 @@ class EmailRecuperacion(FlaskForm):
     ])
 
     submit=SubmitField('Enviar Email')
+
+
+#Formulario de enviar email para recuperar contraseña
+class ChangePassword(FlaskForm):
+
+    password=PasswordField('Contraseña',validators=[
+        DataRequired(message="Este campo es obligatorio"),
+        Length(min=8,max=100,message='8-100 caracteres requeridos'),
+        validar_password
+    ])
+
+    confirm=PasswordField('Confirmar Contraseña',validators=[
+        DataRequired(message="Este campo es obligatorio"),
+        Length(min=8,max=100,message='8-100 caracteres requeridos'),
+        EqualTo('password',message='Contraseñas no coinciden')
+        
+    ])
+    
+
+    submit=SubmitField('Cambiar Contraseña')
