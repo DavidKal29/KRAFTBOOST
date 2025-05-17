@@ -1,5 +1,6 @@
 from flask import Flask,render_template
 from flask_login import LoginManager
+from flask_mail import Mail
 from os import getenv
 from config import config
 from dotenv import load_dotenv
@@ -29,6 +30,9 @@ app.config.from_object(config['development'])
 
 #Conexión de la base de datos
 db=MySQL(app)
+
+#Conexión al email
+mail=Mail(app)
 
 #Añadimos la db al config de app
 app.config['db']=db
