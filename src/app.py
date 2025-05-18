@@ -17,7 +17,7 @@ from routes.shop import shop_bp
 from routes.page_product import product_bp
 from routes.auth import auth_bp
 from routes.profile import profile_bp
-
+from routes.cart import cart_bp
 
 
 load_dotenv()
@@ -56,6 +56,7 @@ app.register_blueprint(shop_bp)
 app.register_blueprint(product_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(profile_bp)
+app.register_blueprint(cart_bp)
 
 
 #Pagina 404
