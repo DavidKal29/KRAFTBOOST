@@ -44,13 +44,13 @@
         </div>
         
         <!-- Link Crear Cuenta -->
-        <p class="text-white font-semibold max-[320px]:text-[15px]">¿No tienes una cuenta? <a href="{{url_for('auth.register')}}" class="text-[#C40C0C]">Registrarme</a></p>
+        <p class="text-white font-semibold max-[320px]:text-[15px] text-center">¿No tienes una cuenta? <a href="{{url_for('auth.register')}}" class="text-[#C40C0C]">Registrarme</a></p>
         
         <!-- Submit -->
         {{ form.submit(class="cursor-pointer text-white font-bold bg-[#C40C0C] rounded px-8 py-3 w-full max-w-[800px]") }}
 
         <!-- Link Forgot Password -->
-        <p class="text-white font-semibold max-[320px]:text-[15px]">¿Olvidaste contraseña? <a href="{{url_for('auth.forgot_password')}}" class="text-[#C40C0C]">Recuperarla</a></p>
+        <p class="text-white font-semibold max-[320px]:text-[15px] text-center">¿Olvidaste contraseña? <a href="{{url_for('auth.forgot_password')}}" class="text-[#C40C0C]">Recuperarla</a></p>
         
     </form>
 </section>

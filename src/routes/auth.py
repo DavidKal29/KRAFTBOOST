@@ -207,68 +207,65 @@ def forgot_password():
 @auth_bp.route('/reset_password/<token>',methods=['GET','POST'])
 def reset_password(token):
     try:
-        print(1)
+    
         #Obtenemos el cursor de la db, y el formulario de reset password
         db=current_app.config['db']
         form=ChangePassword()
 
-        print(2)
-
+        #Decodeamos el token para ver si es valido
         token_decode=TokenManager.validate_token(token,current_app.config['JWT_SECRET_KEY_RESET_PASSWORD'])
 
-        print(3)
-
+        #Si el token no es valido, mandamos a la página de error de token
         if not token_decode:
             print(4)
-            return 'TOKENCILLO EXPIRADILLO'
+            return render_template('token_error.html')
         
 
-        print(5)
         #Si el metodo es post y se valida el formulario
         if form.validate() and request.method=='POST':
-            print(6)    
+            
+            #Obtenemos los passwords
             password=request.form.get('password')
             confirm=request.form.get('confirm')
 
             print(password,confirm)
 
-
+            #Hacemos el cambio de password y lo asociamos a una variable para ver si se cambió
             validation=ModelUser.change_password(db,token_decode['email'],password)
 
-            print(7)
-
+            #Si todo salio bien mandamos el mensaje de éxito
             if validation:
-                print(8)
+            
                 print('Contraseña cambiada con éxito')
                 flash('Contraseña cambiada con éxito')
                 return render_template('auth/reset_password.html',form=form,token=token)
 
+            #Sino, mandamos el mensaje de error
             else:
-                print(9)
+            
                 print('Error al cambiar contraseña')
                 flash('Error al cambiar contraseña')
                 return render_template('auth/reset_password.html',form=form,token=token)
-            
-                
+                     
         #Si cae en get 
         else:
-            print(10)
+            
             #Si estamos logueados
             if current_user.is_authenticated:
                 #Redirijir a perfil
                 return redirect(url_for('profile.profile'))
             #Sino
             else:
-                print(11)
+                
                 #Redirijir a forgot password otra vez
                 return render_template('auth/reset_password.html',form=form,token=token)
     
     #Cualquier otro error, al home
     except Exception as error:
-        print(12)
+        
         print('ERROR DETECTADO EN LA CONSOLA')
         print(error)
-        return redirect(url_for('home.home'))
+        return render_template('token_error.html')
 
 
             
