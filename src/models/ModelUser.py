@@ -1,4 +1,4 @@
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash,check_password_hash
 from models.entities.User import User
 
 class ModelUser():
@@ -186,6 +186,22 @@ class ModelUser():
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
 
+            #Obtenemos la contraseña antigua
+            sql='SELECT password FROM usuarios WHERE email=%s'
+            cursor.execute(sql,(email,))
+
+            #Obtenemos el row
+            row=cursor.fetchone()
+
+            #Si hay resultados, obtenemos el password antiguo
+            if row:
+                old_password=row[0]
+            
+            #Si la contraseña antigua y la nueva son iguales, no 
+            # cambiamos anda y mandamos el mensaje de que son iguales
+            if check_password_hash(old_password, new_password):
+                return 'Contraseñas iguales'
+            
             #Encriptamos la contraseña para mandarla encriptada a la db
             new_password=generate_password_hash(new_password)
             

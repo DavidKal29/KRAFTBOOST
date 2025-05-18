@@ -235,10 +235,17 @@ def reset_password(token):
 
             #Si todo salio bien mandamos el mensaje de éxito
             if validation:
-            
-                print('Contraseña cambiada con éxito')
-                flash('Contraseña cambiada con éxito')
-                return render_template('auth/reset_password.html',form=form,token=token)
+
+                if validation=='Contraseñas iguales':
+                    print('La nueva Contraseña no puede ser igual a la anterior')
+                    flash('La nueva Contraseña no puede ser igual a la anterior')
+                    return render_template('auth/reset_password.html',form=form,token=token)
+                
+                else:
+                    print('Contraseña cambiada éxito')
+                    flash('Contraseña cambiada éxito')
+                    return render_template('auth/reset_password.html',form=form,token=token)
+
 
             #Sino, mandamos el mensaje de error
             else:
