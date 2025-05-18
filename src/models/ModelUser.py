@@ -1,4 +1,4 @@
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash,check_password_hash
 from models.entities.User import User
 
 class ModelUser():
@@ -135,9 +135,90 @@ class ModelUser():
 
         #Cualquier error distitno, None también        
         except Exception as error:
-            print('Error al obtener el id del usuario')
+            print('Error al obtener el id')
             print(error)
             return None
     
+
+    @classmethod
+    def validate_email(cls,db,email):
+        try:
+
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+            
+            #Montamos la consulta y la ejecutamos
+            sql='SELECT email FROM usuarios WHERE email=%s'
+            cursor.execute(sql,(email,))
+
+            #Variable para ver si el email existe o no
+            validation=False
+
+            row=cursor.fetchone()
+            
+            #Si hay resultados, cambiamos validation a True
+            if row:
+                print('Email encontrado')
+                validation=True
+
+                cursor.close()
+
+                return validation
+            
+            #Si no hay resultado, devolvemos None
+            else:
+                print('Email no encontrado')
+
+                cursor.close()
+                
+                return validation
+
+        #Cualquier error distitno, None también        
+        except Exception as error:
+            print('Error al obtener el email')
+            print(error)
+            return None
+        
+    @classmethod
+    def change_password(cls,db,email,new_password):
+        try:
+
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+
+            #Obtenemos la contraseña antigua
+            sql='SELECT password FROM usuarios WHERE email=%s'
+            cursor.execute(sql,(email,))
+
+            #Obtenemos el row
+            row=cursor.fetchone()
+
+            #Si hay resultados, obtenemos el password antiguo
+            if row:
+                old_password=row[0]
+            
+            #Si la contraseña antigua y la nueva son iguales, no 
+            # cambiamos anda y mandamos el mensaje de que son iguales
+            if check_password_hash(old_password, new_password):
+                return 'Contraseñas iguales'
+            
+            #Encriptamos la contraseña para mandarla encriptada a la db
+            new_password=generate_password_hash(new_password)
+            
+            #Montamos el update, ejecutamos y commiteamos
+            sql='UPDATE usuarios SET password=%s WHERE email=%s'
+            cursor.execute(sql,(new_password,email))
+            db.connection.commit()
+
+            #Devolvemos true si todo sale bien
+            return True
+
+            
+        #Cualquier error distitno, None también        
+        except Exception as error:
+            print('Error al cambiar password')
+            print(error)
+            return None
+
 
 

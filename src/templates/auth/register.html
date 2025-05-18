@@ -5,7 +5,7 @@
 {% block body %}
 
 <section class="flex flex-col justify-center items-center mt-[80px] md:mt-[120px] mb-12 gap-4">
-    <h1 class="text-[#C40C0C] font-bold text-[30px] xl:text-[40px]">KRAFTBOOST</h1>
+    <h1 class="text-[#C40C0C] font-bold text-[30px] xl:text-[40px] text-center">REGISTER</h1>
 
     <form action="{{url_for('auth.register')}}" method="post" class="flex flex-col justify-center items-center gap-6 text-white px-4 w-full max-w-3xl">
 
@@ -14,7 +14,7 @@
         {% with messages=get_flashed_messages() %}
             {% if messages %}
                 {% for msg in messages %}
-                    <span class="text-[#C40C0C] text-md font-semibold">¡{{msg}}!</span>
+                    <span class="text-[#C40C0C] text-md font-semibold text-center">¡{{msg}}!</span>
                 {% endfor %}
             {% endif %}
         {% endwith %}
@@ -24,7 +24,7 @@
             <!-- Nombre -->
             <div class="flex flex-col w-full">
                 {{ form.nombre.label(class="font-bold") }}
-                {{ form.nombre(placeholder='Ej: Antonio', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                {{ form.nombre(placeholder='Ej: Antonio', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
                 
                 {% if form.nombre.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.nombre.errors[0]}}</p>
@@ -37,7 +37,7 @@
             <!-- Apellidos -->
             <div class="flex flex-col w-full">
                 {{ form.apellidos.label(class="font-bold") }}
-                {{ form.apellidos(placeholder='Ej: Gutierrez', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                {{ form.apellidos(placeholder='Ej: Gutierrez', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
                 
                 {% if form.apellidos.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.apellidos.errors[0]}}</p>
@@ -53,7 +53,7 @@
             <!-- Email -->
             <div class="flex flex-col w-full">
                 {{ form.email.label(class="font-bold") }}
-                {{ form.email(placeholder='Ej: ejemplo@ejemplo.es', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                {{ form.email(placeholder='Ej: ejemplo@ejemplo.es', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
                 
                 {% if form.email.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.email.errors[0]}}</p>
@@ -66,7 +66,7 @@
             <!-- Username -->
             <div class="flex flex-col w-full">
                 {{ form.username.label(class="font-bold") }}
-                {{ form.username(placeholder='Ej: Tonio09', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                {{ form.username(placeholder='Ej: Tonio09', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
                 
                 {% if form.username.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.username.errors[0]}}</p>
@@ -82,7 +82,7 @@
             <!-- Password -->
             <div class="flex flex-col w-full">
                 {{ form.password.label(class="font-bold") }}
-                {{ form.password(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                {{ form.password(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
                 
                 {% if form.password.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.password.errors[0]}}</p>
@@ -95,7 +95,7 @@
             <!-- Confirm -->
             <div class="flex flex-col w-full">
                 {{ form.confirm.label(class="font-bold") }}
-                {{ form.confirm(placeholder='Confirmar', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                {{ form.confirm(placeholder='Confirmar', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
                 
                 {% if form.confirm.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.confirm.errors[0]}}</p>
@@ -128,7 +128,7 @@
     <img 
       src="{{url_for('static',filename='images/footer_personajes/tigre_register.png')}}" 
       alt="Personaje Derecho"
-      class="bottom-[270px] right-0 translate-y-[30%] md:translate-y-[10%] lg:translate-y-[-10%] xl:translate-y-[-100%] max-[320px]:w-[28vh] w-[22vh] min-[568px]:w-[60vh] sm:w-[60vh] landscape:md:w-[60vh] md:w-[30vh] md:mb-[20px] landscape:lg:w-[40vh] landscape:lg:h-[45vh]  landscape:lg:mb-[-45px] landscape:xl:mb-[-505px] max-[320px]:mb-[25px] mb-[40px] z-[-1]"
+      class="bottom-[270px] right-0 translate-y-[30%] md:translate-y-[10%] lg:translate-y-[-10%] xl:translate-y-[-100%] max-[320px]:w-[28vh] w-[22vh] min-[568px]:w-[60vh] sm:w-[60vh] landscape:md:w-[60vh] md:w-[30vh] md:mb-[20px] landscape:lg:w-[38vh] landscape:lg:h-[45vh]  landscape:lg:mb-[-45px] landscape:xl:mb-[-505px] max-[320px]:mb-[25px] mb-[40px] z-[-1]"
     />
 </div>
 
