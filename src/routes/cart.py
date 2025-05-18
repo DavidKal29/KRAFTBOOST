@@ -1,4 +1,4 @@
-from flask import Blueprint,abort,redirect,url_for
+from flask import Blueprint,abort,redirect,url_for,render_template
 from flask_login import current_user
 
 
@@ -10,7 +10,7 @@ def cart():
     if current_user.is_authenticated:
         print('EL current user rol:',current_user.rol)
         if current_user.rol=='client':
-            return 'Este es el carrito temporal'
+            return render_template('cart.html')
         else:
             abort(401)
     
