@@ -6,6 +6,9 @@ from models.entities.User import User
 #Enviador de Correos
 from utils.MailSender import MailSender
 
+#Manejador de Tokens
+from utils.TokenManager import TokenManager
+
 #Formularios WTF
 from formularios_WTF.forms import Register,Login,EmailRecuperacion,ChangePassword
 
@@ -148,6 +151,7 @@ def forgot_password():
         #Obtenemos el cursor de la db, y el formulario para enviar email
         db=current_app.config['db']
         form=EmailRecuperacion()
+        print('EL request host:',request.host_url)
 
         #Si el metodo es post y se valida el formulario
         if form.validate() and request.method=='POST':
@@ -162,7 +166,17 @@ def forgot_password():
 
             #Si hay validacion avisa que se envió el correo
             if validation:
+
+                #Pasamos el email, tiempo de exp y el secret key
+                token=TokenManager.create_token(email,2,current_app.config['JWT_SECRET_KEY_RESET_PASSWORD'])
+
+                #Enviamos el email
+                MailSender.reset_password_message(current_app,email,request.host_url,token)
+
+                #Mensaje de éxito
                 flash('Correo Enviado con Éxito')
+
+                #Devolvemos el template con la confirmacion
                 return render_template('auth/forgot_password.html',form=form)
             
             #Sino, avisa que el correo no existe
@@ -190,48 +204,68 @@ def forgot_password():
     
 
 
-@auth_bp('/reset_password/<token>',methods=['GET','POST'])
+@auth_bp.route('/reset_password/<token>',methods=['GET','POST'])
 def reset_password(token):
     try:
+        print(1)
         #Obtenemos el cursor de la db, y el formulario de reset password
         db=current_app.config['db']
         form=ChangePassword()
 
+        print(2)
+
+        token_decode=TokenManager.validate_token(token,current_app.config['JWT_SECRET_KEY_RESET_PASSWORD'])
+
+        print(3)
+
+        if not token_decode:
+            print(4)
+            return 'TOKENCILLO EXPIRADILLO'
+        
+
+        print(5)
         #Si el metodo es post y se valida el formulario
         if form.validate() and request.method=='POST':
-            
-            #Obtenemos el email y el password
-            email=request.form.get('email')
-            
-            print(email)
+            print(6)    
+            password=request.form.get('password')
+            confirm=request.form.get('confirm')
 
-            #Validamos el email para ver si existe en la db
-            validation=ModelUser.validate_email(db,email)
+            print(password,confirm)
 
-            #Si hay validacion avisa que se envió el correo
+
+            validation=ModelUser.change_password(db,token_decode['email'],password)
+
+            print(7)
+
             if validation:
-                flash('Correo Enviado con Éxito')
-                return render_template('auth/forgot_password.html',form=form)
-            
-            #Sino, avisa que el correo no existe
+                print(8)
+                print('Contraseña cambiada con éxito')
+                flash('Contraseña cambiada con éxito')
+                return render_template('auth/reset_password.html',form=form,token=token)
+
             else:
-                flash('Correo No Encontrado en los Registros')
-                return render_template('auth/forgot_password.html',form=form)
-                
+                print(9)
+                print('Error al cambiar contraseña')
+                flash('Error al cambiar contraseña')
+                return render_template('auth/reset_password.html',form=form,token=token)
             
+                
         #Si cae en get 
         else:
+            print(10)
             #Si estamos logueados
             if current_user.is_authenticated:
                 #Redirijir a perfil
                 return redirect(url_for('profile.profile'))
             #Sino
             else:
+                print(11)
                 #Redirijir a forgot password otra vez
-                return render_template('auth/reset_password.html',form=form)
+                return render_template('auth/reset_password.html',form=form,token=token)
     
     #Cualquier otro error, al home
     except Exception as error:
+        print(12)
         print('ERROR DETECTADO EN LA CONSOLA')
         print(error)
         return redirect(url_for('home.home'))
