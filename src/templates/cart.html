@@ -5,9 +5,7 @@
 {% block body %}
 
 
-<section class="flex justify-center flex-col gap-6 lg:gap-12 px-4 sm:px-6 mt-28 lg:mt-32">
-    <h2 class="text-4xl font-bold text-white text-center">Carrito</h2>
-
+<section class="flex justify-center flex-col gap-6 lg:gap-12 px-4 sm:px-6 mt-28 lg:mt-40">
     <div class="flex flex-col gap-4 sm:flex-row-reverse justify-center items-stretch sm:gap-6">
         <div class="flex justify-center items-center flex-col gap-8 ">
             <!-- Sumario -->
@@ -52,44 +50,53 @@
 
    
         <div class="max-h-[600px] h-[25rem] md:h-[30rem] lg:h-[40rem] overflow-y-auto scrollbar-hide flex flex-col justify-start items-center gap-6">
+            
+            {% if productos_carrito %}
+                {% for p in productos_carrito %}
+                    <!-- Tarjeta individual -->
+                    <div class="relative w-full max-w-[800px] sm:max-w-[650px] bg-[#1B1A1A] border-2 border-[#C40C0C] rounded p-4 flex flex-row items-center gap-4">
 
-            <!-- Tarjeta individual -->
-            <div class="relative w-full max-w-[800px] sm:max-w-[650px] bg-[#1B1A1A] border-2 border-[#C40C0C] rounded p-4 flex flex-row items-center gap-4">
+                        <!-- Botón de cerrar -->
+                        <a href="/cart/removeProduct/{{p.id}}" class="absolute top-2 right-2 text-[#C40C0C] sm:text-[20px]">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </a>
 
-                <!-- Botón de cerrar -->
-                <button class="absolute top-2 right-2 text-[#C40C0C] sm:text-[20px]">
-                    <i class="fa-solid fa-circle-xmark"></i>
-                </button>
+                        <!-- Precio -->
+                        <p class="absolute bottom-2 right-4 text-[#C40C0C] font-bold text-[12px] sm:text-[16px]">
+                            {{p.precio}}€
+                        </p>
 
-                <!-- Precio -->
-                <p class="absolute bottom-2 right-4 text-[#C40C0C] font-bold text-[12px] sm:text-[16px]">
-                    49.99€
-                </p>
+                        <!-- Imagen del producto -->
+                        <div class="w-32 min-[568px]:w-32 sm:w-40">
+                            <img src="{{url_for('static',filename=p.imagen)}}"
+                                alt="Producto"
+                                class="w-full h-full object-cover" />
+                        </div>
 
-                <!-- Imagen del producto -->
-                <div class="w-32 min-[568px]:w-32 sm:w-40">
-                    <img src="{{url_for('static',filename='images/productos/estructuras/torre_paralelas_dominadas_kraftboost.png')}}"
-                        alt="Producto"
-                        class="w-full h-full object-cover" />
-                </div>
+                        <!-- Nombre del producto y controles -->
+                        <div class="flex flex-col justify-between h-full gap-2 min-[568px]:pr-10"> 
+                            <p class="text-white font-bold text-[12px] sm:text-[16px]">
+                                {{p.nombre}}
+                            </p>
 
-                <!-- Nombre del producto y controles -->
-                <div class="flex flex-col justify-between h-full gap-2 min-[568px]:pr-10"> 
-                    <p class="text-white font-bold text-[12px] sm:text-[16px]">
-                        Torre Paralelas y Dominadas Estructura Kraftboost
-                    </p>
+                            
 
-                    <div class="flex items-center gap-3">
-                        <button class="text-[#C40C0C] text-[20px]">
-                            <i class="fa-solid fa-circle-minus"></i>
-                        </button>
-                        <p class="text-white font-bold text-[12px] sm:text-[18px]">5</p>
-                        <button class="text-[#C40C0C] text-[20px]">
-                            <i class="fa-solid fa-circle-plus"></i>
-                        </button>
+                            <div class="flex items-center gap-3">
+                                <a href="/cart/removeOneProduct/{{p.id}}" class="text-[#C40C0C] text-[20px]">
+                                    <i class="fa-solid fa-circle-minus"></i>
+                                </a>
+                                <p class="text-white font-bold text-[12px] sm:text-[18px]">{{p.cantidad}}</p>
+                                <a href="/cart/add_product/{{p.id}}" class="text-[#C40C0C] text-[20px]">
+                                    <i class="fa-solid fa-circle-plus"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                {% endfor %}
+            {% endif %}
+
+
+            
 
             
             

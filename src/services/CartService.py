@@ -1,4 +1,53 @@
+from models.entities.CartProduct import CartProduct
+
 class CartService:
+
+    @classmethod
+    def showAllProductsInCart(cls,db,id_usuario):
+        try:
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+
+            #Obtenemos el stock y el precio del producto requerido
+            sql='''
+                SELECT p.id, p.nombre, p.imagen, c.cantidad, c.precio FROM carrito c
+                INNER JOIN productos p
+                ON c.id_producto=p.id
+                WHERE id_usuario=%s
+            '''
+            cursor.execute(sql,(id_usuario,))
+          
+            row=cursor.fetchall()
+
+            #Si hay resultados
+            if row:
+                productos_carrito=[]
+
+                for product in row:
+                    id=product[0]
+                    nombre=product[1]
+                    imagen=product[2]
+                    cantidad=product[3]
+                    precio=product[4]
+                
+                    productos_carrito.append(CartProduct(id,nombre,imagen,cantidad,precio))
+
+                return productos_carrito
+
+            #Sino, devolvemos None
+            else:
+                print('Usuario sin productos en el carrito')
+                return None
+
+        #Si hay errores, devolvemos None
+        except Exception as error:
+            print(error)
+            print('Usuario sin productos + error en la consola')
+            return None
+        
+
+
+
 
     @classmethod
     def addProductCart(cls,db,id_usuario,id_producto):
@@ -78,6 +127,7 @@ class CartService:
 
             #Si el producto existe
             if row:
+                precio=row[0]
 
                 #Consultamos a ver si el producto ya fue añadido al carrito antes
                 sql='SELECT cantidad FROM carrito WHERE id_usuario=%s and id_producto=%s'
@@ -99,8 +149,8 @@ class CartService:
 
                         #Sino restamos la cantidad y el precio de ese producto 
                         # en la tabla carrito asociado al usuario y al producto
-                        sql='UPDATE carrito SET cantidad=cantidad-1, precio=precio-precio WHERE id_usuario=%s and id_producto=%s'
-                        cursor.execute(sql,(id_usuario,id_producto))
+                        sql='UPDATE carrito SET cantidad=cantidad-1, precio=precio-%s WHERE id_usuario=%s and id_producto=%s'
+                        cursor.execute(sql,(precio,id_usuario,id_producto))
                         db.connection.commit()
 
                     #Añadimos 1 al stock del producto requerido
