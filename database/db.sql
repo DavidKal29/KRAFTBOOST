@@ -4,13 +4,22 @@ USE kraftboost;
 
 CREATE TABLE usuarios (
 	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR (100) NOT NULL,
-    apellidos VARCHAR (100) NOT NULL,
+    nombre VARCHAR (25) NOT NULL,
+    apellidos VARCHAR (25) NOT NULL,
     email VARCHAR (150) NOT NULL UNIQUE,
     username VARCHAR (25) NOT NULL UNIQUE,
     password VARCHAR (255) NOT NULL,
-	fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    rol VARCHAR (50) NOT NULL
+    rol VARCHAR (50) NOT NULL,
+	fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    
+);
+
+CREATE TABLE domicilios(
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    domicilio VARCHAR (150) NOT NULL,
+    localidad VARCHAR (150) NOT NULL,
+    puerta INT UNSIGNED NOT NULL,
+    codigo_postal INT UNSIGNED NOT NULL
 );
 
 CREATE TABLE categorias (
@@ -65,10 +74,6 @@ CREATE TABLE pedidos (
     id_usuario INT UNSIGNED NOT NULL,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
     nombre_destinatario VARCHAR (100) NOT NULL,
-    domicilio VARCHAR (150) NOT NULL,
-    localidad VARCHAR (150) NOT NULL,
-    puerta INT UNSIGNED NOT NULL,
-    codigo_postal INT UNSIGNED NOT NULL,
     enviado BOOLEAN NOT NULL
 );
 
@@ -283,11 +288,3 @@ Oxylane, distribuido por la marca Domyos.', 'images/productos/bancos/banco_multi
 ('Kettlebell Gorilla 40kg Kraftboost', 50, 99.99, 7, 3, 'Kettlebell de 40 kilogramos. Ideal para entrenamientos funcionales o CrossFit. Distribuido por la marca Kraft Boost.', 'images/productos/kettlebells/kettlebell_gorilla_40kg_kraftboost.png'),
 ('Megatron Estructura Kraftboost', 50, 399.99, 8, 3, 'Megatron. Ideal para realizar todo tipo de ejercicios aislados en polea. Distribuido por la marca Kraft Boost.', 'images/productos/estructuras/megatron_kraftboost.png'),
 ('Banda 60kg Corength', 50, 29.99, 6, 4, 'Banda elástica de 60 kilogramos. Ideal para entrenamientos dinámicos y de fuerza . Distribuido por la marca Corength.', 'images/productos/bandas elasticas/banda_60kg.png');
-
-
-
-
-
-
-
-
