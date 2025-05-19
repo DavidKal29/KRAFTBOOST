@@ -47,6 +47,35 @@ class CartService:
         
 
 
+    @classmethod
+    def showSumario(cls,db,id_usuario):
+        try:
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+
+            #Obtenemos el stock y el precio del producto requerido
+            sql='SELECT SUM(precio) FROM carrito WHERE id_usuario=%s'
+            cursor.execute(sql,(id_usuario,))
+          
+            row=cursor.fetchone()
+
+            #Si hay resultados
+            if row:
+                subtotal=row[0]
+
+                return subtotal
+
+            #Sino, devolvemos None
+            else:
+                print('Usuario sin productos en el carrito')
+                return None
+
+        #Si hay errores, devolvemos None
+        except Exception as error:
+            print(error)
+            print('Usuario sin productos + error en la consola')
+            return None
+
 
 
     @classmethod

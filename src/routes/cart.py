@@ -14,8 +14,13 @@ def cart():
             db=current_app.config['db']
 
             productos_carrito=CartService.showAllProductsInCart(db,current_user.id)
+
+            subtotal=CartService.showSumario(db,current_user.id)
+
+            if subtotal:
+                subtotal=float(subtotal)
             
-            return render_template('cart.html',productos_carrito=productos_carrito)
+            return render_template('cart.html',productos_carrito=productos_carrito,subtotal=subtotal)
         else:
             abort(401)
     
