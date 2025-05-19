@@ -7,44 +7,44 @@
 
 <section class="flex justify-center flex-col min-[568px]:flex-row gap-6 px-4 mt-28 sm:mt-32 mb-10 sm:px-6 xl:gap-12">
 
-  <!-- Tarjeta de producto -->
-  <div class="flex justify-center items-center bg-[#1B1A1A] border-4 border-[#C40C0C] rounded-[8px] p-4">
-    <div class="flex justify-center items-center">
-      <img src="{{url_for('static',filename=producto.imagen)}}" alt="{{producto.nombre}}" class="w-full h-full my-8">
-    </div>
-  </div>
-
-  <!-- Detalles y acciones -->
-  <div class="flex flex-col gap-4 w-full max-w-sm xl:max-w-xl">
-
-    <!-- Info del producto -->
-    <div class="flex flex-col gap-1">
-      <span class="text-[#999999] font-semibold text-[20px]">{{producto.nombre_marca}} - {{producto.nombre_categoria}}</span>
-      <span class="text-white font-bold text-[22px]">{{producto.nombre}}</span>
-      <span class="text-[#C40C0C] font-semibold text-[20px]">{{producto.precio}}€</span>
+    <!-- Tarjeta de producto -->
+    <div class="flex justify-center items-center bg-[#1B1A1A] border-4 border-[#C40C0C] rounded-[8px] p-4">
+      <div class="flex justify-center items-center">
+        <img src="{{url_for('static',filename=producto.imagen)}}" alt="{{producto.nombre}}" class="w-full h-full my-8">
+      </div>
     </div>
 
-    <!-- Envíos -->
-    <p class="text-center border-4 border-[#C40C0C] text-[#C40C0C] font-bold text-[20px] py-3">
-      ENVIOS EN 24 HORAS
-    </p>
+    <!-- Detalles y acciones -->
+    <div class="flex flex-col gap-4 w-full max-w-sm xl:max-w-xl">
 
-    <!-- Botones -->
-    <div class="flex flex-col gap-4 xl:flex-row">
-      <button class="w-full bg-[#C40C0C] text-white rounded py-3 font-bold text-[16px]">
-        Añadir al carrito <i class="fa-solid fa-cart-plus"></i>
-      </button>
-      <button class="w-full bg-white text-[#C40C0C] rounded py-3 font-bold text-[16px]">
-        Añadir a favoritos <i class="fa-solid fa-heart"></i>
-      </button>
+      <!-- Info del producto -->
+      <div class="flex flex-col gap-1">
+        <span class="text-[#999999] font-semibold text-[20px]">{{producto.nombre_marca}} - {{producto.nombre_categoria}}</span>
+        <span class="text-white font-bold text-[22px]">{{producto.nombre}}</span>
+        <span class="text-[#C40C0C] font-semibold text-[20px]">{{producto.precio}}€</span>
+      </div>
+
+      <!-- Envíos -->
+      <p class="text-center border-4 border-[#C40C0C] text-[#C40C0C] font-bold text-[20px] py-3">
+        ENVIOS EN 24 HORAS
+      </p>
+
+      <!-- Botones -->
+      <div class="flex flex-col gap-4 xl:flex-row">
+        <a onclick="desactivar(this)" href="{{url_for('cart.add_product', id_producto=id)}}" class="w-full bg-[#C40C0C] text-white rounded py-3 font-bold text-[16px] text-center">
+          <button>Añadir al carrito <i class="fa-solid fa-cart-plus"></i></button>
+        </a>
+        <a href="" class="w-full bg-white text-[#C40C0C] rounded py-3 font-bold text-[16px] text-center">
+          Añadir a favoritos <i class="fa-solid fa-heart"></i>
+        </a>
+      </div>
+
+      <!-- Descripción -->
+      <p class="text-white font-bold text-[20px] text-justify">
+        {{producto.descripcion}}
+      </p>
+
     </div>
-
-    <!-- Descripción -->
-    <p class="text-white font-bold text-[20px] text-justify">
-      {{producto.descripcion}}
-    </p>
-
-  </div>
 </section>
 
 <div class="w-full flex justify-between ">

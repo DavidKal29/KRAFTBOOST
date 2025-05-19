@@ -1,0 +1,117 @@
+{% extends './layout.html' %}
+
+{% block title %}Carrito{% endblock %}
+
+{% block body %}
+
+{% if productos_carrito %}
+<section class="flex justify-center flex-col gap-6 lg:gap-12 px-4 sm:px-6 mt-28 lg:mt-40 mb-6">
+    <div class="flex flex-col gap-4 sm:flex-row-reverse justify-center items-stretch sm:gap-6">
+        <div class="flex justify-center items-center flex-col gap-8 ">
+            <!-- Sumario -->
+            <div class="bg-[#1B1A1A] text-white flex flex-col justify-start py-6 md:py-10 px-6 rounded w-full min-[568px]:max-w-[500px] lg:max-w-[450px]">
+                
+                <p class="font-bold text-left text-[25px]">Sumario</p>
+                
+                <div class="flex flex-col justify-center items-center gap-4 pl-4 py-6">
+                    <div class="flex flex-row justify-between w-full items-start">
+                        <p class="text-white font-bold">Subtotal</p>
+                        <p class="text-[#C40C0C] font-bold">{{(subtotal / 1.21) | round(2)}}€</p>
+                    </div>
+
+                    <div class="flex flex-row justify-between w-full items-start">
+                        <p class="text-white font-bold">Envío</p>
+                        <p class="text-[#C40C0C] font-bold">Gratis</p>
+                    </div>
+
+                    <div class="flex flex-row justify-between w-full items-start">
+                        <p class="text-white font-bold">IVA 21%</p>
+                        <p class="text-[#C40C0C] font-bold">{{(subtotal-(subtotal / 1.21)) | round(2)}}€</p>
+                    </div>
+
+                    
+
+                    <hr class="bg-white w-full h-[2px]">
+
+                    <div class="flex flex-row justify-between w-full items-start">
+                        <p class="text-white font-bold">Total</p>
+                        <p class="text-[#C40C0C] font-bold">{{subtotal}}€</p>
+                    </div>
+                </div>
+            
+                <a class="w-full bg-[#C40C0C] text-white rounded py-2 font-bold text-[16px] text-center cursor-pointer">
+                    Finalizar compra
+                </a>
+            
+            </div>
+
+            <!-- Elefante -->
+            <div class="flex items-center justify-center">
+                <img 
+                src="{{url_for('static',filename='images/footer_personajes/elefante_cart.png')}}" 
+                alt="Personaje Izquierdo"
+                class="w-1/2 "
+                />
+            </div>
+        </div>
+
+   
+        <div class="max-h-[600px] h-[25rem] md:h-[30rem] lg:h-[40rem] overflow-y-auto scrollbar-hide flex flex-col justify-start items-center gap-6">
+            
+            {% for p in productos_carrito|reverse %}
+                <!-- Tarjeta individual -->
+                <div class="relative w-full max-w-[800px] sm:max-w-[650px] bg-[#1B1A1A] border-2 border-[#C40C0C] rounded p-4 flex flex-row items-center gap-4">
+
+                    <!-- Botón de cerrar -->
+                    <a onclick="desactivar(this)" href="{{url_for('cart.removeProduct', id_producto=p.id)}}" class="absolute top-2 right-2 text-[#C40C0C] sm:text-[20px]">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </a>
+
+
+                    <!-- Precio -->
+                    <p class="absolute bottom-2 right-4 text-[#C40C0C] font-bold text-[12px] sm:text-[16px]">
+                        {{p.precio}}€
+                    </p>
+
+                    <!-- Imagen del producto -->
+                    <div class="w-32 min-[568px]:w-32 sm:w-40">
+                        <img src="{{url_for('static',filename=p.imagen)}}"
+                            alt="Producto"
+                            class="w-full h-full object-cover" />
+                    </div>
+
+                    <!-- Nombre del producto y controles -->
+                    <div class="flex flex-col justify-between h-full gap-2 min-[568px]:pr-10"> 
+                        <p class="text-white font-bold text-[12px] sm:text-[16px]">
+                            {{p.nombre}}
+                        </p>
+
+                        <div class="flex items-center gap-3">
+                            <a onclick="desactivar(this)" href="{{url_for('cart.removeOneProduct', id_producto=p.id)}}" class="text-[#C40C0C] text-[20px]">
+                                <i class="fa-solid fa-circle-minus"></i>
+                            </a>
+                            <p class="text-white font-bold text-[12px] sm:text-[18px]">{{p.cantidad}}</p>
+                            <a onclick="desactivar(this)" href="{{url_for('cart.add_product', id_producto=p.id)}}" class="text-[#C40C0C] text-[20px]">
+                                <i class="fa-solid fa-circle-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+{% else %}
+<section class="flex justify-center items-center flex-col gap-2 mt-32 sm:mt-28 md:mt-32 lg:mt-40">
+    <h1 class="text-[40px] sm:text-[50px] md:text-[100px] text-white font-bold "><i class="fa-solid fa-xmark text-[#C40C0C]"></i></h1>
+    <p class="text-[20px] md:text-[35px] text-white font-bold text-center">Carrito Vacio</p>
+    <p class="text-[15px] md:text-[20px] text-white font-semibold text-center">Pulsa el botón de abajo para comprar productos</p>
+    <a href="{{url_for('shop.shop')}}" class="bg-[#C40C0C] rounded px-4 py-2 md:px-8 md:py-2 md:text-[20px] mt-4"><button class="text-white font-bold">Ver Tienda</button></a>
+    
+</section>
+{% endif %}
+
+
+
+{% endblock %}

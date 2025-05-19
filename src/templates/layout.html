@@ -54,7 +54,7 @@
 
 
         <!-- Icono Carrito -->
-        <a href="#" class="hidden lg:flex text-white text-[25px] hover:text-[#C40C0C] duration-[0.5s]"><i class="fa-solid fa-cart-shopping"></i></a>
+        <a href="{{url_for('cart.cart')}}" class="hidden lg:flex text-white text-[25px] hover:text-[#C40C0C] duration-[0.5s]"><i class="fa-solid fa-cart-shopping"></i></a>
         
     
         
@@ -76,7 +76,7 @@
             <a href="{{url_for('auth.register')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
                 <i class="fa-solid fa-user-plus"></i> Crear Cuenta
             </a>
-            <a href="#" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
+            <a href="{{url_for('cart.cart')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
                 <i class="fa-solid fa-cart-shopping"></i> Carrito
             </a>  
         </nav>
