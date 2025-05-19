@@ -1,5 +1,6 @@
-from flask import Blueprint,abort,redirect,url_for,render_template,request
+from flask import Blueprint,abort,redirect,url_for,render_template,request,current_app
 from flask_login import current_user
+from services.CartService import CartService
 
 
 cart_bp=Blueprint('cart',__name__,url_prefix='/cart')
@@ -17,15 +18,18 @@ def cart():
     return redirect(url_for('auth.login'))
 
 
-@cart_bp.route('/add_product',methods=['GET'])
-def add_product(id):
+@cart_bp.route('/add_product/<id_producto>',methods=['GET'])
+def add_product(id_producto):
     if current_user.is_authenticated:
         print('EL current user rol:',current_user.rol)
         if current_user.rol=='client':
+            db=current_app.config['db']
             
             print('Aqui ira el codigo para añadir el producto')
+
+            CartService.addProductCart(db,current_user.id,id_producto)
             
-            return render_template('cart.html')
+            return redirect(url_for('cart.cart'))
         else:
             abort(401)
     

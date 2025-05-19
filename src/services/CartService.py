@@ -33,8 +33,8 @@ class CartService:
 
                     #Actualizamos la cantidad y el precio de ese producto en la tabla
                     # carrito asociado al usuario y al producto
-                    sql='UPDATE carrito SET cantidad=cantidad+1 and precio=precio+precio WHERE id_usuario=%s and id_producto=%s'
-                    cursor.execute(sql,(id_usuario,id_producto))
+                    sql='UPDATE carrito SET cantidad=cantidad+1, precio=precio+%s WHERE id_usuario=%s and id_producto=%s'
+                    cursor.execute(sql,(precio,id_usuario,id_producto))
                     db.connection.commit()
 
                 else:
@@ -99,7 +99,7 @@ class CartService:
 
                         #Sino restamos la cantidad y el precio de ese producto 
                         # en la tabla carrito asociado al usuario y al producto
-                        sql='UPDATE carrito SET cantidad=cantidad-1 and precio=precio-precio WHERE id_usuario=%s and id_producto=%s'
+                        sql='UPDATE carrito SET cantidad=cantidad-1, precio=precio-precio WHERE id_usuario=%s and id_producto=%s'
                         cursor.execute(sql,(id_usuario,id_producto))
                         db.connection.commit()
 
