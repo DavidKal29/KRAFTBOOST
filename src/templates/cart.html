@@ -5,7 +5,7 @@
 {% block body %}
 
 {% if productos_carrito %}
-<section class="flex justify-center flex-col gap-6 lg:gap-12 px-4 sm:px-6 mt-28 lg:mt-40">
+<section class="flex justify-center flex-col gap-6 lg:gap-12 px-4 sm:px-6 mt-28 lg:mt-40 mb-6">
     <div class="flex flex-col gap-4 sm:flex-row-reverse justify-center items-stretch sm:gap-6">
         <div class="flex justify-center items-center flex-col gap-8 ">
             <!-- Sumario -->
@@ -58,7 +58,7 @@
    
         <div class="max-h-[600px] h-[25rem] md:h-[30rem] lg:h-[40rem] overflow-y-auto scrollbar-hide flex flex-col justify-start items-center gap-6">
             
-            {% for p in productos_carrito %}
+            {% for p in productos_carrito|reverse %}
                 <!-- Tarjeta individual -->
                 <div class="relative w-full max-w-[800px] sm:max-w-[650px] bg-[#1B1A1A] border-2 border-[#C40C0C] rounded p-4 flex flex-row items-center gap-4">
 
@@ -112,20 +112,6 @@
 </section>
 {% endif %}
 
-<div class="w-full flex justify-between ">
-    <!-- Personaje Izquierdo -->
-    <img 
-      src="{{url_for('static',filename='images/footer_personajes/rino_footer.png')}}" 
-      alt="Personaje Izquierdo"
-      class="bottom-[270px] right-0 translate-y-[30%] w-[20vh] min-[568px]:w-[60vh] sm:w-[60vh] landscape:md:w-[60vh] md:w-[30vh] md:mb-[55px] landscape:lg:w-[50vh] landscape:lg:h-[55vh]  landscape:lg:mb-[90px] max-[320px]:mb-[25px] mb-[40px] z-[-1]"
-    />
 
-    <!-- Personaje Derecho -->
-    <img 
-      src="{{url_for('static',filename='images/footer_personajes/oso_footer.png')}}" 
-      alt="Personaje Derecho"
-      class="bottom-[270px] right-0 translate-y-[30%] w-[20vh] min-[568px]:w-[60vh] sm:w-[60vh] landscape:md:w-[60vh] md:w-[30vh] md:mb-[55px] landscape:lg:w-[50vh] landscape:lg:h-[55vh]  landscape:lg:mb-[90px] max-[320px]:mb-[25px] mb-[40px] z-[-1]"
-    />
-</div>
 
 {% endblock %}

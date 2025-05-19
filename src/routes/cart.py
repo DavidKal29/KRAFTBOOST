@@ -42,6 +42,7 @@ def add_product(id_producto):
         db=current_app.config['db']
 
         CartService.addProductCart(db,current_user.id,id_producto)
+
             
         return redirect(url_for('cart.cart'))
 

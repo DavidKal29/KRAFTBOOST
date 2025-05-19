@@ -29,7 +29,6 @@ let desactivar=(a)=>{
   
     desactivado=true
     a.style.pointerEvents='none';//Esto evitara que la gente le de 500000 clicks a los enlaces
-    a.style.opacity='0.6'; //Para que la gente sepa que está desactivado
     document.body.style.pointerEvents='none'//Tambien, hacemos que no se pueda pulsar a otro boton 
 
     //Si está 5 segundos sin clickar, se 
@@ -38,7 +37,6 @@ let desactivar=(a)=>{
         desactivado=false;
         a.style.backgroundColor='#C40C0C'
         a.style.pointerEvents='auto'
-        a.style.opacity='1'
         document.body.style.pointerEvents='auto'
     
     },5000);
@@ -46,6 +44,3 @@ let desactivar=(a)=>{
     
     return true
 }
-
-
-
