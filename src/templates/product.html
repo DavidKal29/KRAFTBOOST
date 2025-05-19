@@ -31,8 +31,8 @@
 
     <!-- Botones -->
     <div class="flex flex-col gap-4 xl:flex-row">
-      <a href="{{url_for('cart.add_product', id_producto=id)}}" class="w-full bg-[#C40C0C] text-white rounded py-3 font-bold text-[16px] text-center">
-        Añadir al carrito <i class="fa-solid fa-cart-plus"></i>
+      <a onclick="desactivar(this)" href="{{url_for('cart.add_product', id_producto=id)}}" class="w-full bg-[#C40C0C] text-white rounded py-3 font-bold text-[16px] text-center">
+        <button>Añadir al carrito <i class="fa-solid fa-cart-plus"></i></button>
       </a>
       <a href="" class="w-full bg-white text-[#C40C0C] rounded py-3 font-bold text-[16px] text-center">
         Añadir a favoritos <i class="fa-solid fa-heart"></i>

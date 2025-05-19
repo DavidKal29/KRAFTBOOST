@@ -17,7 +17,35 @@ boton_hamburguesa.addEventListener('click', ()=>{
     icono_boton.classList.toggle("fa-x");       
 });
 
+let desactivado = false;
 
+//FUncion para evitar spammeo de clicks al 
+// añadir o quitar cosas en el carrito
+let desactivar=(a)=>{
+    //Si esta desactivado el boton, devuelve false directamente
+    if (desactivado) {
+        return false
+    }
+  
+    desactivado=true
+    a.style.pointerEvents='none';//Esto evitara que la gente le de 500000 clicks a los enlaces
+    a.style.opacity='0.6'; //Para que la gente sepa que está desactivado
+    document.body.style.pointerEvents='none'//Tambien, hacemos que no se pueda pulsar a otro boton 
+
+    //Si está 5 segundos sin clickar, se 
+    // activa de nuevo el click y la opacidad
+    setTimeout(() => {
+        desactivado=false;
+        a.style.backgroundColor='#C40C0C'
+        a.style.pointerEvents='auto'
+        a.style.opacity='1'
+        document.body.style.pointerEvents='auto'
+    
+    },5000);
+
+    
+    return true
+}
 
 
 
