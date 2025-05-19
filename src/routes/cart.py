@@ -8,7 +8,7 @@ def client_required():
     if not current_user.is_authenticated:
         return redirect(url_for('auth.login'))
     
-    elif not current_user.rol=='client':
+    if not current_user.rol=='client':
         abort(401)
 
     else:
@@ -18,7 +18,9 @@ def client_required():
 @cart_bp.route('/',methods=['GET'])
 def cart():
     check=client_required()
-    if check:
+    if check!=True:
+        return check
+    else:
         db=current_app.config['db']
 
         productos_carrito=CartService.showAllProductsInCart(db,current_user.id)
@@ -34,7 +36,9 @@ def cart():
 @cart_bp.route('/add_product/<id_producto>',methods=['GET'])
 def add_product(id_producto):
     check=client_required()
-    if check:
+    if check!=True:
+        return check
+    else:
         db=current_app.config['db']
 
         CartService.addProductCart(db,current_user.id,id_producto)
@@ -45,7 +49,9 @@ def add_product(id_producto):
 @cart_bp.route('/removeOneProduct/<id_producto>',methods=['GET'])
 def removeOneProduct(id_producto):
     check=client_required()
-    if check:
+    if check!=True:
+        return check
+    else:
         db=current_app.config['db']
 
         CartService.removeOneProductCart(db,current_user.id,id_producto)
@@ -56,7 +62,9 @@ def removeOneProduct(id_producto):
 @cart_bp.route('/removeProduct/<id_producto>',methods=['GET'])
 def removeProduct(id_producto):
     check=client_required()
-    if check:
+    if check!=True:
+        return check
+    else:
         db=current_app.config['db']
 
         CartService.removeProductCart(db,current_user.id,id_producto)
