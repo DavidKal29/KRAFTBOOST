@@ -4,6 +4,7 @@ from flask_login import current_user
 from formularios_WTF.forms import AddressForm,Payment
 from models.entities.Address import Address
 from models.ModelUser import ModelUser
+from services.CartService import CartService
 
 checkout_bp=Blueprint('checkout',__name__,url_prefix='/checkout')
 
@@ -107,10 +108,14 @@ def payment():
 
             #Si el metodo es post y se valida el formulario
             if form.validate() and request.method=='POST':
-                print('cAISTE EN EL POST')
-                
-                
-                return redirect(url_for('checkout.success'))
+                crear_pedido=CartService.makePedido(db,current_user.id)
+
+                if crear_pedido:
+                    return redirect(url_for('checkout.success'))
+
+                else:
+                    flash('Error al tramitar el pago')
+                    return render_template('checkout/payment.html',form=form)
                 
                 
             else:
