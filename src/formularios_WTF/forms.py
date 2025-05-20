@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField,EmailField,PasswordField,SubmitField,IntegerField
 from wtforms.validators import DataRequired,Length,EqualTo,Email,ValidationError,NumberRange
 import re
+import unidecode
 
 #validador de password
 def validar_password(form, field):
@@ -34,6 +35,16 @@ def validar_mes(form, field):
     if form.year.data<=year_actual and field.data<mes_actual:
         raise ValidationError('Mes de expiración inválido')
     
+
+#Validador de letras
+def validar_letras(form,field):
+    texto=unidecode.unidecode(field.data)
+    texto=texto.replace(' ','')
+
+    if not texto.isalpha():
+        raise ValidationError('Este campo solo puede tener letras')
+
+
 
 #Validador de digitos
 def validar_digitos(form,field):
@@ -135,7 +146,8 @@ class ChangePassword(FlaskForm):
 class AddressForm(FlaskForm):
     nombre_destinatario=StringField('Nombre del Destinatario',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=2,max=100,message='2-100 caracteres requeridos')
+        Length(min=2,max=100,message='2-100 caracteres requeridos'),
+        validar_letras
     ])
 
     domicilio=StringField('Domcilio',validators=[
@@ -169,7 +181,8 @@ class AddressForm(FlaskForm):
 class Payment(FlaskForm):
     nombre_titular=StringField('Nombre del Titular',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=2,max=100,message='2-100 caracteres requeridos')
+        Length(min=2,max=100,message='2-100 caracteres requeridos'),
+        validar_letras
     ])
 
     numero_tarjeta=StringField('Número de Tarjeta',validators=[
