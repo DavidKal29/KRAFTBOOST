@@ -42,6 +42,17 @@ def payment():
         form=Payment()
 
         return render_template('checkout/payment.html',form=form)
+
+
+@checkout_bp.route('/success',methods=['GET','POST'])
+def success():
+    check=client_required()
+    if check!=True:
+        return check
+    
+    else:
+
+        return render_template('checkout/success.html')
         
 
 
