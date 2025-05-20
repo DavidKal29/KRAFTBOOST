@@ -1,5 +1,6 @@
 from werkzeug.security import generate_password_hash,check_password_hash
 from models.entities.User import User
+from models.entities.Address import Address
 
 class ModelUser():
 
@@ -140,6 +141,7 @@ class ModelUser():
             return None
     
 
+    #Método para validar el email que se introduce al recuerar contraseña
     @classmethod
     def validate_email(cls,db,email):
         try:
@@ -178,7 +180,9 @@ class ModelUser():
             print('Error al obtener el email')
             print(error)
             return None
-        
+
+
+    #Método para cambiar la contraseña 
     @classmethod
     def change_password(cls,db,email,new_password):
         try:
@@ -219,6 +223,88 @@ class ModelUser():
             print('Error al cambiar password')
             print(error)
             return None
+    
+
+    #Metodo para obtener la direccion de envio
+    @classmethod
+    def getAddress(cls,db,id):
+        try:
+
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+
+            #Obtenemos los datos de direccion
+            sql='SELECT nombre_destinatario,domicilio,localidad,puerta,codigo_postal FROM domicilios WHERE id_usuario=%s'
+            cursor.execute(sql,(id,))
+
+            #Obtenemos el row
+            row=cursor.fetchone()
+
+            #Si hay resultados, devolvemos la direccion con sus datos
+            if row:
+                nombre_destinatario=row[0]
+                domicilio=row[1]
+                localidad=row[2]
+                puerta=row[3]
+                codigo_postal=row[4]
+
+                direccion=Address(nombre_destinatario,domicilio,localidad,puerta,codigo_postal)
+
+                cursor.close()
+
+                return direccion
+            
+            #Sino devolvemos None
+            else:
+                cursor.close()
+                return None
+                   
+        #Cualquier error distitno, None también        
+        except Exception as error:
+            print('Error al cambiar password')
+            print(error)
+            return None
+
+    
+    #Metodo para cambiar la direccion de envio
+    @classmethod
+    def setAddress(cls,db,id,address):
+        try:
+
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+
+            #Obtenemos la contraseña antigua
+            sql='SELECT domicilo FROM domicilios WHERE id_usuario=%s'
+            cursor.execute(sql,(id,))
+
+            #Obtenemos el row
+            row=cursor.fetchone()
+
+            #Si hay resultados
+            if row:
+            
+                #Borramos la dirección antigua
+                sql='DELETE FROM domicilios WHERE id=%s'
+                cursor.execute(sql,(address.id,))
+                db.connection.commit()
+
+            #Insertamos la nueva dirección con los datos
+            sql='INSERT INTO domicilios (nombre_destinatario,domicilio,localidad,puerta,codigo_postal,id_usuario) VALUES(%s,%s,%s,%s,%s,%s)'
+            cursor.execute(sql,(address.nombre_destinatario,address.domicilio,address.localidad,address.puerta,address.codigo_postal,id))
+            db.connection.commit()
+            
+
+            #Devolvemos true si todo sale bien
+            return True
+
+            
+        #Cualquier error distitno, None también        
+        except Exception as error:
+            print('Error al cambiar password')
+            print(error)
+            return None
+        
 
 
 
