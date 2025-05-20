@@ -27,7 +27,7 @@
         <!-- Nombre Titular -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.nombre_titular.label(class="font-bold") }}
-            {{ form.nombre_titular(placeholder='Ej: Antonio Gutierrez', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+            {{ form.nombre_titular(placeholder='Ej: Antonio Gutierrez', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
                 
             {% if form.nombre_titular.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.nombre_titular.errors[0]}}</p>
@@ -37,7 +37,7 @@
         <!-- Numero Tarjeta -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.numero_tarjeta.label(class="font-bold") }}
-            {{ form.numero_tarjeta(placeholder='Ej: 0000000000000', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+            {{ form.numero_tarjeta(placeholder='Ej: 0000000000000', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
                 
             {% if form.numero_tarjeta.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.numero_tarjeta.errors[0]}}</p>
@@ -47,7 +47,7 @@
         <!-- CVV -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.cvv.label(class="font-bold") }}
-            {{ form.cvv(placeholder='Ej: 444', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+            {{ form.cvv(placeholder='Ej: 444', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
                 
             {% if form.cvv.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.cvv.errors[0]}}</p>
