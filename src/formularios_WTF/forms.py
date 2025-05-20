@@ -31,7 +31,7 @@ def validar_mes(form, field):
     year_actual=datetime.now().year
     mes_actual=datetime.now().month
 
-    if form.year.data>=year_actual and field.data<mes_actual:
+    if form.year.data<=year_actual and field.data<mes_actual:
         raise ValidationError('Mes de expiración inválido')
     
 
@@ -165,9 +165,6 @@ class AddressForm(FlaskForm):
 
 
 
-
-
-    
 #Formulario para el pago
 class Payment(FlaskForm):
     nombre_titular=StringField('Nombre del Titular',validators=[
