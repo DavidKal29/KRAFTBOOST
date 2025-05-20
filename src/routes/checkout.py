@@ -1,5 +1,7 @@
-from flask import Blueprint,abort,redirect,url_for
+from flask import Blueprint,abort,redirect,url_for,render_template
 from flask_login import current_user
+
+from formularios_WTF.forms import Address,Payment
 
 checkout_bp=Blueprint('checkout',__name__,url_prefix='/checkout')
 
@@ -26,7 +28,9 @@ def address():
         return check
     
     else:
-        return 'Aqui irá el formulario de direccion'
+        form=Address()
+
+        return render_template('checkout/address.html',form=form)
     
 @checkout_bp.route('/payment',methods=['GET','POST'])
 def payment():
@@ -35,7 +39,9 @@ def payment():
         return check
     
     else:
-        return 'Aqui irá el formulario de pago'
+        form=Payment()
+
+        return render_template('checkout/payment.html',form=form)
         
 
 

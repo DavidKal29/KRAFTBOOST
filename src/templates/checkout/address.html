@@ -27,7 +27,7 @@
         <!-- Nombre Destinatario -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.nombre_destinatario.label(class="font-bold") }}
-            {{ form.nombre_destinatario(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+            {{ form.nombre_destinatario(placeholder='Ej: Antonio Gutierrez', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
             {% if form.nombre_destinatario.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.nombre_destinatario.errors[0]}}</p>
@@ -37,7 +37,7 @@
         <!-- Domicilio -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.domicilio.label(class="font-bold") }}
-            {{ form.domicilio(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+            {{ form.domicilio(placeholder='Ej: Calle Aldaya 12', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
             {% if form.domicilio.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.domicilio.errors[0]}}</p>
@@ -47,7 +47,7 @@
         <!-- Localidad -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.localidad.label(class="font-bold") }}
-            {{ form.localidad(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+            {{ form.localidad(placeholder='Ej: Mislata', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
             {% if form.localidad.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.localidad.errors[0]}}</p>
@@ -60,7 +60,7 @@
             <!-- Puerta -->
             <div class="flex flex-col w-full">
                 {{ form.puerta.label(class="font-bold") }}
-                {{ form.puerta(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
+                {{ form.puerta(placeholder='Ej: 5A', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
                 
                 {% if form.puerta.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.puerta.errors[0]}}</p>
@@ -73,7 +73,7 @@
             <!-- Codigo Postal -->
             <div class="flex flex-col w-full">
                 {{ form.codigo_postal.label(class="font-bold") }}
-                {{ form.codigo_postal(placeholder='Confirmar', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
+                {{ form.codigo_postal(placeholder='46920', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
                 
                 {% if form.codigo_postal.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.codigo_postal.errors[0]}}</p>
@@ -83,12 +83,23 @@
                 {% endif %}
             </div>
         </div>
-        
-        
-        
-        <!-- Submit -->
-        {{ form.submit(class="cursor-pointer text-white font-bold bg-[#C40C0C] rounded px-8 py-3 w-full max-w-[800px]") }}
 
+        <!-- Botones -->
+        <div class="flex flex-col min-[568px]:flex-row justify-center items-center gap-4 min-[568px]:gap-2 w-full">
+            <!-- Cancelar Pago -->
+            <div class="flex flex-col w-full">
+                <a href="{{url_for('cart.cart')}}" class="cursor-pointer text-white font-bold bg-[#C40C0C] rounded text-center px-4 py-2 w-full">Cancelar Compra</a>
+            </div>
+
+            <!-- Continuar -->
+            <div class="flex flex-col w-full">
+                {{ form.submit(class="cursor-pointer text-[#C40C0C] font-bold bg-white rounded px-4 py-2 w-full") }}
+            </div>
+        </div>
+        
+        
+        
+        
     </form>
 </section>
 

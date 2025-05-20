@@ -195,5 +195,8 @@ class Payment(FlaskForm):
         validar_mes
     ])
 
+
+    submit=SubmitField('Efectuar pago')
+
     
     

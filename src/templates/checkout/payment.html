@@ -5,7 +5,7 @@
 {% block body %}
 
 <section class="flex flex-col justify-center items-center mt-[80px] md:mt-[120px] mb-12 gap-4">
-    <h1 class="text-[#C40C0C] font-bold text-[30px] xl:text-[40px] text-center">Dirección de Envío</h1>
+    <h1 class="text-[#C40C0C] font-bold text-[30px] xl:text-[40px] text-center">Pasarela de Pago</h1>
 
     
     <form action="{{url_for('auth.login')}}" method="post" class="flex flex-col justify-center items-center gap-6 text-white px-4 w-full max-w-[600px]">
@@ -27,7 +27,7 @@
         <!-- Nombre Titular -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.nombre_titular.label(class="font-bold") }}
-            {{ form.nombre_titular(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+            {{ form.nombre_titular(placeholder='Ej: Antonio Gutierrez', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
             {% if form.nombre_titular.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.nombre_titular.errors[0]}}</p>
@@ -37,7 +37,7 @@
         <!-- Numero Tarjeta -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.numero_tarjeta.label(class="font-bold") }}
-            {{ form.numero_tarjeta(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+            {{ form.numero_tarjeta(placeholder='Ej: 0000000000000', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
             {% if form.numero_tarjeta.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.numero_tarjeta.errors[0]}}</p>
@@ -47,7 +47,7 @@
         <!-- CVV -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.cvv.label(class="font-bold") }}
-            {{ form.cvv(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+            {{ form.cvv(placeholder='Ej: 444', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
             {% if form.cvv.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.cvv.errors[0]}}</p>
@@ -60,7 +60,7 @@
             <!-- Mes -->
             <div class="flex flex-col w-full">
                 {{ form.mes.label(class="font-bold") }}
-                {{ form.mes(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
+                {{ form.mes(placeholder='Ej: 12', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
                 
                 {% if form.mes.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.mes.errors[0]}}</p>
@@ -73,7 +73,7 @@
             <!-- Año -->
             <div class="flex flex-col w-full">
                 {{ form.year.label(class="font-bold") }}
-                {{ form.year(placeholder='Confirmar', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
+                {{ form.year(placeholder='Ej: 2027', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
                 
                 {% if form.year.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.year.errors[0]}}</p>
@@ -84,10 +84,18 @@
             </div>
         </div>
         
-        
-        
-        <!-- Submit -->
-        {{ form.submit(class="cursor-pointer text-white font-bold bg-[#C40C0C] rounded px-8 py-3 w-full max-w-[800px]") }}
+       <!-- Botones -->
+        <div class="flex flex-col min-[568px]:flex-row justify-center items-center gap-4 min-[568px]:gap-2 w-full">
+            <!-- Cancelar Pago -->
+            <div class="flex flex-col w-full">
+                <a href="{{url_for('cart.cart')}}" class="cursor-pointer text-white font-bold bg-[#C40C0C] rounded text-center px-4 py-2 w-full">Cancelar Compra</a>
+            </div>
+
+            <!-- Continuar -->
+            <div class="flex flex-col w-full">
+                {{ form.submit(class="cursor-pointer text-[#C40C0C] font-bold bg-white rounded px-4 py-2 w-full") }}
+            </div>
+        </div>
 
     </form>
 </section>
