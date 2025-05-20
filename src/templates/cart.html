@@ -39,7 +39,7 @@
                     </div>
                 </div>
             
-                <a class="w-full bg-[#C40C0C] text-white rounded py-2 font-bold text-[16px] text-center cursor-pointer">
+                <a href="{{url_for('checkout.checkout')}}" class="w-full bg-[#C40C0C] text-white rounded py-2 font-bold text-[16px] text-center cursor-pointer">
                     Finalizar compra
                 </a>
             
@@ -105,11 +105,27 @@
 {% else %}
 <section class="flex justify-center items-center flex-col gap-2 mt-32 sm:mt-28 md:mt-32 lg:mt-40">
     <h1 class="text-[40px] sm:text-[50px] md:text-[100px] text-white font-bold "><i class="fa-solid fa-xmark text-[#C40C0C]"></i></h1>
-    <p class="text-[20px] md:text-[35px] text-white font-bold text-center">Carrito Vacio</p>
+    <p class="text-[20px] md:text-[35px] text-white font-bold text-center">Carrito Vacío</p>
     <p class="text-[15px] md:text-[20px] text-white font-semibold text-center">Pulsa el botón de abajo para comprar productos</p>
     <a href="{{url_for('shop.shop')}}" class="bg-[#C40C0C] rounded px-4 py-2 md:px-8 md:py-2 md:text-[20px] mt-4"><button class="text-white font-bold">Ver Tienda</button></a>
     
 </section>
+<div class="w-full flex justify-between max-[320px]:mt-0 mt-12 sm:mt-0">
+    <!-- Personaje Izquierdo -->
+    <img 
+      src="{{url_for('static',filename='images/footer_personajes/oso_polar_errorToken.png')}}" 
+      alt="Personaje Izquierdo"
+      class="bottom-[270px] right-0 translate-y-[30%] lg:translate-y-[-20%] max-[320px]:w-[28vh] w-[22vh] min-[568px]:w-[60vh] sm:w-[60vh] landscape:md:w-[60vh] md:w-[30vh] md:mb-[55px] landscape:lg:w-[45vh] landscape:lg:h-[50vh]  landscape:lg:mb-[-105px] max-[320px]:mb-[25px] mb-[40px] z-[-1]"
+    />
+
+    <!-- Personaje Derecho -->
+    <img 
+      src="{{url_for('static',filename='images/footer_personajes/oso_negro_errorToken.png')}}" 
+      alt="Personaje Derecho"
+      class="bottom-[270px] right-0 translate-y-[30%] lg:translate-y-[-20%] max-[320px]:w-[28vh] w-[22vh] min-[568px]:w-[60vh] sm:w-[60vh] landscape:md:w-[60vh] md:w-[30vh] md:mb-[55px] landscape:lg:w-[45vh] landscape:lg:h-[50vh]  landscape:lg:mb-[-105px] max-[320px]:mb-[25px] mb-[40px] z-[-1]"
+    />
+</div>
+
 {% endif %}
 
 

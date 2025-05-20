@@ -1,0 +1,107 @@
+{% extends './layout.html' %}
+
+{% block title %}Checkout Address{% endblock %}
+
+{% block body %}
+
+<section class="flex flex-col justify-center items-center mt-[80px] md:mt-[120px] mb-12 gap-4">
+    <h1 class="text-[#C40C0C] font-bold text-[30px] xl:text-[40px] text-center">Dirección de Envío</h1>
+
+    
+    <form action="{{url_for('checkout.address',token=token)}}" method="post" class="flex flex-col justify-center items-center gap-6 text-white px-4 w-full max-w-[600px]">
+        
+        <!-- Hidden Tag -->
+        {{ form.hidden_tag() }}
+
+        <!-- Errores -->
+        {% with messages=get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                    <span class="text-[#C40C0C] text-md font-semibold text-center">¡{{msg}}!</span>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    
+        
+        
+        <!-- Nombre Destinatario -->
+        <div class="flex justify-center items-start flex-col w-full">
+            {{ form.nombre_destinatario.label(class="font-bold") }}
+            {{ form.nombre_destinatario(placeholder='Ej: Antonio Gutierrez', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=direccion_antigua.nombre_destinatario if direccion_antigua else '',autocomplete="off") }}
+                
+            {% if form.nombre_destinatario.errors %}
+                <p class="text-[12px] text-[#C40C0C] mt-1">{{form.nombre_destinatario.errors[0]}}</p>
+            {% endif %}
+        </div>
+
+        <!-- Domicilio -->
+        <div class="flex justify-center items-start flex-col w-full">
+            {{ form.domicilio.label(class="font-bold") }}
+            {{ form.domicilio(placeholder='Ej: Calle Aldaya 12', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=direccion_antigua.domicilio if direccion_antigua else '',autocomplete="off") }}
+                
+            {% if form.domicilio.errors %}
+                <p class="text-[12px] text-[#C40C0C] mt-1">{{form.domicilio.errors[0]}}</p>
+            {% endif %}
+        </div>
+
+        <!-- Localidad -->
+        <div class="flex justify-center items-start flex-col w-full">
+            {{ form.localidad.label(class="font-bold") }}
+            {{ form.localidad(placeholder='Ej: Mislata', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=direccion_antigua.localidad if direccion_antigua else '',autocomplete="off") }}
+                
+            {% if form.localidad.errors %}
+                <p class="text-[12px] text-[#C40C0C] mt-1">{{form.localidad.errors[0]}}</p>
+            {% endif %}
+        </div>
+
+
+        <!-- Puerta y Codigo Postal -->
+        <div class="flex flex-col min-[568px]:flex-row justify-center items-center gap-4 min-[568px]:gap-2 w-full">
+            <!-- Puerta -->
+            <div class="flex flex-col w-full">
+                {{ form.puerta.label(class="font-bold") }}
+                {{ form.puerta(placeholder='Ej: 5A', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=direccion_antigua.puerta if direccion_antigua else '',autocomplete="off") }}
+                
+                {% if form.puerta.errors %}
+                    <p class="text-[12px] text-[#C40C0C] mt-1">{{form.puerta.errors[0]}}</p>
+                {% elif form.codigo_postal.errors %}
+                <!-- Lo pongo para que no se descuadren los inputs -->
+                    <p class="text-[12px] text-black mt-1 opacity-0">This field is required</p>
+                {% endif %}
+            </div>
+
+            <!-- Codigo Postal -->
+            <div class="flex flex-col w-full">
+                {{ form.codigo_postal.label(class="font-bold") }}
+                {{ form.codigo_postal(placeholder='46920', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=direccion_antigua.codigo_postal if direccion_antigua else '',autocomplete="off") }}
+                
+                {% if form.codigo_postal.errors %}
+                    <p class="text-[12px] text-[#C40C0C] mt-1">{{form.codigo_postal.errors[0]}}</p>
+                {% elif form.puerta.errors %}
+                <!-- Lo pongo para que no se descuadren los inputs -->
+                    <p class="text-[12px] text-black mt-1 opacity-0">This field is required</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="flex flex-col min-[568px]:flex-row justify-center items-center gap-4 min-[568px]:gap-2 w-full">
+            <!-- Cancelar Pago -->
+            <div class="flex flex-col w-full">
+                <a href="{{url_for('cart.cart')}}" class="cursor-pointer text-white font-bold bg-[#C40C0C] rounded text-center px-4 py-2 w-full">Cancelar Compra</a>
+            </div>
+
+            <!-- Continuar -->
+            <div class="flex flex-col w-full">
+                {{ form.submit(class="cursor-pointer text-[#C40C0C] font-bold bg-white rounded px-4 py-2 w-full") }}
+            </div>
+        </div>
+        
+        
+        
+        
+    </form>
+</section>
+
+
+{% endblock %}

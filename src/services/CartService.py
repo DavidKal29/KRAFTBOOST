@@ -1,4 +1,5 @@
 from models.entities.CartProduct import CartProduct
+from models.ModelUser import ModelUser
 
 class CartService:
 
@@ -259,8 +260,109 @@ class CartService:
             print(error)
             print('Producto no añadido')
             return None
-        
     
-        
 
+    #Metodo estático para generar numero de pedido
+    @staticmethod
+    def generar_numero_pedido(id_pedido):
+        import random
+        nums='1234567890'
+        letras='ABCDEFGHIJKLMNOPRSTUVWXYZ'
+        numero=''
 
+        for i in range(7):
+            if i%2==0:
+                numero+=letras[random.randint(0,len(letras)-1)]
+
+            else:
+                numero+=nums[random.randint(0,len(nums)-1)]
+
+        numero+=str(id_pedido)
+
+        return numero
+
+    
+    #Metodo para crear pedidos
+    @classmethod
+    def makePedido(cls,db,id):
+        try:
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+
+            #Obtenemos la suma de todo el carrito
+            sql='SELECT SUM(precio) FROM carrito WHERE id_usuario=%s'
+            cursor.execute(sql,(id,))
+
+            #Asignamos el precio total al resultado
+            precio_total=cursor.fetchone()[0]
+
+            cursor.close()
+
+            #Obtenemos la direccion de envio
+            direccion=ModelUser.getAddress(db,id)
+
+            #Si hay precio total y hay direccion
+            if direccion and precio_total:
+
+                #Abrimos un segundo cursor
+                cursor=db.connection.cursor()
+                
+                #Creamos el pedido con los datos requeridos
+                sql='INSERT INTO pedidos (precio_total,id_usuario,nombre_destinatario,domicilio,localidad,puerta,codigo_postal,enviado) VALUES (%s,%s,%s,%s,%s,%s,%s,True)'
+                cursor.execute(sql,(precio_total,id,direccion.nombre_destinatario,direccion.domicilio,direccion.localidad,direccion.puerta,direccion.codigo_postal))
+                db.connection.commit()
+
+                
+                #Obtenemos el id del pedido
+                sql='SELECT id FROM pedidos ORDER BY fecha_compra DESC LIMIT 1'
+                cursor.execute(sql)
+                
+                id_pedido=cursor.fetchone()[0]
+
+                #Creamos el numero de pedido
+                numero_pedido=cls.generar_numero_pedido(id_pedido)
+
+                #Actualizamos el numero_pedido del pedido
+                sql='UPDATE pedidos SET numero_pedido=%s WHERE id=%s'
+                cursor.execute(sql,(numero_pedido,id_pedido))
+                db.connection.commit()
+                
+                #Obtenemos todos los productos del carrito del usuario
+                sql='SELECT id_producto,cantidad,precio FROM carrito WHERE id_usuario=%s'
+                cursor.execute(sql,(id,))
+
+                productos=cursor.fetchall()
+
+                #Recorremos los productos
+                for p in productos:
+                    id_producto=p[0]
+                    cantidad=p[1]
+                    precio=p[2]
+
+                    #Por cada producto insertamos sus datos en detalles_pedido
+                    sql='INSERT INTO detalles_pedido (id_pedido,id_producto,cantidad,precio) VALUES(%s,%s,%s,%s)'
+                    cursor.execute(sql,(id_pedido,id_producto,cantidad,precio))
+                
+                db.connection.commit()
+
+                
+                #Finalmente, borramos el carrito
+                sql='DELETE FROM carrito WHERE id_usuario=%s'
+                cursor.execute(sql,(id,))
+                db.connection.commit()
+
+                cursor.close()
+
+                return True
+
+            #Sino, devolvemos None
+            else:
+                print('Producto erroneo')
+                return None
+
+        #Si hay errores, devolvemos None
+        except Exception as error:
+            db.connection.rollback() #Deshacer todo lo cambiado
+            print(error)
+            print('Pedido no realizado')
+            return None
