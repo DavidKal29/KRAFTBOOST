@@ -1,4 +1,5 @@
 from models.entities.CartProduct import CartProduct
+from models.ModelUser import ModelUser
 
 class CartService:
 
@@ -259,6 +260,84 @@ class CartService:
             print(error)
             print('Producto no añadido')
             return None
+        
+
+    
+    @classmethod
+    def makePedido(cls,db,id):
+        try:
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+
+            #Obtenemos la suma de todo el carrito
+            sql='SELECT SUM(precio) FROM carrito WHERE id_usuario=%s'
+            cursor.execute(sql,(id,))
+
+            #Asignamos el precio total al resultado
+            precio_total=cursor.fetchone()[0]
+
+            cursor.close()
+
+            #Obtenemos la direccion de envio
+            direccion=ModelUser.getAddress(db,id)
+
+            #Si hay precio total y hay direccion
+            if direccion and precio_total:
+
+                #Abrimos un segundo cursor
+                cursor=db.connection.cursor()
+                
+                #Creamos el pedido con los datos requeridos
+                sql='INSERT INTO pedidos (precio_total,id_usuario,nombre_destinatario,domicilio,localidad,puerta,codigo_postal) VALUES (%s,%s,%s,%s,%s,%s,%s)'
+                cursor.execute(sql,(precio_total,id,direccion.nombre_destinatario,direccion.domicilio,direccion.localidad,direccion.puerta,direccion.codigo_postal))
+                db.connection.commit()
+
+                #Obtenemos el id del pedido
+                sql='SELECT id FROM pedidos ORDER BY id DESC LIMIT 1'
+                cursor.execute(sql)
+                
+                id_pedido=cursor.fetchone()[0]
+
+                #Obtenemos todos los productos del carrito del usuario
+                sql='SELECT id_producto,cantidad,precio FROM carrito WHERE id_usuario=%s'
+                cursor.execute(sql,(id,))
+
+                productos=cursor.fetchall()
+
+                #Recorremos los productos
+                for p in productos:
+                    id_producto=p[0]
+                    cantidad=p[1]
+                    precio=p[2]
+
+                    #Por cada producto insertamos sus datos en detalles_pedido
+                    sql='INSERT INTO detalles_pedido (id_pedido,id_producto,cantidad,precio) VALUES(%s,%s,%s,%s)'
+                    cursor.execute(sql,(id_pedido,id_producto,cantidad,precio))
+                
+                db.connection.commit()
+
+                
+                #Finalmente, borramos el carrito
+                sql='DELETE FROM carrito WHERE id_usuario=%s'
+                cursor.execute(sql,(id,))
+                db.connection.commit()
+
+                cursor.close()
+
+                return True
+
+            #Sino, devolvemos None
+            else:
+                print('Producto erroneo')
+                return None
+
+        #Si hay errores, devolvemos None
+        except Exception as error:
+            db.connection.rollback() #Deshacer todo lo cambiado
+            print(error)
+            print('Pedido no realizado')
+            return None
+
         
     
         

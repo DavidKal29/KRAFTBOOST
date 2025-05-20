@@ -93,14 +93,37 @@ def address():
 
 @checkout_bp.route('/payment',methods=['GET','POST'])
 def payment():
-    check=client_required()
-    if check!=True:
-        return check
-    
-    else:
-        form=Payment()
+    try:
+        check=client_required()
+        if check!=True:
+            return check
+        
+        else:
+            #Obtenemos el cursor de la db y el formulario del register
+            db=current_app.config['db']
+            form=Payment()
 
-        return render_template('checkout/payment.html',form=form)
+            print(1)
+
+            #Si el metodo es post y se valida el formulario
+            if form.validate() and request.method=='POST':
+                print('cAISTE EN EL POST')
+                
+                
+                return redirect(url_for('checkout.success'))
+                
+                
+            else:
+                print(6)
+                print('cAISTE EN EL GET')
+                return render_template('checkout/payment.html',form=form)
+    
+    #Cualquier error nos lleva a home
+    except Exception as error:
+        print(88888)
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        return redirect(url_for('home.home'))
 
 
 @checkout_bp.route('/success',methods=['GET','POST'])
