@@ -15,6 +15,30 @@ def validar_password(form, field):
 
     if not re.search(r'[a-z]', field.data):
         raise ValidationError('Al menos 1 minúscula en la contraseña')
+    
+#Validador de fechas
+def validar_year(form, field):
+    from datetime import datetime
+
+    year_actual=datetime.now().year
+
+    if field.data<year_actual:
+        raise ValidationError('Año de expiración inválido')
+    
+def validar_mes(form, field):
+    from datetime import datetime
+
+    year_actual=datetime.now().year
+    mes_actual=datetime.now().month
+
+    if form.year.data>=year_actual and field.data<mes_actual:
+        raise ValidationError('Mes de expiración inválido')
+    
+
+#Validador de digitos
+def validar_digitos(form,field):
+    if not field.data.isdigit():
+        raise ValidationError('Este campo solo puede tener digitos')
 
     
 
@@ -108,7 +132,7 @@ class ChangePassword(FlaskForm):
 
 
 #Formulario para enviar direccion de email
-class Address(FlaskForm):
+class AddressForm(FlaskForm):
     nombre_destinatario=StringField('Nombre del Destinatario',validators=[
         DataRequired(message="Este campo es obligatorio"),
         Length(min=2,max=100,message='2-100 caracteres requeridos')
@@ -116,22 +140,23 @@ class Address(FlaskForm):
 
     domicilio=StringField('Domcilio',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=3,max=150,message='3-150 caracteres requeridos')
+        Length(min=3,max=50,message='3-50 caracteres requeridos')
     ])
 
     localidad=StringField('Localidad',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=3,max=100,message='3-100 caracteres requeridos')
+        Length(min=3,max=25,message='3-25 caracteres requeridos')
     ])
 
     puerta=StringField('Puerta',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=1,max=25,message='1-20 caracteres requeridos')
+        Length(min=1,max=10,message='1-10 caracteres requeridos')
     ])
 
-    codigo_postal=IntegerField('Código Postal',validators=[
+    codigo_postal=StringField('Código Postal',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=4,max=10,message='4-10 caracteres requeridos')
+        Length(min=4,max=10,message='4-10 caracteres requeridos'),
+        validar_digitos
     ])
 
 
@@ -139,29 +164,7 @@ class Address(FlaskForm):
 
 
 
-#Validador de fechas
-def validar_year(form, field):
-    from datetime import datetime
 
-    year_actual=datetime.now().year
-
-    if field.data<year_actual:
-        raise ValidationError('Año de expiración inválido')
-    
-def validar_mes(form, field):
-    from datetime import datetime
-
-    year_actual=datetime.now().year
-    mes_actual=datetime.now().month
-
-    if form.year.data>=year_actual and field.data<mes_actual:
-        raise ValidationError('Mes de expiración inválido')
-    
-
-#Validador de digitos
-def validar_digitos(form,field):
-    if not field.data.isdigit():
-        raise ValidationError('Este campo solo puede tener digitos')
 
 
     

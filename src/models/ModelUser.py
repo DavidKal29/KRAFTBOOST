@@ -114,7 +114,6 @@ class ModelUser():
             
             #Si hay resultados, creamos el objeto user, sin el password, y lo devolvemos
             if row:
-                print('Usuario encontrado con su id')
                 id=row[0]
                 nombre=row[1]
                 apellidos=row[2]
@@ -247,8 +246,9 @@ class ModelUser():
                 localidad=row[2]
                 puerta=row[3]
                 codigo_postal=row[4]
+                id_usuario=id
 
-                direccion=Address(nombre_destinatario,domicilio,localidad,puerta,codigo_postal)
+                direccion=Address(nombre_destinatario,domicilio,localidad,puerta,codigo_postal,id_usuario)
 
                 cursor.close()
 
@@ -268,15 +268,15 @@ class ModelUser():
     
     #Metodo para cambiar la direccion de envio
     @classmethod
-    def setAddress(cls,db,id,address):
+    def setAddress(cls,db,address):
         try:
 
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
 
             #Obtenemos la contraseña antigua
-            sql='SELECT domicilo FROM domicilios WHERE id_usuario=%s'
-            cursor.execute(sql,(id,))
+            sql='SELECT domicilio FROM domicilios WHERE id_usuario=%s'
+            cursor.execute(sql,(address.id_usuario,))
 
             #Obtenemos el row
             row=cursor.fetchone()
@@ -284,15 +284,16 @@ class ModelUser():
             #Si hay resultados
             if row:
             
-                #Borramos la dirección antigua
-                sql='DELETE FROM domicilios WHERE id=%s'
-                cursor.execute(sql,(address.id,))
+                #Actualizamos la dirección antigua
+                sql='UPDATE domicilios SET nombre_destinatario=%s,domicilio=%s,localidad=%s,puerta=%s,codigo_postal=%s WHERE id_usuario=%s'
+                cursor.execute(sql,(address.nombre_destinatario,address.domicilio,address.localidad,address.puerta,address.codigo_postal,address.id_usuario))
                 db.connection.commit()
-
-            #Insertamos la nueva dirección con los datos
-            sql='INSERT INTO domicilios (nombre_destinatario,domicilio,localidad,puerta,codigo_postal,id_usuario) VALUES(%s,%s,%s,%s,%s,%s)'
-            cursor.execute(sql,(address.nombre_destinatario,address.domicilio,address.localidad,address.puerta,address.codigo_postal,id))
-            db.connection.commit()
+            
+            else:
+                #Insertamos la nueva dirección con los datos
+                sql='INSERT INTO domicilios (nombre_destinatario,domicilio,localidad,puerta,codigo_postal,id_usuario) VALUES(%s,%s,%s,%s,%s,%s)'
+                cursor.execute(sql,(address.nombre_destinatario,address.domicilio,address.localidad,address.puerta,address.codigo_postal,address.id_usuario))
+                db.connection.commit()
             
 
             #Devolvemos true si todo sale bien
