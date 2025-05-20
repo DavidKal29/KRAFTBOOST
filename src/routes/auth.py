@@ -168,7 +168,7 @@ def forgot_password():
             if validation:
 
                 #Pasamos el email, tiempo de exp y el secret key
-                token=TokenManager.create_token(email,2,current_app.config['JWT_SECRET_KEY_RESET_PASSWORD'])
+                token=TokenManager.create_token(email,2,current_app.config['JWT_SECRET_KEY_RESET_PASSWORD'],None)
 
                 #Enviamos el email
                 MailSender.reset_password_message(current_app,email,request.host_url,token)

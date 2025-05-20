@@ -5,14 +5,14 @@ class TokenManager:
 
     #Metodo estatico para crear el token
     @staticmethod
-    def create_token(email,tiempo,secret_key):
+    def create_token(email,tiempo,secret_key,step):
         
         #Recibe el email al que se enviará el token, 
         # el tiempo de expiracion en minutos y el secret_key 
-        # del jwt
+        # del jwt y el step que será para que pagina es
         token=jwt.encode(
             payload={
-                'email':email,'exp':datetime.now(timezone.utc)+timedelta(minutes=tiempo)
+                'email':email,'step': step,'exp':datetime.now(timezone.utc)+timedelta(minutes=tiempo)
             },
             key=secret_key,algorithm='HS256'
         )
