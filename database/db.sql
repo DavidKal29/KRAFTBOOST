@@ -73,6 +73,7 @@ CREATE TABLE favoritos (
 CREATE TABLE pedidos (
 	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     fecha_compra TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    numero_pedido VARCHAR(100) DEFAULT '1',
     precio_total DECIMAL (10,2) NOT NULL,
     id_usuario INT UNSIGNED NOT NULL,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,

@@ -260,9 +260,29 @@ class CartService:
             print(error)
             print('Producto no añadido')
             return None
-        
+    
+
+    #Metodo estático para generar numero de pedido
+    @staticmethod
+    def generar_numero_pedido(id_pedido):
+        import random
+        nums='1234567890'
+        letras='ABCDEFGHIJKLMNOPRSTUVWXYZ'
+        numero=''
+
+        for i in range(7):
+            if i%2==0:
+                numero+=letras[random.randint(0,len(letras)-1)]
+
+            else:
+                numero+=nums[random.randint(0,len(nums)-1)]
+
+        numero+=str(id_pedido)
+
+        return numero
 
     
+    #Metodo para crear pedidos
     @classmethod
     def makePedido(cls,db,id):
         try:
@@ -292,12 +312,21 @@ class CartService:
                 cursor.execute(sql,(precio_total,id,direccion.nombre_destinatario,direccion.domicilio,direccion.localidad,direccion.puerta,direccion.codigo_postal))
                 db.connection.commit()
 
+                
                 #Obtenemos el id del pedido
-                sql='SELECT id FROM pedidos ORDER BY id DESC LIMIT 1'
+                sql='SELECT id FROM pedidos ORDER BY fecha_compra DESC LIMIT 1'
                 cursor.execute(sql)
                 
                 id_pedido=cursor.fetchone()[0]
 
+                #Creamos el numero de pedido
+                numero_pedido=cls.generar_numero_pedido(id_pedido)
+
+                #Actualizamos el numero_pedido del pedido
+                sql='UPDATE pedidos SET numero_pedido=%s WHERE id=%s'
+                cursor.execute(sql,(numero_pedido,id_pedido))
+                db.connection.commit()
+                
                 #Obtenemos todos los productos del carrito del usuario
                 sql='SELECT id_producto,cantidad,precio FROM carrito WHERE id_usuario=%s'
                 cursor.execute(sql,(id,))
