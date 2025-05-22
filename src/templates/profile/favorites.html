@@ -1,0 +1,66 @@
+{% extends './layout.html' %}
+
+{% block title %}Favoritos{% endblock %}
+
+{% block body %}
+
+<!-- Secccion -->
+<section class="flex flex-col justify-center items-center mt-[80px] md:mt-[120px] mb-12 gap-4">
+
+    {% include 'menu_perfil.html' %}
+
+
+    <!-- Productos -->
+    <div class="mx-auto md:mx-4 lg:mx-12 text-center px-4">
+        
+        
+        
+        <h1 class="text-[#C40C0C] font-bold text-[30px] xl:text-[40px] text-center">Favoritos</h1>
+
+  
+        {% if productos %}
+        <!-- Contenedor de tarjetas -->
+        <div class="grid grid-cols-2 min-[568px]:grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-10 ">
+            
+            {% for producto in productos %}  
+                
+            <div class="relative bg-[#1B1A1A] border-2 border-[#C40C0C] rounded-lg p-4 lg:w-full h-full flex flex-col">
+
+                <a href="{{url_for('profile.deleteFavorites',id=producto.id)}}" class="absolute top-2 right-2 text-[#C40C0C]">
+                    <i class="fa-solid fa-circle-xmark fa-lg"></i>
+                </a>
+
+                <a href="{{ url_for('product.product', id=producto.id) }}" class="flex-1 flex flex-col justify-between items-center">
+                    <img src="{{ url_for('static', filename=producto.imagen) }}" alt="{{ producto.nombre }}" class="w-full h-full sm:h-52 md:h-52 mt-4 mb-4 lg:h-56 xl:h-72">
+                    <h3 class="text-[15px] sm:text-[20px] font-semibold mb-2 text-white text-center">{{ producto.nombre }}</h3>
+                    <p class="text-lg text-[#C40C0C]">{{ producto.precio }}€</p>
+                </a>
+
+            </div>
+
+                
+            {% endfor %}
+
+        </div>
+        {% else %}
+        <div class="flex flex-col justify-center items-center gap-2 mt-12  md:mt-24">
+            <p class="text-[80px] sm:text-[100px] text-[#C40C0C] rounded-full">
+                <i class="fa-solid fa-xmark"></i>
+            </p>
+            <p class="text-white text-center text-[30px] font-semibold">
+                No tienes productos favoritos
+            </p>
+        </div>
+        {% endif %}
+
+       
+        
+        
+
+    </div>
+
+  </section>
+
+  
+
+{% endblock %}

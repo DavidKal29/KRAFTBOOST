@@ -1,8 +1,8 @@
 from flask import Blueprint,redirect,url_for,render_template,abort,flash,current_app,request
 from flask_login import current_user
-from flask_login import login_required
 from formularios_WTF.forms import Account,AddressForm
 from models.ModelUser import ModelUser
+from models.ModelProduct import ModelProduct
 from models.entities.Address import Address
 from models.entities.User import User
 
@@ -21,13 +21,11 @@ def client_required():
 
 
 @profile_bp.route('/',methods=['GET','POST'])
-@login_required
 def profile():
     return redirect(url_for('profile.account'))
 
 
 @profile_bp.route('/account',methods=['GET','POST'])
-@login_required
 def account():
 
     try:
@@ -88,7 +86,6 @@ def account():
 
 
 @profile_bp.route('/delete_account',methods=['GET'])
-@login_required
 def delete_account():
     try:
         check=client_required()
@@ -121,7 +118,6 @@ def delete_account():
 
 
 @profile_bp.route('/address',methods=['GET','POST'])
-@login_required
 def address():
     try:
         check=client_required()
@@ -178,7 +174,6 @@ def address():
 
 
 @profile_bp.route('/delete_address',methods=['GET'])
-@login_required
 def delete_address():
     try:
         check=client_required()
@@ -206,6 +201,108 @@ def delete_address():
         print('ERROR DETECTADO EN LA CONSOLA')
         print(error)
         abort(404)
+
+
+
+@profile_bp.route('/addFavorites/<id>',methods=['GET'])
+def addFavorites(id):
+    try:
+        check=client_required()
+        if check!=True:
+            return check
+        
+        else:
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            agregado=ModelProduct.addFavorites(db,current_user.id,id)
+
+            
+            if agregado:
+                if agregado==True:
+                    flash('Producto añadido a Favoritos')
+                
+                else: 
+                    flash(agregado)
+
+                return redirect(url_for('product.product',id=id))
+            
+            else:
+                flash('Error al añadir producto')
+                return redirect(url_for('product.product',id=id))
+            
+
+    #Cualquier error nos lleva a home
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+
+@profile_bp.route('/deleteFavorites/<id>',methods=['GET'])
+def deleteFavorites(id):
+    try:
+        check=client_required()
+        if check!=True:
+            return check
+        
+        else:
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            borrado=ModelProduct.deleteFavorites(db,current_user.id,id)
+
+            if borrado:
+
+                if '/product' in request.referrer:
+                    flash('Producto quitado de Favoritos')
+                    return redirect(url_for('product.product',id=id))
+                
+                else:
+                    return redirect(url_for('profile.favorites'))
+            
+            else:
+                flash('Error al borrar producto de Favoritos')
+                return redirect(url_for('product.product',id=id))
+            
+
+    #Cualquier error nos lleva a home
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+
+
+
+
+
+@profile_bp.route('/favorites',methods=['GET'])
+def favorites():
+    try:
+        check=client_required()
+        if check!=True:
+            return check
+        
+        else:
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            productos=ModelProduct.mostrar_favoritos(db,current_user.id)
+
+            return render_template('profile/favorites.html',productos=productos)
+            
+
+    #Cualquier error nos lleva a home
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+
 
 
 

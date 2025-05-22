@@ -52,6 +52,149 @@ class ModelProduct():
         except Exception as error:
             print(error)
             return None
+        
+
+    #Función basica para mostrar productos en inicio
+    @classmethod
+    def mostrar_favoritos(cls,db,id_usuario):
+        try:
+            #Se abre un cursor con la conexion a la db y se crea la consulta sql
+            cursor=db.connection.cursor()
+
+            #Montamos la consulta para obtener los favortios(maximo 12 favoritos)
+            sql='''
+                SELECT p.id,p.nombre,p.precio,p.imagen FROM productos p
+                INNER JOIN favoritos f
+                ON p.id=f.id_producto
+                WHERE f.id_usuario=%s
+                ORDER BY f.id DESC
+                LIMIT 12
+            '''
+            
+
+            #Ejecutamos la consulta
+            cursor.execute(sql,(id_usuario,))
+            resultados=cursor.fetchall()
+           
+            #Si la consulta devuelve datos, creamos una lista, recorremos los datos 
+            # y creamos un objeto con cada producto, metiendolos en la lista
+            if resultados:
+                productos=[]
+
+                for resultado in resultados:
+                    id=resultado[0]
+                    nombre=resultado[1]
+                    precio=resultado[2]
+                    imagen=resultado[3]
+
+                    productos.append(Product(id,nombre, precio, None, None, None, imagen))
+
+                cursor.close()
+                return productos
+                
+            #Si no hay resultados, retornamos None    
+            else:
+                cursor.close()
+                return None
+        
+        
+        #Si hay errores, devolvemos None tambien
+        except Exception as error:
+            print(error)
+            return None
+        
+
+    @classmethod
+    def checkFavorite(cls,db,id_usuario,id_producto):
+        try:
+            #Se abre un cursor con la conexion a la db y se crea la consulta sql
+            cursor=db.connection.cursor()
+
+             #Vemos a ver si ese producto ya está en favoritos
+            sql='SELECT id_producto FROM favoritos WHERE id_producto=%s and id_usuario=%s'
+            cursor.execute(sql,(id_producto,id_usuario))
+
+            existe=cursor.fetchone()
+
+            #Si el producto existe en favoritos, retornamos true
+            if existe and existe[0]:
+                cursor.close()
+                return True
+            
+            else:
+                cursor.close()
+                return None
+
+           
+        #Si hay errores, devolvemos None tambien
+        except Exception as error:
+            print(error)
+            return None
+        
+        
+
+    @classmethod
+    def addFavorites(cls,db,id_usuario,id_producto):
+        try:
+            #Se abre un cursor con la conexion a la db y se crea la consulta sql
+            cursor=db.connection.cursor()
+
+             #Vemos a ver si ese producto ya está en favoritos
+            sql='SELECT id_producto FROM favoritos WHERE id_producto=%s and id_usuario=%s'
+            cursor.execute(sql,(id_producto,id_usuario))
+
+            existe=cursor.fetchone()
+
+            #Si el producto existe en favoritos, no dejamos añadirlo
+            if existe and existe[0]:
+                cursor.close()
+                return 'El producto ya está en tu lista de favoritos'
+
+            #Obtenemos la cantidad de favoritos de un usuario
+            sql='SELECT COUNT(*) FROM favoritos WHERE id_usuario=%s'
+            cursor.execute(sql,(id_usuario,))
+
+            cantidad=cursor.fetchone()
+
+            if cantidad and cantidad[0]>=12:
+                #Si la cantidad es mayor o igual a 12 no permitimos añadir más
+                cursor.close()
+                return 'Solo puedes tener 12 productos en favoritos'
+                    
+                      
+            #Insertamos en la tabla favoritos, los ids del producto y usuario
+            sql='INSERT INTO favoritos (id_usuario,id_producto) VALUES (%s,%s)'
+            cursor.execute(sql,(id_usuario,id_producto))
+            db.connection.commit()
+
+            return True
+
+           
+        #Si hay errores, devolvemos None tambien
+        except Exception as error:
+            print(error)
+            return None
+        
+
+    @classmethod
+    def deleteFavorites(cls,db,id_usuario,id_producto):
+        try:
+            #Se abre un cursor con la conexion a la db y se crea la consulta sql
+            cursor=db.connection.cursor()
+
+            #Borramos el producto(si no existe da igual, no se borra y ya)
+            sql='DELETE FROM favoritos WHERE id_producto=%s and id_usuario=%s'
+            cursor.execute(sql,(id_producto,id_usuario))
+            db.connection.commit()
+
+            return True
+
+           
+        #Si hay errores, devolvemos None tambien
+        except Exception as error:
+            print(error)
+            return None
+
 
     
     #Metodo estatico para convertir la busqueda que es un string, 
