@@ -173,6 +173,7 @@ def address():
 
 
 
+
 @profile_bp.route('/delete_address',methods=['GET'])
 def delete_address():
     try:
@@ -280,6 +281,34 @@ def deleteFavorites(id):
 
 
 @profile_bp.route('/favorites',methods=['GET'])
+def favorites():
+    try:
+        check=client_required()
+        if check!=True:
+            return check
+        
+        else:
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            productos=ModelProduct.mostrar_favoritos(db,current_user.id)
+
+            return render_template('profile/favorites.html',productos=productos)
+            
+
+    #Cualquier error nos lleva a home
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+
+
+
+
+
+@profile_bp.route('/orders',methods=['GET'])
 def favorites():
     try:
         check=client_required()
