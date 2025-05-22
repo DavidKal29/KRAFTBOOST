@@ -65,7 +65,7 @@
         <!-- Nombre -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.nombre.label(class="font-bold") }}
-            {{ form.nombre(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+            {{ form.nombre(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=datos.nombre if datos else '',autocomplete="off") }}
                 
             {% if form.nombre.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.nombre.errors[0]}}</p>
@@ -75,7 +75,7 @@
         <!-- Apellidos -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.apellidos.label(class="font-bold") }}
-            {{ form.apellidos(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+            {{ form.apellidos(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=datos.apellidos if datos else '',autocomplete="off") }}
                 
             {% if form.apellidos.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.apellidos.errors[0]}}</p>
@@ -85,7 +85,7 @@
         <!-- Email -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.email.label(class="font-bold") }}
-            {{ form.email(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+            {{ form.email(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=datos.email if datos else '',autocomplete="off") }}
                 
             {% if form.email.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.email.errors[0]}}</p>
@@ -96,7 +96,7 @@
         <!-- Username -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.username.label(class="font-bold") }}
-            {{ form.username(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+            {{ form.username(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=datos.username if datos else '',autocomplete="off") }}
                 
             {% if form.username.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.username.errors[0]}}</p>
@@ -107,7 +107,7 @@
         <div class="flex flex-col min-[568px]:flex-row justify-center items-center gap-4 min-[568px]:gap-2 w-full">
             <!-- Borrar Cuenta -->
             <div class="flex flex-col w-full">
-                <a href="" class="cursor-pointer text-white font-bold bg-[#C40C0C] rounded text-center px-4 py-2 w-full">Borrar Cuenta</a>
+                <a href="{{url_for('profile.delete_account')}}" class="cursor-pointer text-white font-bold bg-[#C40C0C] rounded text-center px-4 py-2 w-full">Borrar Cuenta</a>
             </div>
 
             <!--  -->

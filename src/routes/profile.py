@@ -4,6 +4,7 @@ from flask_login import login_required
 from formularios_WTF.forms import Account,AddressForm
 from models.ModelUser import ModelUser
 from models.entities.Address import Address
+from models.entities.User import User
 
 
 profile_bp=Blueprint('profile',__name__,url_prefix='/profile')
@@ -29,10 +30,95 @@ def profile():
 @login_required
 def account():
 
-    form=Account()
+    try:
+        check=client_required()
+        if check!=True:
+            return check
+        
+        else:
+            
+            #Obtenemos el cursor de la db y el formulario del register
+            db=current_app.config['db']
+            form=Account()
+
+            datos=User(current_user.id,current_user.nombre,current_user.apellidos,current_user.email,current_user.username,None,None)
+
+            #Si el metodo es post y se valida el formulario
+            if form.validate() and request.method=='POST':
+                
+                #Obtenemos todos lod datos del formulario de direccion de envio
+                nombre=request.form.get('nombre')
+                apellidos=request.form.get('apellidos')
+                email=request.form.get('email')
+                username=request.form.get('username')
+            
+                print(nombre,apellidos,email,username)
+
+                datos_nuevos=User(current_user.id,nombre,apellidos,email,username,None,None)
+
+
+                #Intentamos cambiar los datos de cuenta
+                datos_cambiados=ModelUser.setAccount(db,datos_nuevos)
+
+                #Si la direccion se ha asignado correctamente
+                if datos_cambiados:
+                    print('Datos cambaidos con exitillo')
+
+                    
+
+                    return redirect(url_for('profile.account'))
+
+                #Sino indicamos el error
+                else:
+                    flash('Error al cambiar los datos de cuenta')
+                    return render_template('profile/account.html',form=form,datos=datos)
+
+
+            #Sino      
+            else:
+                return render_template('profile/account.html',form=form,datos=datos)
     
     
-    return render_template('profile/account.html',form=form)
+    #Cualquier error nos lleva a home
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+
+@profile_bp.route('/delete_account',methods=['GET'])
+@login_required
+def delete_account():
+    try:
+        check=client_required()
+        if check!=True:
+            return check
+        
+        else:
+            
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            eliminado=ModelUser.deleteAccount(db,current_user.id)
+
+            if eliminado:
+                return redirect(url_for('home.home'))
+            
+            else:
+                flash('Error al borrar al usuario')
+                return redirect(url_for('profile.account'))
+
+            
+    
+    #Cualquier error nos lleva a home
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+
 
 @profile_bp.route('/address',methods=['GET','POST'])
 @login_required
@@ -71,7 +157,6 @@ def address():
                 #Si la direccion se ha asignado correctamente
                 if direccion_asignada:
                     print('Direccion asignada con exitillo')
-                    direccion_nueva=ModelUser.getAddress(db,current_user.id)
 
                     return redirect(url_for('profile.address'))
 
@@ -102,9 +187,8 @@ def delete_address():
         
         else:
             
-            #Obtenemos el cursor de la db y el formulario del register
+            #Obtenemos el cursor de la db
             db=current_app.config['db']
-            form=AddressForm()
 
             direccion_eliminada=ModelUser.deleteAddress(db,current_user.id)
 
@@ -113,7 +197,7 @@ def delete_address():
             
             else:
                 flash('Error al borrar la dirección')
-                return render_template('profile/address.html',form=form)
+                return redirect(url_for('profile.address'))
 
             
     
