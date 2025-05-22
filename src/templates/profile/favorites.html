@@ -4,22 +4,18 @@
 
 {% block body %}
 
-<!-- Secccion -->
+
 <section class="flex flex-col justify-center items-center mt-[80px] md:mt-[120px] mb-12 gap-4">
 
     {% include 'menu_perfil.html' %}
 
-
     <!-- Productos -->
     <div class="mx-auto md:mx-4 lg:mx-12 text-center px-4">
-        
-        
-        
+          
         <h1 class="text-[#C40C0C] font-bold text-[30px] xl:text-[40px] text-center">Favoritos</h1>
 
-  
         {% if productos %}
-        <!-- Contenedor de tarjetas -->
+
         <div class="grid grid-cols-2 min-[568px]:grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-10 ">
             
             {% for producto in productos %}  
@@ -43,19 +39,12 @@
 
         </div>
         {% else %}
-        <div class="flex flex-col justify-center items-center gap-2 mt-12  md:mt-24">
-            <p class="text-[80px] sm:text-[100px] text-[#C40C0C] rounded-full">
-                <i class="fa-solid fa-xmark"></i>
-            </p>
-            <p class="text-white text-center text-[30px] font-semibold">
-                No tienes productos favoritos
-            </p>
+        <div class="flex flex-col justify-center items-center gap-2">
+            <p class="text-[80px] sm:text-[100px] text-[#C40C0C] rounded-full"><i class="fa-solid fa-xmark"></i></p>
+            <p class="text-white text-center text-[30px] font-semibold">No tienes productos favoritos</p>
+            <a href="{{url_for('shop.shop')}}" class="bg-[#C40C0C] rounded px-4 py-2 md:px-8 md:py-2 md:text-[20px] mt-4"><button class="text-white font-bold">Ver Tienda</button></a>
         </div>
         {% endif %}
-
-       
-        
-        
 
     </div>
 

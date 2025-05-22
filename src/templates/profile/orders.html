@@ -1,0 +1,68 @@
+{% extends './layout.html' %}
+
+{% block title %}Favoritos{% endblock %}
+
+{% block body %}
+
+<!-- Secccion -->
+<section class="flex flex-col justify-center items-center mt-[80px] md:mt-[120px] mb-12 gap-4">
+
+    {% include 'menu_perfil.html' %}
+
+    <h1 class="text-[#C40C0C] font-bold text-[30px] xl:text-[40px] text-center">Pedidos</h1>
+
+    {% if pedidos %}
+    <div class="w-full px-4 py-8 flex flex-col items-center text-white">
+        <div class="overflow-x-auto w-full max-w-[1200px] rounded">
+            <table class="w-full whitespace-nowrap border-none">
+            <thead class="text-white bg-[#C40C0C]">
+                <tr>
+                <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Número</th>
+                <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Fecha</th>
+                <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Total</th>
+                <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Estado</th>
+                <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Acciones</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {% for pedido in pedidos %}
+                    <tr class="odd:bg-[#1f1f1f] even:bg-[#2a2a2a]">
+                    <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">{{pedido.numero_pedido}}</td>
+                    <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">{{pedido.fecha_compra}}</td>
+                    <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">{{pedido.precio_total}}€</td>
+                    {% if pedido.enviado==1 %}
+                        <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center text-green-500">Entregado</td>
+                    {% else %}
+                        <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center text-[#C40C0C]">Pendiente</td>
+                    {% endif %}
+                        <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">
+                            <div class="flex justify-center gap-4">
+                            <a href="#" class="text-center bg-[#102190] px-3 py-1 rounded text-[15px]">Ver Detalles</a>
+                            <a href="#" class="text-center bg-[#C40C0C] px-3 py-1 rounded text-[15px]">Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                
+            </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+
+    <div class="flex flex-col justify-center items-center gap-2">
+        <p class="text-[80px] sm:text-[100px] text-[#C40C0C] rounded-full"><i class="fa-solid fa-xmark"></i></p>
+        <p class="text-white text-center text-[30px] font-semibold">No tienes pedidos</p>
+        <a href="{{url_for('shop.shop')}}" class="bg-[#C40C0C] rounded px-4 py-2 md:px-8 md:py-2 md:text-[20px] mt-4"><button class="text-white font-bold">Ver Tienda</button></a>
+    </div>
+
+    {% endif %}
+
+   
+
+  </section>
+
+  
+
+{% endblock %}

@@ -5,6 +5,8 @@ from models.ModelUser import ModelUser
 from models.ModelProduct import ModelProduct
 from models.entities.Address import Address
 from models.entities.User import User
+from models.entities.Order import Order
+from models.ModelOrder import ModelOrder
 
 
 profile_bp=Blueprint('profile',__name__,url_prefix='/profile')
@@ -309,7 +311,7 @@ def favorites():
 
 
 @profile_bp.route('/orders',methods=['GET'])
-def favorites():
+def orders():
     try:
         check=client_required()
         if check!=True:
@@ -319,9 +321,9 @@ def favorites():
             #Obtenemos el cursor de la db
             db=current_app.config['db']
 
-            productos=ModelProduct.mostrar_favoritos(db,current_user.id)
+            pedidos=ModelOrder.showOrders(db,current_user.id)
 
-            return render_template('profile/favorites.html',productos=productos)
+            return render_template('profile/orders.html',pedidos=pedidos)
             
 
     #Cualquier error nos lleva a home
