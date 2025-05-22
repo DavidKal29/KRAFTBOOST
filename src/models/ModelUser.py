@@ -307,5 +307,28 @@ class ModelUser():
             return None
         
 
+    #Metodo para cambiar la direccion de envio
+    @classmethod
+    def deleteAddress(cls,db,id):
+        try:
+
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+
+            #Obtenemos la contraseña antigua
+            sql='DELETE FROM domicilios WHERE id_usuario=%s'
+            cursor.execute(sql,(id,))
+            db.connection.commit()
+            
+            return True
+
+            
+        #Cualquier error distitno, None también        
+        except Exception as error:
+            print('Error al borrar la dirección')
+            print(error)
+            return None
+        
+
 
 

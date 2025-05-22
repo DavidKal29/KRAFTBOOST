@@ -172,7 +172,7 @@ class AddressForm(FlaskForm):
     ])
 
 
-    submit=SubmitField('Continuar')
+    submit=SubmitField('Guardar Cambios')
 
 
 
