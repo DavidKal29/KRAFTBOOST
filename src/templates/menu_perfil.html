@@ -1,38 +1,44 @@
 <!-- Menu perfil -->
-    <div class="flex justify-center items-center max-[320px]:gap-6 gap-2 lg:gap-4  bg-[#443E3E] text-white font-bold mt-8 rounded w-5/6 min-[568px]:w-4/6 sm:w-3/6 lg:w-[40%] xl:w-[30%] h-12 lg:h-14">
-        <a href="{{url_for('profile.account')}}" class="flex flex-col items-center justify-center h-full p-2 max-[320px]:max-[320px]:text-[20px] text-[12px] min-[568px]:text-[15px] lg:text-[16px]">
-            
-            <div class="flex flex-col justify-center items-center">
-                <i class="fa-solid fa-box"></i>
-                <p class="max-[320px]:hidden">Pedidos</p>
-            </div>
-            
-        </a>
+<div class="flex justify-center items-center max-[320px]:gap-6 gap-2 lg:gap-4 bg-[#443E3E] text-white font-bold rounded w-5/6 min-[568px]:w-4/6 sm:w-3/6 lg:w-[40%] xl:w-[30%] h-12 lg:h-14">
 
-        <a href="{{url_for('profile.favorites')}}" class="flex flex-col items-center justify-center h-full p-2 max-[320px]:text-[20px] text-[12px] min-[568px]:text-[15px] lg:text-[16px]">
-            
-            <div class="flex flex-col justify-center items-center">
-                <i class="fa-solid fa-heart"></i>
-                <p class="max-[320px]:hidden">Favoritos</p>
-            </div>
-            
-        </a>
+    <a href="{{ url_for('profile.account') }}"
+       class="flex flex-col items-center justify-center h-full p-2 
+       max-[320px]:text-[20px] text-[12px] min-[568px]:text-[15px] lg:text-[16px]
+       {% if '/profile/order' in request.path %} bg-[#C40C0C] {% endif %}">
+        <div class="flex flex-col justify-center items-center">
+            <i class="fa-solid fa-box"></i>
+            <p class="max-[320px]:hidden">Pedidos</p>
+        </div>
+    </a>
 
-        <a href="{{url_for('profile.account')}}" class="flex flex-col items-center justify-center h-full p-2 max-[320px]:text-[20px] text-[12px] min-[568px]:text-[15px] lg:text-[16px]     bg-[#C40C0C]">
-            
-            <div class="flex flex-col justify-center items-center">
-                <i class="fa-solid fa-user-pen"></i>
-                <p class="max-[320px]:hidden">Cuenta</p>
-            </div>
-           
-        </a>
+    <a href="{{ url_for('profile.favorites') }}"
+       class="flex flex-col items-center justify-center h-full p-2 
+       max-[320px]:text-[20px] text-[12px] min-[568px]:text-[15px] lg:text-[16px]
+       {% if '/profile/favorites' in request.path %} bg-[#C40C0C] {% endif %}">
+        <div class="flex flex-col justify-center items-center">
+            <i class="fa-solid fa-heart"></i>
+            <p class="max-[320px]:hidden">Favoritos</p>
+        </div>
+    </a>
 
-        <a href="{{url_for('profile.address')}}" class="flex flex-col items-center justify-center h-full p-2 max-[320px]:text-[20px] text-[12px] min-[568px]:text-[15px] lg:text-[16px]">
-            
-            <div class="flex flex-col justify-center items-center">
-                <i class="fa-solid fa-location-dot"></i>
-                <p class="max-[320px]:hidden">Dirección</p>
-            </div>
-            
-        </a>
-    </div>
+    <a href="{{ url_for('profile.account') }}"
+       class="flex flex-col items-center justify-center h-full p-2 
+       max-[320px]:text-[20px] text-[12px] min-[568px]:text-[15px] lg:text-[16px]
+       {% if '/profile/account' in request.path %} bg-[#C40C0C] {% endif %}">
+        <div class="flex flex-col justify-center items-center">
+            <i class="fa-solid fa-user-pen"></i>
+            <p class="max-[320px]:hidden">Cuenta</p>
+        </div>
+    </a>
+
+    <a href="{{ url_for('profile.address') }}"
+       class="flex flex-col items-center justify-center h-full p-2 
+       max-[320px]:text-[20px] text-[12px] min-[568px]:text-[15px] lg:text-[16px]
+       {% if '/profile/address' in request.path %} bg-[#C40C0C] {% endif %}">
+        <div class="flex flex-col justify-center items-center">
+            <i class="fa-solid fa-location-dot"></i>
+            <p class="max-[320px]:hidden">Dirección</p>
+        </div>
+    </a>
+
+</div>
