@@ -400,8 +400,7 @@ def delete_order(id):
                 #Mandamos a los pedidos
                 return redirect(url_for('profile.orders'))
             
-            #Sino, mandamos al 404, en señal de que intentamos borrar
-            # un pedido que no existe o no nos pertenece
+            #Sino, mandamos al 404
             else:
                 abort(404)
             
