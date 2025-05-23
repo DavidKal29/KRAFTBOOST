@@ -360,6 +360,32 @@ def order(num):
         abort(404)
 
 
+@profile_bp.route('/delete_order/<id>',methods=['GET'])
+def delete_order(id):
+    try:
+        check=client_required()
+        if check!=True:
+            return check
+        
+        else:
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            eliminado=ModelOrder.deleteOrder(db,current_user.id,id)
+
+            if eliminado:
+                return redirect(url_for('profile.orders'))
+            else:
+                abort(404)
+            
+
+    #Cualquier error nos lleva a home
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
 
 
 

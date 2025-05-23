@@ -146,3 +146,32 @@ class ModelOrder:
             print('Error al obtener el email')
             print(error)
             return None
+        
+
+
+    
+    @classmethod
+    def deleteOrder(cls,db,id_usuario,id_pedido):
+        try:
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+
+            #Montamos y ejecutamos la instruccion que borrará los detalles del pedido
+            sql='DELETE FROM detalles_pedido WHERE id_pedido=%s'
+            cursor.execute(sql,(id_pedido,))
+            db.connection.commit()
+
+            
+            #Montamos y ejecutamos la instruccion que borrará el pedido
+            sql='DELETE FROM pedidos WHERE id_usuario=%s and id=%s'
+            cursor.execute(sql,(id_usuario,id_pedido))
+            db.connection.commit()
+
+            return True
+        
+        
+        #Cualquier error distitno, None también        
+        except Exception as error:
+            print('Error al obtener el email')
+            print(error)
+            return None
