@@ -55,7 +55,7 @@ class ModelOrder:
             cursor=db.connection.cursor()
             
             sql='''
-                SELECT p.nombre,p.imagen,p.cantidad,p.precio FROM productos p
+                SELECT p.nombre,p.imagen,dp.cantidad,dp.precio FROM productos p
                 INNER JOIN detalles_pedido dp
                 ON p.id=dp.id_producto
                 WHERE dp.id_pedido=%s
@@ -77,7 +77,7 @@ class ModelOrder:
                     cantidad=p[2]
                     precio=p[3]
 
-                    productos.append(CartProduct(nombre,imagen,cantidad,precio))
+                    productos.append(CartProduct(0,nombre,imagen,cantidad,precio))
 
                 
                 cursor.close()
@@ -127,7 +127,9 @@ class ModelOrder:
                 codigo_postal=row[9]
                 enviado=row[10]
 
-                order=Order(id,fecha_compra,numero_pedido,precio_total,nombre_destinatario,domicilio,localidad,puerta,codigo_postal,enviado)
+                print(id,fecha_compra,numero_pedido,precio_total,nombre_destinatario,domicilio,localidad,puerta,codigo_postal,enviado)
+
+                order=Order(id,fecha_compra,numero_pedido,precio_total,enviado,nombre_destinatario,domicilio,localidad,puerta,codigo_postal)
 
                 cursor.close()
 
