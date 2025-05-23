@@ -11,7 +11,7 @@ class ModelOrder:
             cursor=db.connection.cursor()
             
             #Montamos la consulta para obtener los pedidos
-            sql='SELECT id,fecha_compra,numero_pedido,precio_total,enviado FROM pedidos WHERE id_usuario=%s'
+            sql='SELECT id,fecha_compra,numero_pedido,precio_total,enviado FROM pedidos WHERE id_usuario=%s ORDER BY id DESC'
             cursor.execute(sql,(id_usuario,))
 
             row=cursor.fetchall()

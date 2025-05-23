@@ -61,7 +61,11 @@
 
                 <div class="flex flex-col justify-center items-center gap-4 lg:gap-2">
                     <i class="fa-solid fa-people-carry-box text-[40px]"></i>
+                    {% if pedido.enviado==1 %}
                     <i class="fa-solid fa-check text-green-500 text-[40px]"></i>
+                    {% else %}
+                    <i class="fa-solid fa-xmark text-[#C40C0C] text-[40px]"></i>
+                    {% endif %}
                     <p class="text-[20px] font-bold text-center">Paquete Enviado</p>
                 </div>
 
