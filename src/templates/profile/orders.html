@@ -32,9 +32,9 @@
                     <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">{{pedido.fecha_compra}}</td>
                     <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">{{pedido.precio_total}}€</td>
                     {% if pedido.enviado==1 %}
-                        <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center text-green-500">Entregado</td>
+                        <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center text-green-500"><i class="fa-solid fa-check"></i> Entregado</td>
                     {% else %}
-                        <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center text-[#C40C0C]">Pendiente</td>
+                        <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center text-[#C40C0C]"><i class="fa-solid fa-xmark"></i> Pendiente</td>
                     {% endif %}
                         <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">
                             <div class="flex justify-center gap-4">

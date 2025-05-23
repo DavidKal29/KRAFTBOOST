@@ -119,9 +119,11 @@ class ModelProduct():
             #Si el producto existe en favoritos, retornamos true
             if existe and existe[0]:
                 cursor.close()
+
                 return True
             
             else:
+
                 cursor.close()
                 return None
 

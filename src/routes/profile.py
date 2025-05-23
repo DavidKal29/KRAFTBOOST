@@ -308,8 +308,6 @@ def favorites():
 
 
 
-
-
 @profile_bp.route('/orders',methods=['GET'])
 def orders():
     try:
@@ -331,6 +329,38 @@ def orders():
         print('ERROR DETECTADO EN LA CONSOLA')
         print(error)
         abort(404)
+
+
+@profile_bp.route('/order/<num>',methods=['GET'])
+def order(num):
+    try:
+        check=client_required()
+        if check!=True:
+            return check
+        
+        else:
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            pedido=ModelOrder.showFullOrder(db,current_user.id,num)
+
+            if pedido:
+                productos=ModelOrder.getOrderProducts(db,pedido.id)
+
+                return render_template('profile/order.html',pedido=pedido,productos=productos)
+            
+            else:
+                abort(404)
+            
+
+    #Cualquier error nos lleva a home
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+
 
 
 
