@@ -22,14 +22,16 @@ def client_required():
         return True
 
 
+#Ruta raiz
 @profile_bp.route('/',methods=['GET','POST'])
 def profile():
     return redirect(url_for('profile.account'))
 
 
+
+#Rutas de Datos de cuenta
 @profile_bp.route('/account',methods=['GET','POST'])
 def account():
-
     try:
         check=client_required()
         if check!=True:
@@ -37,7 +39,7 @@ def account():
         
         else:
             
-            #Obtenemos el cursor de la db y el formulario del register
+            #Obtenemos el cursor de la db y el formulario de datos de cuenta
             db=current_app.config['db']
             form=Account()
 
@@ -46,7 +48,7 @@ def account():
             #Si el metodo es post y se valida el formulario
             if form.validate() and request.method=='POST':
                 
-                #Obtenemos todos lod datos del formulario de direccion de envio
+                #Obtenemos todos lod datos del formulario
                 nombre=request.form.get('nombre')
                 apellidos=request.form.get('apellidos')
                 email=request.form.get('email')
@@ -60,11 +62,9 @@ def account():
                 #Intentamos cambiar los datos de cuenta
                 datos_cambiados=ModelUser.setAccount(db,datos_nuevos)
 
-                #Si la direccion se ha asignado correctamente
+                #Si los datos han sido cambiados
                 if datos_cambiados:
                     print('Datos cambaidos con exitillo')
-
-                    
 
                     return redirect(url_for('profile.account'))
 
@@ -79,7 +79,7 @@ def account():
                 return render_template('profile/account.html',form=form,datos=datos)
     
     
-    #Cualquier error nos lleva a home
+    #Cualquier error nos lleva a 404
     except Exception as error:
         print('ERROR DETECTADO EN LA CONSOLA')
         print(error)
@@ -99,18 +99,21 @@ def delete_account():
             #Obtenemos el cursor de la db
             db=current_app.config['db']
 
+            #Eliminamos la cuenta
             eliminado=ModelUser.deleteAccount(db,current_user.id)
 
+            #Si el usuario fue elimiando, redirijimos a inicio
             if eliminado:
                 return redirect(url_for('home.home'))
             
+            #Sino indicamos el error
             else:
                 flash('Error al borrar al usuario')
                 return redirect(url_for('profile.account'))
 
             
     
-    #Cualquier error nos lleva a home
+    #Cualquier error nos lleva a 404
     except Exception as error:
         print('ERROR DETECTADO EN LA CONSOLA')
         print(error)
@@ -118,6 +121,8 @@ def delete_account():
 
 
 
+
+#Rutas de Direccion de Envio
 
 @profile_bp.route('/address',methods=['GET','POST'])
 def address():
@@ -128,7 +133,7 @@ def address():
         
         else:
             
-            #Obtenemos el cursor de la db y el formulario del register
+            #Obtenemos el cursor de la db y el formulario
             db=current_app.config['db']
             form=AddressForm()
 
@@ -137,7 +142,7 @@ def address():
             #Si el metodo es post y se valida el formulario
             if form.validate() and request.method=='POST':
                 
-                #Obtenemos todos lod datos del formulario de direccion de envio
+                #Obtenemos todos los datos del formulario de direccion de envio
                 nombre_destinatario=request.form.get('nombre_destinatario')
                 domicilio=request.form.get('domicilio')
                 localidad=request.form.get('localidad')
@@ -167,7 +172,7 @@ def address():
             else:
                 return render_template('profile/address.html',form=form,direccion_antigua=direccion_antigua)
     
-    #Cualquier error nos lleva a home
+    #Cualquier error nos lleva a 404
     except Exception as error:
         print('ERROR DETECTADO EN LA CONSOLA')
         print(error)
@@ -188,18 +193,47 @@ def delete_address():
             #Obtenemos el cursor de la db
             db=current_app.config['db']
 
+            #Borramos la direccion
             direccion_eliminada=ModelUser.deleteAddress(db,current_user.id)
 
+            #Si fue borrada, mostramos el fomulario vacio
             if direccion_eliminada:
                 return redirect(url_for('profile.address'))
             
+            #Sino, indicamos el error
             else:
                 flash('Error al borrar la dirección')
                 return redirect(url_for('profile.address'))
-
-            
+      
     
-    #Cualquier error nos lleva a home
+    #Cualquier error nos lleva a 404
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+
+
+#Ruta de Favoritos
+@profile_bp.route('/favorites',methods=['GET'])
+def favorites():
+    try:
+        check=client_required()
+        if check!=True:
+            return check
+        
+        else:
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            #Obtenemos los productos favoritos
+            productos=ModelProduct.mostrar_favoritos(db,current_user.id)
+
+            return render_template('profile/favorites.html',productos=productos)
+            
+
+    #Cualquier error nos lleva a 404
     except Exception as error:
         print('ERROR DETECTADO EN LA CONSOLA')
         print(error)
@@ -218,28 +252,33 @@ def addFavorites(id):
             #Obtenemos el cursor de la db
             db=current_app.config['db']
 
+            #Agregamos a favoritos
             agregado=ModelProduct.addFavorites(db,current_user.id,id)
 
-            
+            #Si el producto fue añadido a favoritos
             if agregado:
+                #Si es true, mostramos el mensaje de añadido
                 if agregado==True:
                     flash('Producto añadido a Favoritos')
                 
+                #Sino, mostramos el mensaje de error que nos llega del metodo addFavorites
                 else: 
                     flash(agregado)
 
                 return redirect(url_for('product.product',id=id))
             
+            #Sino mostramos el mensaje de error
             else:
                 flash('Error al añadir producto')
                 return redirect(url_for('product.product',id=id))
             
 
-    #Cualquier error nos lleva a home
+    #Cualquier error nos lleva a 404
     except Exception as error:
         print('ERROR DETECTADO EN LA CONSOLA')
         print(error)
         abort(404)
+
 
 
 
@@ -254,23 +293,28 @@ def deleteFavorites(id):
             #Obtenemos el cursor de la db
             db=current_app.config['db']
 
+            #Borramos de favoritos el producto
             borrado=ModelProduct.deleteFavorites(db,current_user.id,id)
 
+            #Si el producto fue borrado
             if borrado:
 
+                #Si estamos en la pagina del producto, msotramos el mensaje de borrado
                 if '/product' in request.referrer:
                     flash('Producto quitado de Favoritos')
                     return redirect(url_for('product.product',id=id))
                 
+                #Sino mostramos de nuevo la pagina de favoritos(Veremos que el producto ya no está)
                 else:
                     return redirect(url_for('profile.favorites'))
             
+            #Sino mostramos el error de borrado en el producto en sí
             else:
                 flash('Error al borrar producto de Favoritos')
                 return redirect(url_for('product.product',id=id))
             
 
-    #Cualquier error nos lleva a home
+    #Cualquier error nos lleva a 404
     except Exception as error:
         print('ERROR DETECTADO EN LA CONSOLA')
         print(error)
@@ -278,36 +322,7 @@ def deleteFavorites(id):
 
 
 
-
-
-
-
-@profile_bp.route('/favorites',methods=['GET'])
-def favorites():
-    try:
-        check=client_required()
-        if check!=True:
-            return check
-        
-        else:
-            #Obtenemos el cursor de la db
-            db=current_app.config['db']
-
-            productos=ModelProduct.mostrar_favoritos(db,current_user.id)
-
-            return render_template('profile/favorites.html',productos=productos)
-            
-
-    #Cualquier error nos lleva a home
-    except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
-        print(error)
-        abort(404)
-
-
-
-
-
+#Ruta de Pedidos
 @profile_bp.route('/orders',methods=['GET'])
 def orders():
     try:
@@ -319,16 +334,18 @@ def orders():
             #Obtenemos el cursor de la db
             db=current_app.config['db']
 
+            #Obtenemos los pedidos
             pedidos=ModelOrder.showOrders(db,current_user.id)
 
             return render_template('profile/orders.html',pedidos=pedidos)
             
 
-    #Cualquier error nos lleva a home
+    #Cualquier error nos lleva a 404
     except Exception as error:
         print('ERROR DETECTADO EN LA CONSOLA')
         print(error)
         abort(404)
+
 
 
 @profile_bp.route('/order/<num>',methods=['GET'])
@@ -342,18 +359,22 @@ def order(num):
             #Obtenemos el cursor de la db
             db=current_app.config['db']
 
+            #Obtenemos el pedido
             pedido=ModelOrder.showFullOrder(db,current_user.id,num)
 
+            #Si existe el pedido
             if pedido:
+                #Obtenemos los productos comprados en el pedido
                 productos=ModelOrder.getOrderProducts(db,pedido.id)
 
                 return render_template('profile/order.html',pedido=pedido,productos=productos)
             
+            #Sino, mandamos 404
             else:
                 abort(404)
             
 
-    #Cualquier error nos lleva a home
+    #Cualquier error nos lleva a 404
     except Exception as error:
         print('ERROR DETECTADO EN LA CONSOLA')
         print(error)
@@ -371,15 +392,21 @@ def delete_order(id):
             #Obtenemos el cursor de la db
             db=current_app.config['db']
 
+            #Eliminamos el producto
             eliminado=ModelOrder.deleteOrder(db,current_user.id,id)
 
+            #Si el producto fue eliminado
             if eliminado:
+                #Mandamos a los pedidos
                 return redirect(url_for('profile.orders'))
+            
+            #Sino, mandamos al 404, en señal de que intentamos borrar
+            # un pedido que no existe o no nos pertenece
             else:
                 abort(404)
             
 
-    #Cualquier error nos lleva a home
+    #Cualquier error nos lleva a 404
     except Exception as error:
         print('ERROR DETECTADO EN LA CONSOLA')
         print(error)
