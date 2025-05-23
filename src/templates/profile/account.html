@@ -1,0 +1,87 @@
+{% extends './layout.html' %}
+
+{% block title %}Account{% endblock %}
+
+{% block body %}
+
+<section class="flex flex-col justify-center items-center mt-[80px] md:mt-[120px] mb-12 gap-4">
+    {% include 'menu_perfil.html' %}
+
+    <h1 class="text-[#C40C0C] font-bold text-[30px] xl:text-[40px] text-center">Datos de Cuenta</h1>
+
+    
+    <form action="{{url_for('profile.account')}}" method="post" class="flex flex-col justify-center items-center gap-6 text-white px-4 w-full max-w-[600px]">
+        
+        <!-- Hidden Tag -->
+        {{ form.hidden_tag() }}
+
+        <!-- Errores -->
+        {% with messages=get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                    <span class="text-[#C40C0C] text-md font-semibold text-center">¡{{msg}}!</span>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+
+        <!-- Nombre -->
+        <div class="flex justify-center items-start flex-col w-full">
+            {{ form.nombre.label(class="font-bold") }}
+            {{ form.nombre(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=datos.nombre if datos else '',autocomplete="off") }}
+                
+            {% if form.nombre.errors %}
+                <p class="text-[12px] text-[#C40C0C] mt-1">{{form.nombre.errors[0]}}</p>
+            {% endif %}
+        </div>
+
+        <!-- Apellidos -->
+        <div class="flex justify-center items-start flex-col w-full">
+            {{ form.apellidos.label(class="font-bold") }}
+            {{ form.apellidos(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=datos.apellidos if datos else '',autocomplete="off") }}
+                
+            {% if form.apellidos.errors %}
+                <p class="text-[12px] text-[#C40C0C] mt-1">{{form.apellidos.errors[0]}}</p>
+            {% endif %}
+        </div>
+
+        <!-- Email -->
+        <div class="flex justify-center items-start flex-col w-full">
+            {{ form.email.label(class="font-bold") }}
+            {{ form.email(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=datos.email if datos else '',autocomplete="off") }}
+                
+            {% if form.email.errors %}
+                <p class="text-[12px] text-[#C40C0C] mt-1">{{form.email.errors[0]}}</p>
+            {% endif %}
+        </div>
+    
+        
+        <!-- Username -->
+        <div class="flex justify-center items-start flex-col w-full">
+            {{ form.username.label(class="font-bold") }}
+            {{ form.username(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=datos.username if datos else '',autocomplete="off") }}
+                
+            {% if form.username.errors %}
+                <p class="text-[12px] text-[#C40C0C] mt-1">{{form.username.errors[0]}}</p>
+            {% endif %}
+        </div>
+        
+        <!-- Botones -->
+        <div class="flex flex-col min-[568px]:flex-row justify-center items-center gap-4 min-[568px]:gap-2 w-full">
+            <!-- Borrar Cuenta -->
+            <div class="flex flex-col w-full">
+                <a href="{{url_for('profile.delete_account')}}" class="cursor-pointer text-white font-bold bg-[#C40C0C] rounded text-center px-4 py-2 w-full">Borrar Cuenta</a>
+            </div>
+
+            <!--  -->
+            <div class="flex flex-col w-full">
+                {{ form.submit(class="cursor-pointer text-[#C40C0C] font-bold bg-white rounded px-4 py-2 w-full") }}
+            </div>
+        </div>
+        
+    </form>
+</section>
+
+
+
+{% endblock %}

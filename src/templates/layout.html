@@ -45,10 +45,22 @@
 
         <!-- botones -->
         <div class="hidden lg:flex items-center">
+            
+            {% if current_user.is_authenticated %}
+                {% if current_user.rol=='client' %}
+                <div id="botones" class="flex space-x-4">
+                    <a href="{{url_for('profile.profile')}}"><button class="bg-transparent text-white rounded px-[16px] py-[8px] font-bold text-[14px] border-[2px] border-white"><i class="fa-solid fa-user"></i> {{current_user.username}}</button></a>
+                    <a href="{{url_for('logout.logout')}}"><button class="bg-[#C40C0C] text-white rounded px-[16px] py-[8px] font-bold text-[14px]"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button></a>
+                </div>
+                
+                {% endif %}
+
+            {% else %}
             <div id="botones" class="flex space-x-4">
                 <a href="{{url_for('auth.login')}}"><button class="bg-white text-[#C40C0C] rounded px-[16px] py-[8px] font-bold text-[14px]">Iniciar Sesión</button></a>
                 <a href="{{url_for('auth.register')}}"><button class="bg-[#C40C0C] text-white rounded px-[16px] py-[8px] font-bold text-[14px]">Crear cuenta</button></a>
             </div>
+            {% endif %}
   
         </div>
 
@@ -70,12 +82,28 @@
             <a href="{{url_for('shop.shop')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
                 <i class="fa-solid fa-shop"></i> Tienda
             </a>
+
+            {% if current_user.is_authenticated %}
+                {% if current_user.rol=='client' %}
+                <a href="{{url_for('profile.profile')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
+                    <i class="fa-solid fa-user"></i> {{current_user.username}}
+                </a>
+                <a href="{{url_for('logout.logout')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
+                    <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+                </a>
+
+                {% endif %}
+            
+            {% else %}
             <a href="{{url_for('auth.login')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
                 <i class="fa-solid fa-user"></i> Iniciar Sesión
             </a>
             <a href="{{url_for('auth.register')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
                 <i class="fa-solid fa-user-plus"></i> Crear Cuenta
             </a>
+                
+            {% endif %}
+            
             <a href="{{url_for('cart.cart')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
                 <i class="fa-solid fa-cart-shopping"></i> Carrito
             </a>  

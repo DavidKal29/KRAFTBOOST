@@ -138,6 +138,39 @@ class ModelUser():
             print('Error al obtener el id')
             print(error)
             return None
+        
+
+    #Metodo para cambiar la direccion de envio
+    @classmethod
+    def deleteAccount(cls,db,id):
+        try:
+
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+
+            #Borramos los detalles de los pedidos del usuario 
+            sql='DELETE FROM detalles_pedido WHERE id_pedido IN (SELECT id FROM pedidos WHERE id_usuario=%s)'
+            cursor.execute(sql,(id,))
+            db.connection.commit()
+
+            #Borramos todos los pedidos del usuario
+            sql='DELETE FROM pedidos WHERE id_usuario=%s'
+            cursor.execute(sql,(id,))
+            db.connection.commit()
+
+            #Borramos al usuario
+            sql='DELETE FROM usuarios WHERE id=%s'
+            cursor.execute(sql,(id,))
+            db.connection.commit()
+            
+            return True
+
+            
+        #Cualquier error distitno, None también        
+        except Exception as error:
+            print('Error al borrar al usuario')
+            print(error)
+            return None
     
 
     #Método para validar el email que se introduce al recuerar contraseña
@@ -223,6 +256,7 @@ class ModelUser():
             print(error)
             return None
     
+    
 
     #Metodo para obtener la direccion de envio
     @classmethod
@@ -303,6 +337,53 @@ class ModelUser():
         #Cualquier error distitno, None también        
         except Exception as error:
             print('Error al cambiar password')
+            print(error)
+            return None
+        
+
+    #Metodo para cambiar la direccion de envio
+    @classmethod
+    def deleteAddress(cls,db,id):
+        try:
+
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+
+            #Obtenemos la contraseña antigua
+            sql='DELETE FROM domicilios WHERE id_usuario=%s'
+            cursor.execute(sql,(id,))
+            db.connection.commit()
+            
+            return True
+
+            
+        #Cualquier error distitno, None también        
+        except Exception as error:
+            print('Error al borrar la dirección')
+            print(error)
+            return None
+        
+
+    #Metodo para cambiar la direccion de envio
+    @classmethod
+    def setAccount(cls,db,user):
+        try:
+
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+
+            #Actualizamos los datos del usuario
+            sql='UPDATE usuarios SET nombre=%s,apellidos=%s,email=%s,username=%s WHERE id=%s'
+            cursor.execute(sql,(user.nombre,user.apellidos,user.email,user.username,user.id))
+            db.connection.commit()
+
+            #Devolvemos true si todo sale bien
+            return True
+
+            
+        #Cualquier error distinto, None         
+        except Exception as error:
+            print('Error al cambiar los datos de cuenta')
             print(error)
             return None
         
