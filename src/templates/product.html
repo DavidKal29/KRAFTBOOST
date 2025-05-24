@@ -40,19 +40,37 @@
 
       <!-- Botones -->
       <div class="flex flex-col gap-4 xl:flex-row">
-        <a onclick="desactivar(this)" href="{{url_for('cart.add_product', id_producto=id)}}" class="w-full bg-[#C40C0C] text-white rounded py-3 font-bold text-[16px] text-center">
-          <button>Añadir al carrito <i class="fa-solid fa-cart-plus"></i></button>
-        </a>
+        
+        {% if not current_user.is_authenticated or current_user.rol=='client'%}
+          <a onclick="desactivar(this)" href="{{url_for('cart.add_product', id_producto=id)}}" class="w-full bg-[#C40C0C] text-white rounded py-3 font-bold text-[16px] text-center">
+            <button>Añadir al carrito <i class="fa-solid fa-cart-plus"></i></button>
+          </a>
 
-        {% if favorito %}
-        <a href="{{url_for('profile.deleteFavorites',id=id)}}" class="w-full bg-white text-[#C40C0C] rounded py-3 font-bold text-[16px] text-center">
-          Quitar de favoritos <i class="fa-solid fa-heart-crack"></i>
-        </a>
-        {% else %}
-        <a href="{{url_for('profile.addFavorites',id=id)}}" class="w-full bg-white text-[#C40C0C] rounded py-3 font-bold text-[16px] text-center">
-          Añadir a favoritos <i class="fa-solid fa-heart"></i>
-        </a>
+          {% if favorito %}
+          <a href="{{url_for('profile.deleteFavorites',id=id)}}" class="w-full bg-white text-[#C40C0C] rounded py-3 font-bold text-[16px] text-center">
+            Quitar de favoritos <i class="fa-solid fa-heart-crack"></i>
+          </a>
+          {% else %}
+          <a href="{{url_for('profile.addFavorites',id=id)}}" class="w-full bg-white text-[#C40C0C] rounded py-3 font-bold text-[16px] text-center">
+            Añadir a favoritos <i class="fa-solid fa-heart"></i>
+          </a>
+          {% endif %}
+          
+
+        {% elif current_user.is_authenticated and current_user.rol=='admin' %}
+          <a href="#" class="w-full bg-[#C40C0C] text-white rounded py-3 font-bold text-[16px] text-center">
+            <button>Editar Producto <i class="fa-solid fa-pen-to-square"></i></button>
+          </a>
+
+          <a href="#" class="w-full bg-[#C40C0C] text-white rounded py-3 font-bold text-[16px] text-center">
+            <button>Desactivar <i class="fa-solid fa-power-off"></i></button>
+          </a>
         {% endif %}
+
+
+      
+      
+      
       </div>
 
       <!-- Descripción -->

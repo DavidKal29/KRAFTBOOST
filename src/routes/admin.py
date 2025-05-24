@@ -61,17 +61,17 @@ def account():
                 if datos_cambiados:
                     print('Datos cambaidos con exitillo')
 
-                    return redirect(url_for('profile.account'))
+                    return redirect(url_for('admin.account'))
 
                 #Sino indicamos el error
                 else:
                     flash('Error al cambiar los datos de cuenta')
-                    return render_template('profile/account.html',form=form,datos=datos)
+                    return render_template('admin/account.html',form=form,datos=datos)
 
 
             #Sino      
             else:
-                return render_template('profile/account.html',form=form,datos=datos)
+                return render_template('admin/account.html',form=form,datos=datos)
     
     
     #Cualquier error nos lleva a 404
@@ -79,3 +79,40 @@ def account():
         print('ERROR DETECTADO EN LA CONSOLA')
         print(error)
         abort(404)
+
+
+
+@admin_bp.route('/delete_account',methods=['GET'])
+def delete_account():
+    try:
+        check=admin_required()
+        if check!=True:
+            return check
+        
+        else:
+            
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            #Eliminamos la cuenta
+            eliminado=ModelUser.deleteAccount(db,current_user.id)
+
+            #Si el usuario fue elimiando, redirijimos a inicio
+            if eliminado:
+                return redirect(url_for('home.home'))
+            
+            #Sino indicamos el error
+            else:
+                flash('Error al borrar al usuario')
+                return redirect(url_for('admin.account'))
+
+    #Cualquier error nos lleva a 404
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+@admin_bp.route('/panel',methods=['GET'])
+def panel():
+    return 'Este será el panel del admin temporal'
