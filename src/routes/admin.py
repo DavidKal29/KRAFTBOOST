@@ -3,7 +3,6 @@ from flask_login import current_user
 from formularios_WTF.forms import Account
 from models.entities.User import User
 from models.ModelUser import ModelUser
-from tools.AdminTools import AdminTools
 from models.ModelOrder import ModelOrder
 
 
@@ -132,7 +131,7 @@ def users():
             db=current_app.config['db']
 
             #Obtenemos los usuarios
-            users=AdminTools.getUsers(db,current_user.id)
+            users=ModelUser.getUsers(db,current_user.id)
 
     
             return render_template('admin/users.html',users=users)            
@@ -158,7 +157,7 @@ def edit_user(id):
             form=Account()
 
 
-            datos=AdminTools.getUser(db,id)
+            datos=ModelUser.getUser(db,id)
 
             if not datos:
                 abort(404)
@@ -251,9 +250,7 @@ def orders():
 
             #Obtenemos los pedidos
 
-            pedidos=AdminTools.showAllOrders(db)
-
-            print(pedidos[0].enviado)
+            pedidos=ModelOrder.showAllOrders(db)
 
     
             return render_template('admin/orders.html',pedidos=pedidos)            
@@ -279,7 +276,7 @@ def order(id):
             db=current_app.config['db']
 
             #Obtenemos el pedido
-            pedido=AdminTools.showFullOrder(db,id)
+            pedido=ModelOrder.showFullOrderAdmin(db,id)
 
             #Si existe el pedido
             if pedido:
@@ -312,7 +309,7 @@ def delete_order(id):
             db=current_app.config['db']
 
             #Eliminamos el producto
-            eliminado=AdminTools.deleteOrder(db,id)
+            eliminado=ModelOrder.deleteOrderAdmin(db,id)
 
             #Si el producto fue eliminado
             if eliminado:
