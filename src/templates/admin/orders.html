@@ -18,6 +18,7 @@
             <thead class="text-white bg-[#C40C0C]">
                 <tr>
                 <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Número</th>
+                <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Usuario</th>
                 <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Fecha</th>
                 <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Total</th>
                 <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Estado</th>
@@ -29,6 +30,7 @@
                 {% for pedido in pedidos %}
                     <tr class="odd:bg-[#1f1f1f] even:bg-[#2a2a2a]">
                     <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">{{pedido.numero_pedido}}</td>
+                    <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">{{pedido.username}}</td>
                     <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">{{pedido.fecha_compra}}</td>
                     <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">{{pedido.precio_total}}€</td>
                     {% if pedido.enviado==1 %}

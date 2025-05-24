@@ -97,7 +97,12 @@ class AdminTools:
             cursor=db.connection.cursor()
             
             #Montamos la consulta para obtener los pedidos
-            sql='SELECT id,fecha_compra,numero_pedido,precio_total,enviado FROM pedidos ORDER BY id DESC'
+            sql='''
+                SELECT p.id,p.fecha_compra,p.numero_pedido,p.precio_total,p.enviado,u.username FROM pedidos p
+                INNER JOIN usuarios u
+                ON p.id_usuario=u.id
+                ORDER BY id DESC
+            '''
             cursor.execute(sql)
 
             row=cursor.fetchall()
@@ -113,8 +118,9 @@ class AdminTools:
                     numero_pedido=o[2]
                     precio_total=o[3]
                     enviado=o[4]
+                    username=o[5]
 
-                    orders.append(Order(id,fecha_compra,numero_pedido,precio_total,enviado,0,0,0,0,0))
+                    orders.append(Order(id,fecha_compra,numero_pedido,precio_total,enviado,0,0,0,0,0,username))
 
                 cursor.close()
 

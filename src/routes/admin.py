@@ -250,7 +250,10 @@ def orders():
             db=current_app.config['db']
 
             #Obtenemos los pedidos
+
             pedidos=AdminTools.showAllOrders(db)
+
+            print(pedidos[0].enviado)
 
     
             return render_template('admin/orders.html',pedidos=pedidos)            

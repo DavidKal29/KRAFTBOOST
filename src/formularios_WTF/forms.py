@@ -157,7 +157,8 @@ class AddressForm(FlaskForm):
 
     localidad=StringField('Localidad',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=3,max=25,message='3-25 caracteres requeridos')
+        Length(min=3,max=25,message='3-25 caracteres requeridos'),
+        validar_letras
     ])
 
     puerta=StringField('Puerta',validators=[
