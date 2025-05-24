@@ -116,3 +116,9 @@ def delete_account():
 @admin_bp.route('/panel',methods=['GET'])
 def panel():
     return 'Este será el panel del admin temporal'
+
+
+
+
+
+
