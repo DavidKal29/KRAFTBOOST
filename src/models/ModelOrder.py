@@ -53,6 +53,10 @@ class ModelOrder:
         try:
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
+
+            print(1)
+
+            print('el id delpedido:',id_pedido)
             
             sql='''
                 SELECT p.nombre,p.imagen,dp.cantidad,dp.precio FROM productos p
@@ -64,12 +68,15 @@ class ModelOrder:
             cursor.execute(sql,(id_pedido,))
 
             row=cursor.fetchall()
+            print(row)
             
             #Si hay resultados, recorremos los productos, 
             # los metemos en una lista y devolvemos esa lista
             if row:
 
                 productos=[]
+
+                print(4)
 
                 for p in row:
                     nombre=p[0]

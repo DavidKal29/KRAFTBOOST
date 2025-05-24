@@ -4,6 +4,7 @@ from formularios_WTF.forms import Account
 from models.entities.User import User
 from models.ModelUser import ModelUser
 from tools.AdminTools import AdminTools
+from models.ModelOrder import ModelOrder
 
 
 admin_bp=Blueprint('admin',__name__,url_prefix='/admin')
@@ -224,8 +225,101 @@ def delete_user(id):
             
             #Sino indicamos el error
             else:
-                flash('Error al borrar al usuario')
                 return redirect(url_for('admin.edit_user',id=id))
+
+    #Cualquier error nos lleva a 404
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+
+
+
+
+@admin_bp.route('/orders',methods=['GET'])
+def orders():
+    try:
+        check=admin_required()
+        if check!=True:
+            return check
+        
+        else:    
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            #Obtenemos los pedidos
+            pedidos=AdminTools.showAllOrders(db)
+
+    
+            return render_template('admin/orders.html',pedidos=pedidos)            
+           
+
+    #Cualquier error nos lleva a 404
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+
+@admin_bp.route('/order/<id>',methods=['GET'])
+def order(id):
+    try:
+        check=admin_required()
+        if check!=True:
+            return check
+        
+        else:
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            #Obtenemos el pedido
+            pedido=AdminTools.showFullOrder(db,id)
+
+            #Si existe el pedido
+            if pedido:
+                #Obtenemos los productos comprados en el pedido
+                productos=ModelOrder.getOrderProducts(db,id)
+
+                return render_template('admin/order.html',pedido=pedido,productos=productos)
+            
+            #Sino, mandamos 404
+            else:
+                abort(404)
+            
+
+    #Cualquier error nos lleva a 404
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+@admin_bp.route('/delete_order/<id>',methods=['GET'])
+def delete_order(id):
+    try:
+        check=admin_required()
+        if check!=True:
+            return check
+        
+        else:
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            #Eliminamos el producto
+            eliminado=AdminTools.deleteOrder(db,id)
+
+            #Si el producto fue eliminado
+            if eliminado:
+                #Mandamos a los pedidos
+                return redirect(url_for('admin.orders'))
+            
+            #Sino, mandamos al 404
+            else:
+                abort(404)
+            
 
     #Cualquier error nos lleva a 404
     except Exception as error:
