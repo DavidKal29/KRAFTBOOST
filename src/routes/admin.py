@@ -3,6 +3,7 @@ from flask_login import current_user
 from formularios_WTF.forms import Account
 from models.entities.User import User
 from models.ModelUser import ModelUser
+from tools.AdminTools import AdminTools
 
 
 admin_bp=Blueprint('admin',__name__,url_prefix='/admin')
@@ -115,10 +116,119 @@ def delete_account():
 
 @admin_bp.route('/panel',methods=['GET'])
 def panel():
-    return 'Este será el panel del admin temporal'
+    return redirect(url_for('admin.users'))
 
 
+@admin_bp.route('/users',methods=['GET'])
+def users():
+    try:
+        check=admin_required()
+        if check!=True:
+            return check
+        
+        else:    
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            #Obtenemos los usuarios
+            users=AdminTools.getUsers(db,current_user.id)
+
+    
+            return render_template('admin/users.html',users=users)            
+           
+
+    #Cualquier error nos lleva a 404
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
 
 
+@admin_bp.route('/edit_user/<id>',methods=['GET','POST'])
+def edit_user(id):
+    try:
+        check=admin_required()
+        if check!=True:
+            return check
+        
+        else:    
+            #Obtenemos el cursor de la db y el formulario de datos de cuenta
+            db=current_app.config['db']
+            form=Account()
 
 
+            datos=AdminTools.getUser(db,id)
+
+            if not datos:
+                abort(404)
+
+            #Si el metodo es post y se valida el formulario
+            if form.validate() and request.method=='POST':
+                
+                #Obtenemos todos lod datos del formulario
+                nombre=request.form.get('nombre')
+                apellidos=request.form.get('apellidos')
+                email=request.form.get('email')
+                username=request.form.get('username')
+            
+                print(nombre,apellidos,email,username)
+
+                datos_nuevos=User(id,nombre,apellidos,email,username,None,None)
+
+
+                #Intentamos cambiar los datos de cuenta
+                datos_cambiados=ModelUser.setAccount(db,datos_nuevos)
+
+                #Si los datos han sido cambiados
+                if datos_cambiados:
+                    print('Datos cambiados con exitillo')
+                    flash('Datos cambiados')
+
+                    return redirect(url_for('admin.edit_user',id=id))
+
+                #Sino indicamos el error
+                else:
+                    flash('Error al cambiar los datos de cuenta')
+                    return render_template('admin/editUser.html',form=form,datos=datos)
+
+
+            #Sino      
+            else:
+                return render_template('admin/editUser.html',form=form,datos=datos)
+
+    #Cualquier error nos lleva a 404
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+@admin_bp.route('/delete_user/<id>',methods=['GET'])
+def delete_user(id):
+    try:
+        check=admin_required()
+        if check!=True:
+            return check
+        
+        else:
+            
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            #Eliminamos al usuario
+            eliminado=ModelUser.deleteAccount(db,id)
+
+            #Si el usuario fue elimiando, redirijimos a los usuarios
+            if eliminado:
+                return redirect(url_for('admin.users'))
+            
+            #Sino indicamos el error
+            else:
+                flash('Error al borrar al usuario')
+                return redirect(url_for('admin.edit_user',id=id))
+
+    #Cualquier error nos lleva a 404
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)

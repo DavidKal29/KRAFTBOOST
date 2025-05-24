@@ -3,7 +3,7 @@ from flask_login import UserMixin
 
 class User(UserMixin):
 
-    def __init__(self,id,nombre,apellidos,email,username,password,rol):
+    def __init__(self,id,nombre,apellidos,email,username,password,rol,fecha_registro=None):
         self.id=id
         self.nombre=nombre
         self.apellidos=apellidos
@@ -11,6 +11,7 @@ class User(UserMixin):
         self.username=username
         self.password=password
         self.rol=rol
+        self.fecha_registro=fecha_registro
 
     @classmethod
     def checkPassword(cls,hashed_password,password):
