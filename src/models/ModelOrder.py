@@ -188,7 +188,7 @@ class ModelOrder:
 ##########################################################################################
 #Metodos del modo admin
     @classmethod
-    def showAllOrders(cls,db):
+    def showAllOrders(cls,db,id_usuario=None):
         try:
 
             #Se abre el cursor de la db
@@ -199,9 +199,18 @@ class ModelOrder:
                 SELECT p.id,p.fecha_compra,p.numero_pedido,p.precio_total,p.enviado,u.username FROM pedidos p
                 INNER JOIN usuarios u
                 ON p.id_usuario=u.id
-                ORDER BY id DESC
             '''
-            cursor.execute(sql)
+
+            if id_usuario:
+                sql+=' WHERE id_usuario=%s ORDER BY id DESC'
+                cursor.execute(sql,(id_usuario,))
+
+
+            else:
+                sql+=' ORDER BY id DESC'
+                cursor.execute(sql)
+
+            
 
             row=cursor.fetchall()
             

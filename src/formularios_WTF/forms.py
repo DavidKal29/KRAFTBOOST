@@ -169,7 +169,7 @@ class AddressForm(FlaskForm):
 
     codigo_postal=StringField('Código Postal',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=4,max=10,message='4-10 caracteres requeridos'),
+        Length(min=4,max=5,message='4-10 caracteres requeridos'),
         validar_digitos
     ])
 

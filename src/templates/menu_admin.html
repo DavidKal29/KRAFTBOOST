@@ -21,15 +21,6 @@
         </div>
     </a>
 
-    <a href="#"
-       class="flex flex-col items-center justify-center h-full p-2 
-       max-[320px]:text-[20px] text-[12px] min-[568px]:text-[15px] lg:text-[16px]
-       {% if '/admin/register_admin' in request.path %} bg-[#C40C0C] {% endif %}">
-        <div class="flex flex-col justify-center items-center">
-            <i class="fa-solid fa-user-plus"></i>
-            <p class="max-[320px]:hidden">+Admin</p>
-        </div>
-    </a>
 
     <a href="{{url_for('admin.products')}}"
        class="flex flex-col items-center justify-center h-full p-2 

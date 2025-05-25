@@ -679,60 +679,6 @@ class ModelProduct():
 
 ###################################################################################################
 #Metodos para modo admin
-
-    #Función para mostrar todos los productos
-    @classmethod
-    def getAllProducts(cls,db):
-        try:
-            #Se abre un cursor con la conexion a la db y se crea la consulta sql
-            cursor=db.connection.cursor()
-
-            #Mostramos todos los productos
-            sql='''
-                SELECT p.id,p.nombre,p.stock,p.precio,p.activo,p.ventas,m.nombre,c.nombre FROM productos p 
-                INNER JOIN marcas m
-                ON p.id_marca=m.id
-                INNER JOIN categorias c
-                ON p.id_categoria=c.id
-                ORDER BY id DESC
-            '''
-            cursor.execute(sql)
-
-            #Ejecutamos la consulta
-            cursor.execute(sql)
-            resultados=cursor.fetchall()
-           
-            #Si la consulta devuelve datos, creamos una lista, recorremos los datos 
-            # y creamos un objeto con cada producto, metiendolos en la lista
-            if resultados:
-                productos=[]
-
-                for resultado in resultados:
-                    id=resultado[0]
-                    nombre=resultado[1]
-                    stock=resultado[2]
-                    precio=resultado[3]
-                    activo=resultado[4]
-                    ventas=resultado[5]
-                    marca=resultado[6]
-                    categoria=resultado[7]
-                    
-
-                    productos.append(Product(id,nombre,precio,marca,categoria,0,0,stock,ventas,activo))
-
-                cursor.close()
-                return productos
-                
-            #Si no hay resultados, retornamos None    
-            else:
-                cursor.close()
-                return None
-        
-        
-        #Si hay errores, devolvemos None tambien
-        except Exception as error:
-            print(error)
-            return None
         
     #Función para mostrar un producto
     @classmethod

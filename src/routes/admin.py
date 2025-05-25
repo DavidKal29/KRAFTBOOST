@@ -268,6 +268,37 @@ def orders():
         abort(404)
 
 
+@admin_bp.route('/ordersUser/<id>',methods=['GET'])
+def ordersUser(id):
+    try:
+        check=admin_required()
+        if check!=True:
+            return check
+        
+        else:    
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            usuario_existe=ModelUser.get_by_id(db,id)
+
+            if usuario_existe:
+
+                #Obtenemos los pedidos
+                pedidos=ModelOrder.showAllOrders(db,id)
+                return render_template('admin/userOrders.html',pedidos=pedidos)   
+
+            else:
+                abort(404)         
+           
+
+    #Cualquier error nos lleva a 404
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+
 
 @admin_bp.route('/order/<id>',methods=['GET'])
 def order(id):
