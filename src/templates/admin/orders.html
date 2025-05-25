@@ -40,6 +40,11 @@
                     {% endif %}
                         <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">
                             <div class="flex justify-center gap-4">
+                            {% if pedido.enviado==1 %}
+                                <a href="{{url_for('admin.setEnviadoOrder',id=pedido.id)}}" class="text-center bg-[#C40C0C] px-3 py-1 rounded text-[15px]">Desactivar</a>
+                            {% else %}
+                                <a href="{{url_for('admin.setEnviadoOrder',id=pedido.id)}}" class="text-center bg-[#10902C] px-3 py-1 rounded text-[15px]">Activar</a>
+                            {% endif %}
                             <a href="{{url_for('admin.order',id=pedido.id)}}" class="text-center bg-[#102190] px-3 py-1 rounded text-[15px]">Ver Detalles</a>
                             <a href="{{url_for('admin.delete_order',id=pedido.id)}}" class="text-center bg-[#C40C0C] px-3 py-1 rounded text-[15px]">Eliminar</a>
                             </div>

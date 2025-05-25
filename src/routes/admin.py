@@ -365,6 +365,38 @@ def delete_order(id):
 
 
 
+@admin_bp.route('/setEnviadoOrder/<id>',methods=['GET'])
+def setEnviadoOrder(id):
+    try:
+        check=admin_required()
+        if check!=True:
+            return check
+        
+        else:
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            #Activamos el producto
+            activado=ModelOrder.setEnviadoOrder(db,id)
+
+            #Si el producto fue activado
+            if activado:
+                #Mandamos a los productos
+                return redirect(request.referrer or url_for('admin.orders'))
+            
+            #Sino, mandamos al 404
+            else:
+                abort(404)
+            
+
+    #Cualquier error nos lleva a 404
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+
 @admin_bp.route('/products',methods=['GET','POST'])
 def products():
     try:

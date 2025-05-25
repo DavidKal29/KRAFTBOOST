@@ -323,3 +323,25 @@ class ModelOrder:
             print(error)
             return None
         
+
+    @classmethod
+    def setEnviadoOrder(cls,db,id):
+        try:
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+
+            
+            #Montamos y ejecutamos la instruccion que cambiara el estado de enviado del pedido
+            sql='UPDATE pedidos SET enviado=NOT enviado WHERE id=%s'
+            cursor.execute(sql,(id,))
+            db.connection.commit()
+
+            return True
+        
+        
+        #Cualquier error distitno, None también        
+        except Exception as error:
+            print('Error al activar el producto')
+            print(error)
+            return None
+        
