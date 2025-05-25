@@ -31,7 +31,7 @@
         <!-- Buscador -->
         <form action="{{url_for('shop.shop')}}" method="post">
             <div class="relative w-full">
-                <input {% if 'search' in parametros %}value="{{parametros['search']}}"{% endif %} name="search" type="text" class="font-bold outline-none p-2 w-[200px] max-[320px]:w-[160px] min-[568px]:w-[350px] sm:w-[450px] md:w-[500px] lg:w-[420px] min-[1180px]:w-[500px] min-[1280px]:w-[600px] min-[1281px]:w-[700px] h-[30px] min-[568px]:h-[35px] sm:h-[40px] text-gray-900  bg-gray-50 rounded-[5px] rounded-r-lg border border-gray-300 text-[12px]  max-[320px]:text-[10px] sm:text-[15px]" placeholder="Busca tu producto" required />
+                <input {% if 'search' in parametros and request.path==url_for('shop.shop') %}value="{{parametros['search']}}"{% endif %} name="search" type="text" class="font-bold outline-none p-2 w-[200px] max-[320px]:w-[160px] min-[568px]:w-[350px] sm:w-[450px] md:w-[500px] lg:w-[420px] min-[1180px]:w-[500px] min-[1280px]:w-[600px] min-[1281px]:w-[700px] h-[30px] min-[568px]:h-[35px] sm:h-[40px] text-gray-900  bg-gray-50 rounded-[5px] rounded-r-lg border border-gray-300 text-[12px]  max-[320px]:text-[10px] sm:text-[15px]" placeholder="Busca tu producto" required />
                 
                 <button type="submit" class="h-[30px] min-[568px]:h-[35px] sm:h-[40px] absolute right-0 px-1.5 sm:px-3 md:px-3 bg-[#C40C0C] text-white rounded-r-lg border border-red-700">
                     <i class="fa-solid fa-magnifying-glass text-lg md:text-xl"></i>
@@ -47,16 +47,14 @@
         <div class="hidden lg:flex items-center">
             
             {% if current_user.is_authenticated %}
-                {% if current_user.rol=='client' %}
                 <div id="botones" class="flex space-x-4">
-                    <a href="{{url_for('profile.profile')}}"><button class="bg-transparent text-white rounded px-[16px] py-[8px] font-bold text-[14px] border-[2px] border-white"><i class="fa-solid fa-user"></i> {{current_user.username}}</button></a>
+                    <a href="{% if current_user.rol=='admin' %}{{ url_for('admin.account') }}{% else %}{{ url_for('profile.profile') }}{% endif %}"><button class="bg-transparent text-white rounded px-[16px] py-[8px] font-bold text-[14px] border-[2px] border-white"><i class="fa-solid fa-user"></i> {{current_user.username}}</button></a>
                     <a href="{{url_for('logout.logout')}}"><button class="bg-[#C40C0C] text-white rounded px-[16px] py-[8px] font-bold text-[14px]"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button></a>
                 </div>
                 
-                {% endif %}
 
             {% else %}
-            <div id="botones" class="flex space-x-4">
+            <div id="botones" class="flex gap-4">
                 <a href="{{url_for('auth.login')}}"><button class="bg-white text-[#C40C0C] rounded px-[16px] py-[8px] font-bold text-[14px]">Iniciar Sesión</button></a>
                 <a href="{{url_for('auth.register')}}"><button class="bg-[#C40C0C] text-white rounded px-[16px] py-[8px] font-bold text-[14px]">Crear cuenta</button></a>
             </div>
@@ -65,8 +63,17 @@
         </div>
 
 
+        
+        {% if not current_user.is_authenticated or current_user.rol=='client'%}
         <!-- Icono Carrito -->
         <a href="{{url_for('cart.cart')}}" class="hidden lg:flex text-white text-[25px] hover:text-[#C40C0C] duration-[0.5s]"><i class="fa-solid fa-cart-shopping"></i></a>
+
+
+        {% elif current_user.is_authenticated and current_user.rol=='admin' %}
+        <!-- Icono Panel -->
+         <a href="{{url_for('admin.panel')}}" class="hidden lg:flex text-white text-[25px] hover:text-[#C40C0C] duration-[0.5s]"><i class="fa-solid fa-pen-to-square"></i></a>
+
+        {% endif %}
         
     
         
@@ -84,15 +91,13 @@
             </a>
 
             {% if current_user.is_authenticated %}
-                {% if current_user.rol=='client' %}
-                <a href="{{url_for('profile.profile')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
+                <a href="{% if current_user.rol=='admin' %}{{ url_for('admin.account') }}{% else %}{{ url_for('profile.profile') }}{% endif %}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
                     <i class="fa-solid fa-user"></i> {{current_user.username}}
                 </a>
                 <a href="{{url_for('logout.logout')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
                     <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
                 </a>
 
-                {% endif %}
             
             {% else %}
             <a href="{{url_for('auth.login')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
@@ -104,9 +109,16 @@
                 
             {% endif %}
             
+
+            {% if not current_user.is_authenticated or current_user.rol=='client'%}
             <a href="{{url_for('cart.cart')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
                 <i class="fa-solid fa-cart-shopping"></i> Carrito
             </a>  
+            {% elif current_user.is_authenticated and current_user.rol=='admin' %}
+            <a href="{{url_for('cart.cart')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
+                <i class="fa-solid fa-pen-to-square"></i> Admin
+            </a>  
+            {% endif %}
         </nav>
     </header>
     

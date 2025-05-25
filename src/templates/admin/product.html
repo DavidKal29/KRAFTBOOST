@@ -1,0 +1,98 @@
+{% extends './layout.html' %}
+
+{% block title %}{{producto.nombre}}{% endblock %}
+
+{% block body %}
+
+<section class="flex justify-center items-center mt-36 md:mt-[120px] mb-12 px-4">
+    <div class="flex flex-col md:flex-row gap-10 w-full max-w-[1100px]">
+
+        <!-- Imagen a la izquierda -->
+        <div class="flex flex-col items-center md:items-start w-full md:w-1/2">
+            <label class="font-bold mb-2">Imagen actual</label>
+            <img src="{{ url_for('static', filename=producto.imagen) }}" alt="Imagen del producto" class="bg-[#1B1A1A] w-full max-h-[500px] rounded border-[2px] border-[#C40C0C]" />
+        </div>
+
+        <!-- Formulario a la derecha -->
+        <form action="{{url_for('admin.edit_product',id=producto.id)}}" method="post" class="flex flex-col gap-6 text-white w-full md:w-1/2">
+            
+            {{ form.hidden_tag() }}
+
+            <!-- Errores -->
+            {% with messages=get_flashed_messages() %}
+                {% if messages %}
+                    {% for msg in messages %}
+                        <span class="text-[#C40C0C] text-md font-semibold text-center">¡{{msg}}!</span>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- Nombre -->
+            <div class="flex flex-col w-full">
+                {{ form.nombre.label(class="font-bold") }}
+                {{ form.nombre(placeholder='Ej: Disco de 20kg', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full", value=producto.nombre, autocomplete="off") }}
+                {% if form.nombre.errors %}
+                    <p class="text-[12px] text-[#C40C0C] mt-1">{{form.nombre.errors[0]}}</p>
+                {% endif %}
+            </div>
+
+            <!-- Marca -->
+            <div class="flex flex-col w-full">
+                {{ form.marca.label(class="font-bold") }}
+                {{ form.marca(class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                {% if form.marca.errors %}
+                    <p class="text-[12px] text-[#C40C0C] mt-1">Elige la marca</p>
+                {% endif %}
+            </div>
+
+            <!-- Categoría -->
+            <div class="flex flex-col w-full">
+                {{ form.categoria.label(class="font-bold") }}
+                {{ form.categoria(class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+                {% if form.categoria.errors %}
+                    <p class="text-[12px] text-[#C40C0C] mt-1">Elige la categoria</p>
+                {% endif %}
+            </div>
+
+            <!-- Precio y Stock -->
+            <div class="flex flex-col min-[568px]:flex-row gap-4 w-full">
+                <div class="flex flex-col w-full">
+                    {{ form.precio.label(class="font-bold") }}
+                    {{ form.precio(placeholder='Ej: 49.99€', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full", value=producto.precio, autocomplete="off") }}
+                    {% if form.precio.errors %}
+                        <p class="text-[12px] text-[#C40C0C] mt-1">{{form.precio.errors[0]}}</p>
+                    {% endif %}
+                </div>
+
+                <div class="flex flex-col w-full">
+                    {{ form.stock.label(class="font-bold") }}
+                    {{ form.stock(placeholder='Ej: 45', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full", value=producto.stock, autocomplete="off") }}
+                    {% if form.stock.errors %}
+                        <p class="text-[12px] text-[#C40C0C] mt-1">{{form.stock.errors[0]}}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Descripción -->
+            <div class="flex flex-col w-full">
+                {{ form.descripcion.label(class="font-bold") }}
+                {{ form.descripcion(class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full resize-none", value=producto.descripcion) }}
+                {% if form.descripcion.errors %}
+                    <p class="text-[12px] text-[#C40C0C] mt-1">{{form.descripcion.errors[0]}}</p>
+                {% endif %}
+            </div>
+
+            <!-- Botones -->
+            <div class="flex flex-col sm:flex-row gap-4 w-full">
+                <a href="{{ url_for('admin.products') }}"
+                   class="cursor-pointer text-white font-bold bg-[#C40C0C] rounded text-center px-4 py-2 w-full">Volver</a>
+
+                {{ form.submit(class="cursor-pointer text-[#C40C0C] font-bold bg-white rounded px-4 py-2 w-full") }}
+            </div>
+        </form>
+    </div>
+</section>
+
+
+
+{% endblock %}

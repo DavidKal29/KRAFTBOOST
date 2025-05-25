@@ -111,8 +111,6 @@ def delete_account():
                 flash('Error al borrar al usuario')
                 return redirect(url_for('profile.account'))
 
-            
-    
     #Cualquier error nos lleva a 404
     except Exception as error:
         print('ERROR DETECTADO EN LA CONSOLA')

@@ -1,0 +1,160 @@
+{% extends './layout.html' %}
+
+{% block title %}Productos{% endblock %}
+
+{% block body %}
+
+
+
+<!-- Secccion -->
+<section class="flex flex-col justify-center items-center mt-32 mb-12 mb-12 gap-4 text-white">
+
+    {% include 'menu_admin.html' %}
+
+
+    <h1 class="text-[#C40C0C] font-bold text-[30px] xl:text-[40px] text-center">Productos</h1>
+
+
+    <form method="post" action="{{ url_for('admin.products') }}{% if parametros['search'] %}?search={{ parametros['search'] }}{% endif %}" class="flex flex-col  justify-center items-center mb-6 gap-4 lg:gap-8 px-4 w-full xl:px-8">
+        <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 justify-center items-center gap-2 sm:gap-3 w-full sm:w-[80%] lg:w-[60%] xl:w-[90%]">
+
+
+            <!-- Mini Buscador -->
+            <div class="flex items-start flex-col w-full">
+                <label for="search" class="text-white font-bold mb-1">Nombre:</label>
+                <input id="search" {% if 'search' in parametros %}value="{{parametros['search']}}"{% endif %} name="search" type="text" class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full" placeholder="Buscar" />
+                
+            </div>
+              
+            <!-- Select Marca -->
+            <div class="flex items-start flex-col w-full">
+                <label for="select_marca" class="text-white font-bold mb-1">Marca:</label>
+                <select name="select_marca" id="select_marca" class="w-full rounded px-4 h-10 font-bold bg-[#1B1A1A] text-white">
+                    <option value="0" {% if not parametros['marca'] %}selected{% endif %}>Cualquiera</option>
+                    {% for marca in marcas %}
+                        <option value="{{ marca.id }}" {% if marca.id==parametros['marca'] %}selected{% endif %}>{{ marca.nombre }}</option>
+                    {% endfor %}
+                        
+                        
+                </select>
+            </div>
+          
+            <!-- Select Categoría -->
+            <div class="flex items-start flex-col w-full">
+                <label for="select_categoria" class="text-white font-bold mb-1">Categoría:</label>
+                <select name="select_categoria" id="select_categoria" class="w-full rounded px-4 h-10 font-bold bg-[#1B1A1A] text-white">
+                    <option value="0" {% if not parametros['categoria'] %}selected{% endif %}>Cualquiera</option>
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}" {% if categoria.id==parametros['categoria'] %}selected{% endif %}>{{ categoria.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+          
+            <!-- Select Precio -->
+            <div class="flex items-start flex-col w-full">
+                <label for="select_precio" class="text-white font-bold mb-1">Precio:</label>
+                <select name="select_precio" id="select_precio" class="w-full rounded px-4 h-10 font-bold bg-[#1B1A1A] text-white">
+                    <option value="0" {% if not parametros['precio'] %}selected{% endif %}>Cualquiera</option>
+                    {% for clave,valor in precios.items() %}
+                    <option value="{{clave}}" {% if parametros['precio']==clave %}selected{% endif %}>{{valor}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            
+              
+
+            <div class="flex items-start flex-col w-full mt-2 lg:mt-0">
+                <label class="hidden lg:block opacity-0 mb-1">Label</label>
+                <button  type="submit" class="w-full bg-white text-[#C40C0C] rounded px-4 h-10 font-bold">Filtrar</button>
+            </div>
+
+            <div class="flex items-start flex-col w-full mt-2 lg:mt-0">
+                <label class="hidden lg:block opacity-0 mb-1">Label</label>
+                <a href="{{url_for('admin.products')}}" class="w-full text-white bg-[#C40C0C] rounded px-4 h-10 font-bold flex items-center justify-center">
+                Restart
+                </a>
+            </div>
+              
+        </div>
+          
+    </form>
+
+    {% if productos %}
+    <div class="w-full px-4 py-8 flex flex-col items-center text-white">
+        <div class="overflow-x-auto w-full max-w-[1200px] rounded scrollbar-hide">
+            <table class="w-full whitespace-nowrap border-none">
+            <thead class="text-white bg-[#C40C0C]">
+                <tr>
+                <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Nombre</th>
+                <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Stock</th>
+                <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Marca</th>
+                <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Categoria</th>
+                <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Precio</th>
+                <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Ventas</th>
+                <th class="px-4 py-3 text-[20px] md:text-[25px] font-bold text-center">Acciones</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {% for producto in productos %}
+                    <tr class="odd:bg-[#1f1f1f] even:bg-[#2a2a2a]">
+                    <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">{{producto.nombre}}</td>
+                    <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">{{producto.stock}}</td>
+                    <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">{{producto.nombre_marca}}</td>
+                    <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">{{producto.nombre_categoria}}</td>
+                    <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">{{producto.precio}}€</td>
+                    <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">{{producto.ventas}}</td>
+                    <td class="px-4 py-3 text-[16px] md:text-[18px] font-semibold text-center">
+                        <div class="flex justify-center gap-4">
+                        <a href="{{url_for('admin.edit_product',id=producto.id)}}" class="text-center bg-[#10902C] px-3 py-1 rounded text-[15px]">Editar</a>
+                        {% if producto.activo==1 %}
+                        <a href="{{url_for('admin.setActiveProduct',id=producto.id)}}" class="text-center bg-[#C40C0C] px-3 py-1 rounded text-[15px]">Desactivar</a>
+                        {% else %}
+                        <a href="{{url_for('admin.setActiveProduct',id=producto.id)}}" class="text-center bg-[#10902C] px-3 py-1 rounded text-[15px]">Activar</a>
+                        {% endif %}
+                        </div>
+                    </td>
+                    </tr>
+                {% endfor %}
+                
+            </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if paginas>1 %}
+    <div class="flex justify-center items-center gap-2 mt-4 lg:mt-6 gap-4 flex-wrap">
+        {% for i in range(paginas) %}
+
+        <a href="{{url_for('admin.products',page=i+1, orden=orden, **parametros)}}" >
+            {% if i+1==page %}
+            <div class="bg-[#C40C0C] text-white px-3 py-2 sm:px-5 sm:py-3 rounded-[5px] font-bold" >
+                {{i+1}}
+            </div>
+            {% else %}
+            <div class="bg-white text-[#C40C0C] px-3 py-2 sm:px-5 sm:py-3 rounded-[5px] font-bold" >
+                {{i+1}}
+            </div>
+            {% endif %}
+        </a>
+
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    {% else %}
+    <div class="flex flex-col justify-center items-center gap-2">
+        <p class="text-[80px] sm:text-[100px] text-[#C40C0C] rounded-full"><i class="fa-solid fa-xmark"></i></p>
+        <p class="text-white text-center text-[30px] font-semibold">No hay productos</p>
+    </div>
+
+    {% endif %}
+
+   
+
+  </section>
+
+  
+
+{% endblock %}

@@ -47,9 +47,15 @@ def login():
             if logged_user:
                 #Si si contraseña está bine
                 if logged_user.password:
-                    #Lo logueamos y llevamos a perfil
+                    #Lo logueamos y llevamos a perfil dependiendo del rol
                     login_user(logged_user)
-                    return redirect(url_for('profile.profile'))
+
+                    if logged_user.rol=='admin':
+                        return redirect(url_for('admin.admin'))
+                    
+                    if logged_user.rol=='client':
+                        return redirect(url_for('profile.profile'))
+                          
                 #Sino
                 else:
                     #Contraseña incorrecta, lo llevamos a login
