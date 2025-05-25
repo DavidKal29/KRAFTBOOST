@@ -354,7 +354,7 @@ class ModelProduct():
         
     #Metodo para construir el where de la consulta para msotrar productos
     @classmethod
-    def construir_where(cls,parametros,categorias):
+    def construir_where(cls,parametros,categorias,admin=False):
         
         #Creamos la lista donde van las condiciones del where y 
         # la usaré para luego juntar todo con un join
@@ -365,11 +365,11 @@ class ModelProduct():
         if parametros:
 
             if 'marca' in parametros:
-                condiciones.append("id_marca={}".format(parametros['marca']))
+                condiciones.append("p.id_marca={}".format(parametros['marca']))
 
 
             if 'categoria' in parametros:
-                condiciones.append("id_categoria={}".format(parametros['categoria']))
+                condiciones.append("p.id_categoria={}".format(parametros['categoria']))
 
 
             if 'precio' in parametros:
@@ -379,7 +379,7 @@ class ModelProduct():
                 precio_min=rangos[0]
                 precio_max=rangos[1]
 
-                condiciones.append("precio>={} AND precio<={}".format(precio_min,precio_max))
+                condiciones.append("p.precio>={} AND p.precio<={}".format(precio_min,precio_max))
 
 
             #Si alguien buscó algo en el buscador
@@ -401,7 +401,7 @@ class ModelProduct():
                     #Si es un número, añade a las condiciones_numeros con el kg
                     if termino.isdigit():
                     
-                        condiciones_numeros.append("nombre LIKE '%% {}kg%%'".format(termino))
+                        condiciones_numeros.append("p.nombre LIKE '%% {}kg%%'".format(termino))
                     
 
                     #Si no es un numero
@@ -412,25 +412,25 @@ class ModelProduct():
                             termino=float(termino)
                                 
                             #Si es un decimal se añade como si fuera un numero mas, con el kg
-                            condiciones_numeros.append("nombre LIKE '%% {}kg%%'".format(termino))
+                            condiciones_numeros.append("p.nombre LIKE '%% {}kg%%'".format(termino))
         
                                 
                         #Si falla es porque es una palabra   
                         except Exception as error:
 
                             if termino=='kg':
-                                condiciones_kilos.append("nombre LIKE '%%{}%%'".format(termino))
+                                condiciones_kilos.append("p.nombre LIKE '%%{}%%'".format(termino))
 
                             #Si es alguna marca lo añade a las condiciones_marcas
                             elif termino in ['domyos','maniak','corength','e-series','kraftboost','tunturi']:
-                                condiciones_marcas.append("nombre LIKE '%%{}%%'".format(termino))
+                                condiciones_marcas.append("p.nombre LIKE '%%{}%%'".format(termino))
 
                             elif termino in ['inclinado','plano','abierto','cuerda','metal','neutro','unilateral','estrecho','gironda','hierro','goma','metalico']:
-                                condiciones_materiales.append("nombre LIKE '%%{}%%'".format(termino))
+                                condiciones_materiales.append("p.nombre LIKE '%%{}%%'".format(termino))
 
                             #Sino ya lo mete en condiciones_palabras    
                             else:
-                                condiciones_palabras.append("nombre LIKE '%%{}%%'".format(termino))
+                                condiciones_palabras.append("p.nombre LIKE '%%{}%%'".format(termino))
                 
                 
                 #Con cada lista, juntamos los strings con ors y dentro de parentesis, 
@@ -454,8 +454,12 @@ class ModelProduct():
             #si hay condiciones, mete un WHERE y luego, los 
             # strings separados por ands usando el join
             if condiciones:
-
-                condiciones=' WHERE activo=1 AND '+' AND '.join(condiciones)
+                
+                if not admin:
+                    condiciones=' WHERE p.activo=1 AND '+' AND '.join(condiciones)
+                else:
+                    condiciones=' WHERE '+' AND '.join(condiciones)
+                
                 print('Las condiciones ya procesadas:',condiciones)
                 
                 return condiciones
@@ -469,17 +473,21 @@ class ModelProduct():
     #Funcion para /shop para devolver el total de productos que se 
     # necesitará para hacer lo de la paginacion
     @classmethod
-    def mostrar_contador_productos(cls,db,parametros,categorias):
+    def mostrar_contador_productos(cls,db,parametros,categorias,admin=False):
         try:
             #Se abre un cursor con la conexion a la db
             cursor=db.connection.cursor()
         
-            #Creamos la consulta base
-            sql='SELECT COUNT(*) FROM productos WHERE activo=1'
-            
+            sql='SELECT COUNT(*) FROM productos p'
             #Añado al sql, las condiciones del where
-            condiciones=cls.construir_where(parametros, categorias)
+            if not admin:
+                condiciones=cls.construir_where(parametros,categorias)
+            else:
+                condiciones=cls.construir_where(parametros,categorias,admin=True)
+                
             sql+=condiciones
+
+            print('El sql final dsde mostrar contador:',sql)
             
             #Ejecutamos la consulta
             cursor.execute(sql)
@@ -510,7 +518,7 @@ class ModelProduct():
     #Funcion para /shop, donde se mostraran los productos y se filtraran con LIMIT y OFFSET
     # para que se muestren asi con la paginación
     @classmethod
-    def mostrar_productos_paginacion(cls,db,page,productos_por_pagina,orden,parametros,categorias):
+    def mostrar_productos_paginacion(cls,db,page,productos_por_pagina,orden,parametros,categorias,admin=False):
         try:
             #Se abre un cursor con la conexion a la db
             cursor=db.connection.cursor()
@@ -525,28 +533,42 @@ class ModelProduct():
             
 
             #Montamos la consulta base
-            sql='SELECT id,nombre,precio,imagen FROM productos'
+            if not admin:
+                sql='SELECT id,nombre,precio,imagen FROM productos p'
+            else:
+                sql='''
+                    SELECT p.id,p.nombre,p.stock,p.precio,p.activo,p.ventas,m.nombre,c.nombre FROM productos p 
+                    INNER JOIN marcas m
+                    ON p.id_marca=m.id
+                    INNER JOIN categorias c
+                    ON p.id_categoria=c.id
+                '''
+
 
             #Añado al sql, las condiciones del where
-            condiciones=cls.construir_where(parametros, categorias)
+            if not admin:
+                condiciones=cls.construir_where(parametros,categorias)
+            else:
+                condiciones=cls.construir_where(parametros,categorias,admin=True)
             sql+=condiciones
 
             if not condiciones:
-                sql+=' WHERE activo=1'
+                if not admin:
+                    sql+=' WHERE p.activo=1'
 
 
             #Mira el orden por cual filtrar
             if orden=='masRecientes':
-                sql+=' ORDER BY id DESC'
+                sql+=' ORDER BY p.id DESC'
 
             elif orden=='topVentas':
-                sql+=' ORDER BY ventas DESC'
+                sql+=' ORDER BY p.ventas DESC'
 
 
             #Añadimos al final el limit y el offset con /%s
             sql+=' LIMIT %s OFFSET %s'
 
-            print(sql)
+            print('El sql final desde mostrar productos:',sql)
 
             values=(limit,offset)
             
@@ -560,13 +582,30 @@ class ModelProduct():
             if resultados:
                 productos=[]
 
-                for resultado in resultados:
-                    id=resultado[0]
-                    nombre=resultado[1]
-                    precio=resultado[2]
-                    imagen=resultado[3]
+                if not admin:
+                    for resultado in resultados:
+                        
+                        id=resultado[0]
+                        nombre=resultado[1]
+                        precio=resultado[2]
+                        imagen=resultado[3]
 
-                    productos.append(Product(id,nombre, precio, None, None, None, imagen))
+                        productos.append(Product(id,nombre, precio, None, None, None, imagen))
+                
+                else:
+                    print('Estamos ante el admin, obteniendo todito')
+                    for resultado in resultados:
+                        id=resultado[0]
+                        nombre=resultado[1]
+                        stock=resultado[2]
+                        precio=resultado[3]
+                        activo=resultado[4]
+                        ventas=resultado[5]
+                        marca=resultado[6]
+                        categoria=resultado[7]
+                    
+
+                        productos.append(Product(id,nombre,precio,marca,categoria,0,0,stock,ventas,activo))
 
                 cursor.close()
                 return productos
