@@ -751,38 +751,17 @@ class ModelProduct():
             return None
         
         
-
-    @classmethod
-    def deactivateProduct(cls,db,id):
-        try:
-            #Se abre el cursor de la db
-            cursor=db.connection.cursor()
-
-            
-            #Montamos y ejecutamos la instruccion que desactivará el pedido
-            sql='UPDATE productos SET activo=0 WHERE id=%s'
-            cursor.execute(sql,(id,))
-            db.connection.commit()
-
-            return True
-        
-        
-        #Cualquier error distitno, None también        
-        except Exception as error:
-            print('Error al desactivar el producto')
-            print(error)
-            return None
         
 
     @classmethod
-    def activateProduct(cls,db,id):
+    def setActiveProduct(cls,db,id):
         try:
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
 
             
             #Montamos y ejecutamos la instruccion que activará el producto
-            sql='UPDATE productos SET activo=1 WHERE id=%s'
+            sql='UPDATE productos SET activo=NOT activo WHERE id=%s'
             cursor.execute(sql,(id,))
             db.connection.commit()
 
@@ -791,7 +770,7 @@ class ModelProduct():
         
         #Cualquier error distitno, None también        
         except Exception as error:
-            print('Error al activar el producto')
+            print('Error al activar/desactivar el producto')
             print(error)
             return None
         

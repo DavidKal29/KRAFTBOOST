@@ -109,9 +109,9 @@
                         <div class="flex justify-center gap-4">
                         <a href="{{url_for('admin.edit_product',id=producto.id)}}" class="text-center bg-[#10902C] px-3 py-1 rounded text-[15px]">Editar</a>
                         {% if producto.activo==1 %}
-                        <a href="{{url_for('admin.deactivate_product',id=producto.id)}}" class="text-center bg-[#C40C0C] px-3 py-1 rounded text-[15px]">Desactivar</a>
+                        <a href="{{url_for('admin.setActiveProduct',id=producto.id)}}" class="text-center bg-[#C40C0C] px-3 py-1 rounded text-[15px]">Desactivar</a>
                         {% else %}
-                        <a href="{{url_for('admin.activate_product',id=producto.id)}}" class="text-center bg-[#10902C] px-3 py-1 rounded text-[15px]">Activar</a>
+                        <a href="{{url_for('admin.setActiveProduct',id=producto.id)}}" class="text-center bg-[#10902C] px-3 py-1 rounded text-[15px]">Activar</a>
                         {% endif %}
                         </div>
                     </td>

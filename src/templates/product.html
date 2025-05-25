@@ -58,12 +58,8 @@
           
 
         {% elif current_user.is_authenticated and current_user.rol=='admin' %}
-          <a href="#" class="w-full bg-[#C40C0C] text-white rounded py-3 font-bold text-[16px] text-center">
+          <a href="{{url_for('admin.products',search=producto.nombre)}}" class="w-full bg-[#C40C0C] text-white rounded py-3 font-bold text-[16px] text-center">
             <button>Editar Producto <i class="fa-solid fa-pen-to-square"></i></button>
-          </a>
-
-          <a href="#" class="w-full bg-[#C40C0C] text-white rounded py-3 font-bold text-[16px] text-center">
-            <button>Desactivar <i class="fa-solid fa-power-off"></i></button>
           </a>
         {% endif %}
 

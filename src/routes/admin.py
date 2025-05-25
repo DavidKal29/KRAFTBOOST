@@ -614,39 +614,11 @@ def products():
         abort(404)
 
 
-@admin_bp.route('/deactivate_product/<id>',methods=['GET'])
-def deactivate_product(id):
-    try:
-        check=admin_required()
-        if check!=True:
-            return check
-        
-        else:
-            #Obtenemos el cursor de la db
-            db=current_app.config['db']
-
-            #Desactivamos el producto
-            desactivado=ModelProduct.deactivateProduct(db,id)
-
-            #Si el producto fue desactivado
-            if desactivado:
-                #Mandamos a los productos
-                return redirect(request.referrer or url_for('admin.products'))
-            
-            #Sino, mandamos al 404
-            else:
-                abort(404)
-            
-
-    #Cualquier error nos lleva a 404
-    except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
-        print(error)
-        abort(404)
 
 
-@admin_bp.route('/activate_product/<id>',methods=['GET'])
-def activate_product(id):
+
+@admin_bp.route('/setActiveProduct/<id>',methods=['GET'])
+def setActiveProduct(id):
     try:
         check=admin_required()
         if check!=True:
@@ -657,7 +629,7 @@ def activate_product(id):
             db=current_app.config['db']
 
             #Activamos el producto
-            activado=ModelProduct.activateProduct(db,id)
+            activado=ModelProduct.setActiveProduct(db,id)
 
             #Si el producto fue activado
             if activado:
