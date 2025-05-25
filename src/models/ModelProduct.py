@@ -15,9 +15,9 @@ class ModelProduct():
             # mas nuevos por tanto, la variable order tendrá id o
             # ventas, para poder filtrar y sacar los productos requeridos
             if order=='id':
-                sql='SELECT id,nombre,precio,imagen FROM productos ORDER BY id DESC LIMIT 8'
+                sql='SELECT id,nombre,precio,imagen FROM productos WHERE activo=1 ORDER BY id DESC LIMIT 8'
             elif order=='ventas':
-                sql='SELECT id,nombre,precio,imagen FROM productos ORDER BY ventas DESC LIMIT 8'
+                sql='SELECT id,nombre,precio,imagen FROM productos WHERE activo=1 ORDER BY ventas DESC LIMIT 8'
             else:
                 cursor.close()
                 return None
@@ -455,10 +455,11 @@ class ModelProduct():
             # strings separados por ands usando el join
             if condiciones:
 
-                condiciones=' WHERE '+' AND '.join(condiciones)
+                condiciones=' WHERE activo=1 AND '+' AND '.join(condiciones)
                 print('Las condiciones ya procesadas:',condiciones)
                 
                 return condiciones
+                
                 
             return ''
         
@@ -474,7 +475,7 @@ class ModelProduct():
             cursor=db.connection.cursor()
         
             #Creamos la consulta base
-            sql='SELECT COUNT(*) FROM productos'
+            sql='SELECT COUNT(*) FROM productos WHERE activo=1'
             
             #Añado al sql, las condiciones del where
             condiciones=cls.construir_where(parametros, categorias)
@@ -529,6 +530,9 @@ class ModelProduct():
             #Añado al sql, las condiciones del where
             condiciones=cls.construir_where(parametros, categorias)
             sql+=condiciones
+
+            if not condiciones:
+                sql+=' WHERE activo=1'
 
 
             #Mira el orden por cual filtrar
@@ -632,6 +636,191 @@ class ModelProduct():
         except Exception as error:
             print(error)
             return None
+        
+
+###################################################################################################
+#Metodos para modo admin
+
+    #Función para mostrar todos los productos
+    @classmethod
+    def getAllProducts(cls,db):
+        try:
+            #Se abre un cursor con la conexion a la db y se crea la consulta sql
+            cursor=db.connection.cursor()
+
+            #Mostramos todos los productos
+            sql='''
+                SELECT p.id,p.nombre,p.stock,p.precio,p.activo,p.ventas,m.nombre,c.nombre FROM productos p 
+                INNER JOIN marcas m
+                ON p.id_marca=m.id
+                INNER JOIN categorias c
+                ON p.id_categoria=c.id
+                ORDER BY id DESC
+            '''
+            cursor.execute(sql)
+
+            #Ejecutamos la consulta
+            cursor.execute(sql)
+            resultados=cursor.fetchall()
+           
+            #Si la consulta devuelve datos, creamos una lista, recorremos los datos 
+            # y creamos un objeto con cada producto, metiendolos en la lista
+            if resultados:
+                productos=[]
+
+                for resultado in resultados:
+                    id=resultado[0]
+                    nombre=resultado[1]
+                    stock=resultado[2]
+                    precio=resultado[3]
+                    activo=resultado[4]
+                    ventas=resultado[5]
+                    marca=resultado[6]
+                    categoria=resultado[7]
+                    
+
+                    productos.append(Product(id,nombre,precio,marca,categoria,0,0,stock,ventas,activo))
+
+                cursor.close()
+                return productos
+                
+            #Si no hay resultados, retornamos None    
+            else:
+                cursor.close()
+                return None
+        
+        
+        #Si hay errores, devolvemos None tambien
+        except Exception as error:
+            print(error)
+            return None
+        
+    #Función para mostrar un producto
+    @classmethod
+    def getProduct(cls,db,id):
+        try:
+            #Se abre un cursor con la conexion a la db y se crea la consulta sql
+            cursor=db.connection.cursor()
+
+            #Mostramos todos los productos
+            sql='''
+                SELECT p.id,p.nombre,p.stock,p.precio,p.descripcion,p.imagen,m.nombre,c.nombre FROM productos p 
+                INNER JOIN marcas m
+                ON p.id_marca=m.id
+                INNER JOIN categorias c
+                ON p.id_categoria=c.id
+                WHERE p.id=%s
+                ORDER BY id DESC
+            '''
+            cursor.execute(sql,(id,))
+            resultado=cursor.fetchone()
+           
+            #Si hay resultado, devolvemos el producto
+            if resultado:
+
+                id=resultado[0]
+                nombre=resultado[1]
+                stock=resultado[2]
+                precio=resultado[3]
+                descripcion=resultado[4]
+                imagen=resultado[5]
+                marca=resultado[6]
+                categoria=resultado[7]
+
+                cursor.close()
+                    
+                return Product(id,nombre,precio,marca,categoria,descripcion,imagen,stock)
+
+                
+            #Si no hay resultados, retornamos None    
+            else:
+                cursor.close()
+                return None
+        
+        
+        #Si hay errores, devolvemos None tambien
+        except Exception as error:
+            print(error)
+            return None
+        
+
+    #Función para mostrar un producto
+    @classmethod
+    def setProduct(cls,db,product):
+        try:
+            #Se abre un cursor con la conexion a la db y se crea la consulta sql
+            cursor=db.connection.cursor()
+
+            sql='UPDATE productos SET nombre=%s,stock=%s,precio=%s,descripcion=%s,id_marca=%s,id_categoria=%s WHERE id=%s'
+
+            
+            cursor.execute(sql,(product.nombre,product.stock,product.precio,product.descripcion,product.nombre_marca,product.nombre_categoria,product.id))
+            db.connection.commit()
+            
+            return True
+           
+        
+        #Si hay errores, devolvemos None tambien
+        except Exception as error:
+            print(error)
+            return None
+        
+        
+
+    @classmethod
+    def deactivateProduct(cls,db,id):
+        try:
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+
+            
+            #Montamos y ejecutamos la instruccion que desactivará el pedido
+            sql='UPDATE productos SET activo=0 WHERE id=%s'
+            cursor.execute(sql,(id,))
+            db.connection.commit()
+
+            return True
+        
+        
+        #Cualquier error distitno, None también        
+        except Exception as error:
+            print('Error al desactivar el producto')
+            print(error)
+            return None
+        
+
+    @classmethod
+    def activateProduct(cls,db,id):
+        try:
+            #Se abre el cursor de la db
+            cursor=db.connection.cursor()
+
+            
+            #Montamos y ejecutamos la instruccion que activará el producto
+            sql='UPDATE productos SET activo=1 WHERE id=%s'
+            cursor.execute(sql,(id,))
+            db.connection.commit()
+
+            return True
+        
+        
+        #Cualquier error distitno, None también        
+        except Exception as error:
+            print('Error al activar el producto')
+            print(error)
+            return None
+        
+        
+
+
+
+
+
+
+
+
+
+    
 
 
 

@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,EmailField,PasswordField,SubmitField,IntegerField
+from wtforms import StringField,EmailField,PasswordField,SubmitField,IntegerField,DecimalField,TextAreaField,SelectField
+from flask_wtf.file import FileField,FileRequired,FileAllowed
 from wtforms.validators import DataRequired,Length,EqualTo,Email,ValidationError,NumberRange
 import re
 import unidecode
@@ -214,7 +215,7 @@ class Payment(FlaskForm):
 
     
 
-#Formulario de register
+#Formulario de cuenta
 class Account(FlaskForm):
 
     nombre=StringField('Nombre',validators=[
@@ -236,6 +237,45 @@ class Account(FlaskForm):
     username=StringField('Username',validators=[
         DataRequired(message="Este campo es obligatorio"),
         Length(min=5,max=25,message='5-25 caracteres requeridos')
+    ])
+
+
+    submit=SubmitField('Guardar Cambios')
+
+
+
+#Formulario de producto
+class ProductForm(FlaskForm):
+
+    nombre=StringField('Nombre',validators=[
+        DataRequired(message="Este campo es obligatorio"),
+        Length(min=3,max=100,message='3-100 caracteres requeridos')
+    ])
+
+    marca_choices=[(1,'Domyos'),(2,'Tunturi'),(3,'Kraftboost'),(4,'Corength'),(5,'Maniak'),(6,'E-series')]
+
+    marca=SelectField('Marca',choices=marca_choices,coerce=int)
+
+    categoria_choices=[(1,'Barras'),(2,'Bancos'),(3,'Discos'),(4,'Mancuernas'),(5,'Accesorios'),(6,'Bandas'),(7,'Kettlebells'),(8,'Estructuras')]
+    
+    categoria=SelectField('Categoría',choices=categoria_choices,coerce=int)
+
+    precio=DecimalField('Precio',validators=[
+        DataRequired(message="Este campo es obligatorio")
+    ])
+
+    stock=IntegerField('Stock',validators=[
+        DataRequired(message="Este campo es obligatorio")
+    ])
+
+    descripcion=TextAreaField('Descripcion',validators=[
+        DataRequired(message="Este campo es obligatorio"),
+        Length(max=255, message="Máximo 255 caracteres")
+    ])
+
+
+    imagen=FileField('Imagen',validators=[
+        FileAllowed(['jpg','jpeg','png','gif','webp','svg'],'Solo se permiten imágenes')
     ])
 
 

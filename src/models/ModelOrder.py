@@ -267,7 +267,7 @@ class ModelOrder:
 
                 print(id,fecha_compra,numero_pedido,precio_total,nombre_destinatario,domicilio,localidad,puerta,codigo_postal,enviado)
 
-                print('Kekeojones')
+
 
                 order=Order(id,fecha_compra,numero_pedido,precio_total,enviado,nombre_destinatario,domicilio,localidad,puerta,codigo_postal)
 

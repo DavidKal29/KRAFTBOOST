@@ -1,9 +1,13 @@
 from flask import Blueprint,redirect,url_for,render_template,abort,flash,current_app,request
 from flask_login import current_user
-from formularios_WTF.forms import Account
+from formularios_WTF.forms import Account,ProductForm
 from models.entities.User import User
 from models.ModelUser import ModelUser
 from models.ModelOrder import ModelOrder
+from models.ModelProduct import ModelProduct
+from models.ModelBrand import ModelBrand
+from models.ModelCategory import ModelCategory
+from models.entities.Product import Product
 
 
 admin_bp=Blueprint('admin',__name__,url_prefix='/admin')
@@ -319,6 +323,172 @@ def delete_order(id):
             #Sino, mandamos al 404
             else:
                 abort(404)
+            
+
+    #Cualquier error nos lleva a 404
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+
+@admin_bp.route('/products',methods=['GET'])
+def products():
+    try:
+        check=admin_required()
+        if check!=True:
+            return check
+        
+        else:    
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            #Obtenemos los productos
+            productos=ModelProduct.getAllProducts(db)
+
+    
+            return render_template('admin/products.html',productos=productos)            
+           
+
+    #Cualquier error nos lleva a 404
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+@admin_bp.route('/deactivate_product/<id>',methods=['GET'])
+def deactivate_product(id):
+    try:
+        check=admin_required()
+        if check!=True:
+            return check
+        
+        else:
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            #Desactivamos el producto
+            desactivado=ModelProduct.deactivateProduct(db,id)
+
+            #Si el producto fue desactivado
+            if desactivado:
+                #Mandamos a los productos
+                return redirect(url_for('admin.products'))
+            
+            #Sino, mandamos al 404
+            else:
+                abort(404)
+            
+
+    #Cualquier error nos lleva a 404
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+@admin_bp.route('/activate_product/<id>',methods=['GET'])
+def activate_product(id):
+    try:
+        check=admin_required()
+        if check!=True:
+            return check
+        
+        else:
+            #Obtenemos el cursor de la db
+            db=current_app.config['db']
+
+            #Activamos el producto
+            activado=ModelProduct.activateProduct(db,id)
+
+            #Si el producto fue activado
+            if activado:
+                #Mandamos a los productos
+                return redirect(url_for('admin.products'))
+            
+            #Sino, mandamos al 404
+            else:
+                abort(404)
+            
+
+    #Cualquier error nos lleva a 404
+    except Exception as error:
+        print('ERROR DETECTADO EN LA CONSOLA')
+        print(error)
+        abort(404)
+
+
+
+@admin_bp.route('/edit_product/<id>',methods=['GET','POST'])
+def edit_product(id):
+    try:
+        check=admin_required()
+        if check!=True:
+            return check
+        
+        else:
+            
+            #Obtenemos el cursor de la db y el formulario de los productos
+            db=current_app.config['db']
+            form=ProductForm()
+
+            #Obtenemos las marcas y categorias
+            marcas=ModelBrand.mostrar_marcas(db)
+            categorias=ModelCategory.mostrar_categorias(db)
+
+
+            # #Si el metodo es post y se valida el formulario
+            if form.validate() and request.method=='POST':
+                
+                #Obtenemos todos lod datos del formulario
+                nombre=request.form.get('nombre')
+                marca=int(request.form.get('marca'))             
+                categoria=int(request.form.get('categoria'))
+                precio=request.form.get('precio')
+                stock=request.form.get('stock')
+                descripcion=request.form.get('descripcion')
+                
+            
+                print(nombre,marca,categoria,precio,stock,descripcion)
+
+                producto=Product(id,nombre,precio,marca,categoria,descripcion,0,stock)
+
+                actualizado=ModelProduct.setProduct(db,producto)
+
+                if not actualizado:
+                    flash('Error al actualizar el producto')
+
+                else:
+                    flash('Actualizado con éxito')
+
+                return redirect(url_for('admin.edit_product',id=id))
+
+            else:
+
+                #Obtenemos el producto
+                producto=ModelProduct.getProduct(db,id)
+
+                if producto:
+
+                    for marca in marcas:
+                        if marca.nombre==producto.nombre_marca:
+                            form.marca.data=int(marca.id)
+                            print('Tipo de marca.id:',type(marca.id))
+
+                    for categoria in categorias:
+                        if categoria.nombre==producto.nombre_categoria:
+                            form.categoria.data=int(categoria.id)
+                            print('Tipo de categoria.id:',type(categoria.id))
+
+                    form.descripcion.data=producto.descripcion
+
+                    return render_template('admin/product.html',form=form,producto=producto)
+                
+                else:
+                    abort(404)
+
             
 
     #Cualquier error nos lleva a 404
