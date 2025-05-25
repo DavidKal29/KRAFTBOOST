@@ -318,8 +318,9 @@ def order(id):
             if pedido:
                 #Obtenemos los productos comprados en el pedido
                 productos=ModelOrder.getOrderProducts(db,id)
+                referrer=request.referrer
 
-                return render_template('admin/order.html',pedido=pedido,productos=productos)
+                return render_template('admin/order.html',pedido=pedido,productos=productos,referrer=referrer)
             
             #Sino, mandamos 404
             else:
@@ -350,7 +351,7 @@ def delete_order(id):
             #Si el producto fue eliminado
             if eliminado:
                 #Mandamos a los pedidos
-                return redirect(url_for('admin.orders'))
+                return redirect(request.referrer or url_for('admin.orders'))
             
             #Sino, mandamos al 404
             else:
