@@ -172,7 +172,6 @@ class CartService:
                     if cantidad==1:
                         sql='DELETE FROM carrito WHERE id_usuario=%s and id_producto=%s'
                         cursor.execute(sql,(id_usuario,id_producto))
-                        db.connection.commit()
 
                     else:
 
@@ -180,11 +179,12 @@ class CartService:
                         # en la tabla carrito asociado al usuario y al producto
                         sql='UPDATE carrito SET cantidad=cantidad-1, precio=precio-%s WHERE id_usuario=%s and id_producto=%s'
                         cursor.execute(sql,(precio,id_usuario,id_producto))
-                        db.connection.commit()
 
                     #Añadimos 1 al stock del producto requerido
                     sql='UPDATE productos SET stock=stock+1 WHERE id=%s'
                     cursor.execute(sql,(id_producto,))
+                    
+                    #Commiteamos todo
                     db.connection.commit()
 
                     #Devolvemos True para indicar que todo salio bien
@@ -337,6 +337,10 @@ class CartService:
                     id_producto=p[0]
                     cantidad=p[1]
                     precio=p[2]
+
+                    #Añadimos las ventas en los productos
+                    sql='UPDATE productos SET ventas=ventas+%s WHERE id=%s'
+                    cursor.execute(sql,(cantidad,id_producto))
 
                     #Por cada producto insertamos sus datos en detalles_pedido
                     sql='INSERT INTO detalles_pedido (id_pedido,id_producto,cantidad,precio) VALUES(%s,%s,%s,%s)'
