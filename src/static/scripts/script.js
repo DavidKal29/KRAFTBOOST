@@ -48,7 +48,7 @@ let desactivar=(a)=>{
 
 console.log('El pathname:',window.location.pathname);
 
-//Si la ruta es cualquiera salvo /shop(por los filtros) y tiene parámetros
+//Si la ruta es cualquiera salvo /shop y /admin/products (por los filtros) y tiene parámetros
 if (window.location.pathname!='/shop' && window.location.pathname!='/admin/products' && window.location.search){
     
     //Limpiamos los parámetros sin recargar la página

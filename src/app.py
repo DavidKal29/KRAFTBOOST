@@ -108,8 +108,6 @@ with app.app_context():
         }
 
         
-
-
         #Lo guardamos en config para que desde los bp se pueda acceder
         app.config['marcas']=marcas
         app.config['categorias']=categorias

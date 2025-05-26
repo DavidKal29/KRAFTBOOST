@@ -140,7 +140,7 @@ class ModelUser():
             return None
         
 
-    #Metodo para cambiar la direccion de envio
+    #Metodo para borrar la cuenta
     @classmethod
     def deleteAccount(cls,db,id):
         try:
@@ -151,12 +151,10 @@ class ModelUser():
             #Borramos los detalles de los pedidos del usuario 
             sql='DELETE FROM detalles_pedido WHERE id_pedido IN (SELECT id FROM pedidos WHERE id_usuario=%s)'
             cursor.execute(sql,(id,))
-            db.connection.commit()
 
             #Borramos todos los pedidos del usuario
             sql='DELETE FROM pedidos WHERE id_usuario=%s'
             cursor.execute(sql,(id,))
-            db.connection.commit()
 
             #Borramos al usuario
             sql='DELETE FROM usuarios WHERE id=%s'
@@ -234,7 +232,7 @@ class ModelUser():
                 old_password=row[0]
             
             #Si la contraseña antigua y la nueva son iguales, no 
-            # cambiamos anda y mandamos el mensaje de que son iguales
+            # cambiamos nada y mandamos el mensaje de que son iguales
             if check_password_hash(old_password, new_password):
                 return 'Contraseñas iguales'
             
@@ -295,7 +293,7 @@ class ModelUser():
                    
         #Cualquier error distitno, None también        
         except Exception as error:
-            print('Error al cambiar password')
+            print('Error al obtener la direccion')
             print(error)
             return None
 
@@ -308,7 +306,7 @@ class ModelUser():
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
 
-            #Obtenemos la contraseña antigua
+            #Obtenemos el domicilio del usuario
             sql='SELECT domicilio FROM domicilios WHERE id_usuario=%s'
             cursor.execute(sql,(address.id_usuario,))
 
@@ -323,25 +321,25 @@ class ModelUser():
                 cursor.execute(sql,(address.nombre_destinatario,address.domicilio,address.localidad,address.puerta,address.codigo_postal,address.id_usuario))
                 db.connection.commit()
             
+            #Sino, no tiene direccion el usuario
             else:
                 #Insertamos la nueva dirección con los datos
                 sql='INSERT INTO domicilios (nombre_destinatario,domicilio,localidad,puerta,codigo_postal,id_usuario) VALUES(%s,%s,%s,%s,%s,%s)'
                 cursor.execute(sql,(address.nombre_destinatario,address.domicilio,address.localidad,address.puerta,address.codigo_postal,address.id_usuario))
                 db.connection.commit()
             
-
             #Devolvemos true si todo sale bien
             return True
 
             
         #Cualquier error distitno, None también        
         except Exception as error:
-            print('Error al cambiar password')
+            print('Error al cambiar direccion')
             print(error)
             return None
         
 
-    #Metodo para cambiar la direccion de envio
+    #Metodo para borrar la direccion de envio
     @classmethod
     def deleteAddress(cls,db,id):
         try:
@@ -349,7 +347,7 @@ class ModelUser():
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
 
-            #Obtenemos la contraseña antigua
+            #Borramos el domicilio del usuario
             sql='DELETE FROM domicilios WHERE id_usuario=%s'
             cursor.execute(sql,(id,))
             db.connection.commit()
@@ -364,7 +362,7 @@ class ModelUser():
             return None
         
 
-    #Metodo para cambiar la direccion de envio
+    #Metodo para editar los datos del usuario
     @classmethod
     def setAccount(cls,db,user):
         try:
@@ -390,6 +388,8 @@ class ModelUser():
 
 ########################################################################################
 #Metodos del modo admin
+
+    #Metodo para obtener todos los usuarios para el admin
     @classmethod
     def getUsers(cls,db,id_admin):
         try:
@@ -397,13 +397,13 @@ class ModelUser():
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
                 
-            #Montamos la consulta para obtener los pedidos
+            #Montamos la consulta para obtener a todos los usuarios
             sql='SELECT id,nombre,apellidos,email,username,fecha_registro FROM usuarios WHERE id!=%s ORDER BY id DESC'
             cursor.execute(sql,(id_admin,))
 
             row=cursor.fetchall()
                 
-            #Si hay resultados, recorremos los pedidos, 
+            #Si hay resultados, recorremos los usuarios, 
             # los metemos en una lista y devolvemos esa lista
             if row:
                 users=[]
@@ -436,7 +436,7 @@ class ModelUser():
             return None
             
 
-
+    #Metodo para obtener los datos de un usuario para el admin
     @classmethod
     def getUser(cls,db,id_user):
         try:
@@ -444,14 +444,13 @@ class ModelUser():
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
                 
-            #Montamos la consulta para obtener los pedidos
+            #Montamos la consulta para obtener los datos del usuario
             sql='SELECT nombre,apellidos,email,username FROM usuarios WHERE id=%s'
             cursor.execute(sql,(id_user,))
 
             row=cursor.fetchone()
                 
-            #Si hay resultados, recorremos los pedidos, 
-            # los metemos en una lista y devolvemos esa lista
+            #Si hay resultados, retornamos al usuario con sus datos
             if row:
                 nombre=row[0]
                 apellidos=row[1]

@@ -8,6 +8,8 @@ from services.CartService import CartService
 
 from utils.TokenManager import TokenManager
 
+from werkzeug.exceptions import HTTPException
+
 checkout_bp=Blueprint('checkout',__name__,url_prefix='/checkout')
 
 def client_required():
@@ -15,41 +17,70 @@ def client_required():
         return redirect(url_for('auth.login'))
     
     if not current_user.rol=='client':
-        abort(404)
+        abort(401)
 
     else:
         return True
     
 
+
 @checkout_bp.route('/',methods=['GET'])
 def checkout():
-    return redirect(url_for('checkout.checkout_token'))
+    try:
+        check=client_required()
+        if check!=True:
+            return check
+        
+        else:
+            #Redirijimos al checkout token, donde se creara el token 
+            return redirect(url_for('checkout.checkout_token'))
+        
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
+    #Cualquier otro error, 404
+    except Exception as error:
+        print('ERROR DETECTADO EN /admin')
+        print(error)
+        abort(404)
 
 
 @checkout_bp.route('/checkout_token',methods=['GET'])
 def checkout_token():
-    check=client_required()
-    if check!=True:
-        return check
-        
-    else:
-        #Obtenemos el cursor de la db y el formulario del register
-        db=current_app.config['db']
-
-        cursor=db.connection.cursor()
-
-        sql='SELECT COUNT(*) FROM kraftboost.carrito WHERE id_usuario=%s'
-        cursor.execute(sql,(current_user.id,))
-
-        cantidad_productos=cursor.fetchone()[0]
-
-        if cantidad_productos:
-            token=TokenManager.create_token(current_user.email,5,current_app.config['JWT_SECRET_KEY_RESET_CART'],'address')
-
-            return redirect(url_for('checkout.address',token=token))
-
+    try:
+        check=client_required()
+        if check!=True:
+            return check
+            
         else:
-            abort(404)
+            #Obtenemos el cursor de la db y el formulario del register
+            db=current_app.config['db']
+
+            cursor=db.connection.cursor()
+
+            sql='SELECT COUNT(*) FROM kraftboost.carrito WHERE id_usuario=%s'
+            cursor.execute(sql,(current_user.id,))
+
+            cantidad_productos=cursor.fetchone()[0]
+
+            if cantidad_productos:
+                token=TokenManager.create_token(current_user.email,5,current_app.config['JWT_SECRET_KEY_RESET_CART'],'address')
+
+                return redirect(url_for('checkout.address',token=token))
+
+            else:
+                abort(404)
+
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
+    #Cualquier error nos lleva a 404
+    except Exception as error:
+        print('ERROR DETECTADO EN /checkout/checkout_token')
+        print(error)
+        abort(404)
 
 
 
@@ -113,9 +144,13 @@ def address(token):
             else:
                 return render_template('checkout/address.html',form=form,direccion_antigua=direccion_antigua,token=token)
     
-    #Cualquier error nos lleva a home
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
+    #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /checkout/address/token')
         print(error)
         abort(404)
     
@@ -159,9 +194,13 @@ def payment(token):
             else:
                 return render_template('checkout/payment.html',form=form,token=token)
     
-    #Cualquier error nos lleva a home
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
+    #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /checkout/payment')
         print(error)
         abort(404)
 
@@ -186,11 +225,14 @@ def success(token):
 
             return render_template('checkout/success.html')
     
-    #Cualquier error nos lleva a home
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
+    #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /checkout/success')
         print(error)
         abort(404)
-        
 
 

@@ -5,10 +5,11 @@ from flask_login import current_user
 
 product_bp=Blueprint('product',__name__)
 
-
+#Ruta del producto
 @product_bp.route('/product/<id>')
 def product(id):
 
+    #Obtenemos la db de app.config
     db=current_app.config['db']
 
     try:
@@ -33,7 +34,8 @@ def product(id):
 
             return render_template('product.html',id=id,producto=producto,favorito=favorito)
     
-    #Cualquier error siginifca que no existe tal producto, asique 404 tambien
-    except Exception as err:
-        print(err)
+    #Cualquier otro error, 404
+    except Exception as error:
+        print('ERROR DETECTADO EN /product')
+        print(error)
         abort(404)

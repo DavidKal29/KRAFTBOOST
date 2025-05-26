@@ -10,6 +10,7 @@ from models.ModelCategory import ModelCategory
 from models.entities.Product import Product
 import unidecode
 import math
+from werkzeug.exceptions import HTTPException
 
 
 admin_bp=Blueprint('admin',__name__,url_prefix='/admin')
@@ -20,18 +21,38 @@ def admin_required():
         return redirect(url_for('auth.login'))
     
     if not current_user.rol=='admin':
+        print('Abortamos al 401')
         abort(401)
 
     else:
         return True
     
 
+#Ruta incial del perfil del admin
 @admin_bp.route('/',methods=['GET','POST'])
 def admin():
-    return redirect(url_for('admin.account'))
+    try:
+        check=admin_required()
+        if check!=True:
+            return check
+        
+        else:
+            #Redirijimos a la cuenta del admin
+            return redirect(url_for('admin.account'))
+        
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
+    #Cualquier otro error, 404
+    except Exception as error:
+        print('ERROR DETECTADO EN /admin')
+        print(error)
+        abort(404)
 
 
-#Rutas de Datos de cuenta
+
+#Rutas de Datos de cuenta del admin
 @admin_bp.route('/account',methods=['GET','POST'])
 def account():
     try:
@@ -45,6 +66,7 @@ def account():
             db=current_app.config['db']
             form=Account()
 
+            #Obtenemos los datos del current user
             datos=User(current_user.id,current_user.nombre,current_user.apellidos,current_user.email,current_user.username,None,None)
 
             #Si el metodo es post y se valida el formulario
@@ -58,8 +80,8 @@ def account():
             
                 print(nombre,apellidos,email,username)
 
+                #Creamos el objeto con los nuevos datos
                 datos_nuevos=User(current_user.id,nombre,apellidos,email,username,None,None)
-
 
                 #Intentamos cambiar los datos de cuenta
                 datos_cambiados=ModelUser.setAccount(db,datos_nuevos)
@@ -67,6 +89,7 @@ def account():
                 #Si los datos han sido cambiados
                 if datos_cambiados:
                     print('Datos cambaidos con exitillo')
+                    flash('Datos cambiados con éxito')
 
                     return redirect(url_for('admin.account'))
 
@@ -75,20 +98,22 @@ def account():
                     flash('Error al cambiar los datos de cuenta')
                     return render_template('admin/account.html',form=form,datos=datos)
 
-
             #Sino      
             else:
                 return render_template('admin/account.html',form=form,datos=datos)
     
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
     
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR EN /admin/account')
         print(error)
         abort(404)
 
 
-
+#Ruta para borrar la cuenta del admin
 @admin_bp.route('/delete_account',methods=['GET'])
 def delete_account():
     try:
@@ -112,19 +137,32 @@ def delete_account():
             else:
                 flash('Error al borrar al usuario')
                 return redirect(url_for('admin.account'))
+            
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
 
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /admin/delete_account')
         print(error)
         abort(404)
 
 
+#Ruta inical del panel de los admins
 @admin_bp.route('/panel',methods=['GET'])
 def panel():
-    return redirect(url_for('admin.users'))
+    try:
+        return redirect(url_for('admin.users'))
+    
+    #Cualquier error nos lleva a 404
+    except Exception as error:
+        print('ERROR DETECTADO EN /admin/panel')
+        print(error)
+        abort(404)
 
 
+#Ruta para ver a todos los usuarios
 @admin_bp.route('/users',methods=['GET'])
 def users():
     try:
@@ -139,17 +177,21 @@ def users():
             #Obtenemos los usuarios
             users=ModelUser.getUsers(db,current_user.id)
 
-    
+            #Devolvemos los usuarios del admin
             return render_template('admin/users.html',users=users)            
-           
+    
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
 
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /admin/users')
         print(error)
         abort(404)
 
 
+#Ruta para editar al usuario
 @admin_bp.route('/edit_user/<id>',methods=['GET','POST'])
 def edit_user(id):
     try:
@@ -162,16 +204,17 @@ def edit_user(id):
             db=current_app.config['db']
             form=Account()
 
-
+            #Obtenemos al usuario
             datos=ModelUser.getUser(db,id)
 
+            #Si no hay datos, mandamos al 404
             if not datos:
                 abort(404)
 
             #Si el metodo es post y se valida el formulario
             if form.validate() and request.method=='POST':
                 
-                #Obtenemos todos lod datos del formulario
+                #Obtenemos todos los datos del formulario
                 nombre=request.form.get('nombre')
                 apellidos=request.form.get('apellidos')
                 email=request.form.get('email')
@@ -187,7 +230,6 @@ def edit_user(id):
 
                 #Si los datos han sido cambiados
                 if datos_cambiados:
-                    print('Datos cambiados con exitillo')
                     flash('Datos cambiados')
 
                     return redirect(url_for('admin.edit_user',id=id))
@@ -201,14 +243,20 @@ def edit_user(id):
             #Sino      
             else:
                 return render_template('admin/editUser.html',form=form,datos=datos)
+            
+
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
 
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /admin/edit_user')
         print(error)
         abort(404)
 
 
+#Ruta para borrar a los usuarios
 @admin_bp.route('/delete_user/<id>',methods=['GET'])
 def delete_user(id):
     try:
@@ -231,17 +279,21 @@ def delete_user(id):
             #Sino indicamos el error
             else:
                 return redirect(url_for('admin.edit_user',id=id))
+            
+
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
 
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /admin/delete_user')
         print(error)
         abort(404)
 
 
 
-
-
+#Ruta para ver los pedidos en general
 @admin_bp.route('/orders',methods=['GET'])
 def orders():
     try:
@@ -254,20 +306,25 @@ def orders():
             db=current_app.config['db']
 
             #Obtenemos los pedidos
-
             pedidos=ModelOrder.showAllOrders(db)
 
     
-            return render_template('admin/orders.html',pedidos=pedidos)            
+            return render_template('admin/orders.html',pedidos=pedidos)   
+
+
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err 
            
 
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /admin/orders')
         print(error)
         abort(404)
 
 
+#Ruta para ver los pedidos de un usuario
 @admin_bp.route('/ordersUser/<id>',methods=['GET'])
 def ordersUser(id):
     try:
@@ -279,27 +336,35 @@ def ordersUser(id):
             #Obtenemos el cursor de la db
             db=current_app.config['db']
 
+            #Intentamos obtener al usuario
             usuario_existe=ModelUser.get_by_id(db,id)
 
+            #Si existe
             if usuario_existe:
 
                 #Obtenemos los pedidos
                 pedidos=ModelOrder.showAllOrders(db,id)
                 return render_template('admin/userOrders.html',pedidos=pedidos)   
 
+            #Sino mandamos al 404
             else:
-                abort(404)         
+                abort(404)   
+
+
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err 
            
 
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /admin/ordersUser')
         print(error)
         abort(404)
 
 
 
-
+#Ruta para ver los detalles de un pedido
 @admin_bp.route('/order/<id>',methods=['GET'])
 def order(id):
     try:
@@ -318,6 +383,8 @@ def order(id):
             if pedido:
                 #Obtenemos los productos comprados en el pedido
                 productos=ModelOrder.getOrderProducts(db,id)
+
+                #Obtenemos la ruta desde donde ha llegado la peticion para redirijir ahi
                 referrer=request.referrer
 
                 return render_template('admin/order.html',pedido=pedido,productos=productos,referrer=referrer)
@@ -325,15 +392,19 @@ def order(id):
             #Sino, mandamos 404
             else:
                 abort(404)
-            
 
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+            
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /admin/order')
         print(error)
         abort(404)
 
 
+#Ruta para borrar los pedidos
 @admin_bp.route('/delete_order/<id>',methods=['GET'])
 def delete_order(id):
     try:
@@ -356,16 +427,20 @@ def delete_order(id):
             #Sino, mandamos al 404
             else:
                 abort(404)
+
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
             
 
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /admin/delete_order')
         print(error)
         abort(404)
 
 
-
+#Ruta para activar/desactivar el enviado del producto
 @admin_bp.route('/setEnviadoOrder/<id>',methods=['GET'])
 def setEnviadoOrder(id):
     try:
@@ -377,27 +452,31 @@ def setEnviadoOrder(id):
             #Obtenemos el cursor de la db
             db=current_app.config['db']
 
-            #Activamos el producto
-            activado=ModelOrder.setEnviadoOrder(db,id)
+            #Activamos/Desactivamos el producto
+            seteado=ModelOrder.setEnviadoOrder(db,id)
 
-            #Si el producto fue activado
-            if activado:
-                #Mandamos a los productos
+            #Si el producto fue seteado
+            if seteado:
+                #Mandamos a los pedidos en general, o a los pedidos del usuario en concreto
                 return redirect(request.referrer or url_for('admin.orders'))
             
             #Sino, mandamos al 404
             else:
                 abort(404)
+
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
             
 
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /admin/setEnviadoOrder')
         print(error)
         abort(404)
 
 
-
+#Ruta para obtener los productos para el admin
 @admin_bp.route('/products',methods=['GET','POST'])
 def products():
     try:
@@ -605,19 +684,23 @@ def products():
                 print('Los parametrillos:',parametros)
 
                 #Redirijimos con los parametros
-                return redirect(url_for('admin.products',page=page,orden=orden,**parametros))        
+                return redirect(url_for('admin.products',page=page,orden=orden,**parametros))       
+
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
             
 
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /admin/products')
         print(error)
         abort(404)
 
 
 
 
-
+#Ruta para activar/desactivar los productos
 @admin_bp.route('/setActiveProduct/<id>',methods=['GET'])
 def setActiveProduct(id):
     try:
@@ -629,27 +712,32 @@ def setActiveProduct(id):
             #Obtenemos el cursor de la db
             db=current_app.config['db']
 
-            #Activamos el producto
-            activado=ModelProduct.setActiveProduct(db,id)
+            #Seteeamos el producto
+            seteado=ModelProduct.setActiveProduct(db,id)
 
-            #Si el producto fue activado
-            if activado:
-                #Mandamos a los productos
+            #Si el producto fue seteado
+            if seteado:
+                #Mandamos a los productos o a la ruta desde la que hicimos la peticion
                 return redirect(request.referrer or url_for('admin.products'))
             
             #Sino, mandamos al 404
             else:
                 abort(404)
+
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
             
 
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /admin/setActiveProduct')
         print(error)
         abort(404)
 
 
 
+#Ruta para editar el producto
 @admin_bp.route('/edit_product/<id>',methods=['GET','POST'])
 def edit_product(id):
     try:
@@ -668,10 +756,10 @@ def edit_product(id):
             categorias=ModelCategory.mostrar_categorias(db)
 
 
-            # #Si el metodo es post y se valida el formulario
+            #Si el metodo es post y se valida el formulario
             if form.validate() and request.method=='POST':
                 
-                #Obtenemos todos lod datos del formulario
+                #Obtenemos todos los datos del formulario
                 nombre=request.form.get('nombre')
                 marca=int(request.form.get('marca'))             
                 categoria=int(request.form.get('categoria'))
@@ -679,19 +767,23 @@ def edit_product(id):
                 stock=request.form.get('stock')
                 descripcion=request.form.get('descripcion')
                 
-            
                 print(nombre,marca,categoria,precio,stock,descripcion)
 
+                #Creamos el producto
                 producto=Product(id,nombre,precio,marca,categoria,descripcion,0,stock)
 
+                #Intentamos actualizarlo
                 actualizado=ModelProduct.setProduct(db,producto)
 
+                #Sino fue actualizado mandamso el error
                 if not actualizado:
                     flash('Error al actualizar el producto')
 
+                #Si salio bien todo, mensaje de exito
                 else:
                     flash('Actualizado con éxito')
 
+                #Mandamos a la apgina de edicion del producto
                 return redirect(url_for('admin.edit_product',id=id))
 
             else:
@@ -699,18 +791,24 @@ def edit_product(id):
                 #Obtenemos el producto
                 producto=ModelProduct.getProduct(db,id)
 
+                #Si se encuentra el producto
                 if producto:
 
+                    #Recorremos la marca, y la que sea del producto, 
+                    # la establecemos en el select marca del formulario
                     for marca in marcas:
                         if marca.nombre==producto.nombre_marca:
                             form.marca.data=int(marca.id)
                             print('Tipo de marca.id:',type(marca.id))
 
+                    #Recorremos la categoria, y la que sea del producto, 
+                    # la establecemos en el select categoria del formulario
                     for categoria in categorias:
                         if categoria.nombre==producto.nombre_categoria:
                             form.categoria.data=int(categoria.id)
                             print('Tipo de categoria.id:',type(categoria.id))
 
+                    #Ponemos la descripcion en el textarea de la descripcion
                     form.descripcion.data=producto.descripcion
 
                     return render_template('admin/product.html',form=form,producto=producto)
@@ -718,10 +816,14 @@ def edit_product(id):
                 else:
                     abort(404)
 
-            
+
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+       
 
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /admin/edit_product')
         print(error)
         abort(404)

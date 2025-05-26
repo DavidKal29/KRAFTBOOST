@@ -178,7 +178,6 @@ class AddressForm(FlaskForm):
 
 
 
-
 #Formulario para el pago
 class Payment(FlaskForm):
     nombre_titular=StringField('Nombre del Titular',validators=[
