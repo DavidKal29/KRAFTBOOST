@@ -4,7 +4,7 @@
 
 {% block body %}
 
-{% if productos_carrito %}
+{% if productos %}
 <section class="flex justify-center flex-col gap-6 lg:gap-12 px-4 sm:px-6 mt-28 lg:mt-40 mb-6">
     <div class="flex flex-col gap-4 sm:flex-row-reverse justify-center items-stretch sm:gap-6">
         <div class="flex justify-center items-center flex-col gap-8 ">
@@ -16,7 +16,7 @@
                 <div class="flex flex-col justify-center items-center gap-4 pl-4 py-6">
                     <div class="flex flex-row justify-between w-full items-start">
                         <p class="text-white font-bold">Subtotal</p>
-                        <p class="text-[#C40C0C] font-bold">{{(subtotal / 1.21) | round(2)}}€</p>
+                        <p class="text-[#C40C0C] font-bold">{{(subtotal/1.21) | round(2)}}€</p>
                     </div>
 
                     <div class="flex flex-row justify-between w-full items-start">
@@ -26,10 +26,8 @@
 
                     <div class="flex flex-row justify-between w-full items-start">
                         <p class="text-white font-bold">IVA 21%</p>
-                        <p class="text-[#C40C0C] font-bold">{{(subtotal-(subtotal / 1.21)) | round(2)}}€</p>
+                        <p class="text-[#C40C0C] font-bold">{{(subtotal-(subtotal/1.21)) | round(2)}}€</p>
                     </div>
-
-                    
 
                     <hr class="bg-white w-full h-[2px]">
 
@@ -55,22 +53,20 @@
             </div>
         </div>
 
-   
         <div class="max-h-[600px] h-[25rem] md:h-[30rem] lg:h-[40rem] overflow-y-auto scrollbar-hide flex flex-col justify-start items-center gap-6">
             
-            {% for p in productos_carrito|reverse %}
+            {% for p in productos|reverse %}
                 <!-- Tarjeta individual -->
                 <div class="relative w-full max-w-[800px] sm:max-w-[650px] bg-[#1B1A1A] border-2 border-[#C40C0C] rounded p-4 flex flex-row items-center gap-4">
 
                     <!-- Botón de cerrar -->
-                    <a onclick="desactivar(this)" href="{{url_for('cart.removeProduct', id_producto=p.id)}}" class="absolute top-2 right-2 text-[#C40C0C] sm:text-[20px]">
+                    <a onclick="desactivar(this)" href="{{url_for('cart.cart',action='remove_all',id_producto=p.id)}}" class="absolute top-2 right-2 text-[#C40C0C] sm:text-[20px]">
                         <i class="fa-solid fa-circle-xmark"></i>
                     </a>
 
-
                     <!-- Precio -->
                     <p class="absolute bottom-2 right-4 text-[#C40C0C] font-bold text-[12px] sm:text-[16px]">
-                        {{p.precio}}€
+                        {{p.precio}}€ 
                     </p>
 
                     <!-- Imagen del producto -->
@@ -87,11 +83,11 @@
                         </p>
 
                         <div class="flex items-center gap-3">
-                            <a onclick="desactivar(this)" href="{{url_for('cart.removeOneProduct', id_producto=p.id)}}" class="text-[#C40C0C] text-[20px]">
+                            <a onclick="desactivar(this)" href="{{url_for('cart.cart',action='remove_one',id_producto=p.id)}}" class="text-[#C40C0C] text-[20px]">
                                 <i class="fa-solid fa-circle-minus"></i>
                             </a>
                             <p class="text-white font-bold text-[12px] sm:text-[18px]">{{p.cantidad}}</p>
-                            <a onclick="desactivar(this)" href="{{url_for('cart.add_product', id_producto=p.id)}}" class="text-[#C40C0C] text-[20px]">
+                            <a onclick="desactivar(this)" href="{{url_for('cart.cart',action='add',id_producto=p.id)}}" class="text-[#C40C0C] text-[20px]">
                                 <i class="fa-solid fa-circle-plus"></i>
                             </a>
                         </div>
@@ -127,7 +123,5 @@
 </div>
 
 {% endif %}
-
-
 
 {% endblock %}
