@@ -102,7 +102,7 @@ class CartService:
                 #Si el stock es 0, no permitimos añadir al carrito
                 if stock==0:
                     print('Sin stock')
-                    return None
+                    return 'Sin stock'
                 
                 #Consultamos a ver si el producto ya fue añadido al carrito antes
                 sql='SELECT cantidad FROM carrito WHERE id_usuario=%s and id_producto=%s'
