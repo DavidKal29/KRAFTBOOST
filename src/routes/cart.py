@@ -32,22 +32,7 @@ def cart():
         #Dependiendo de la accion hacemos una cosa u otra
         if action and id_producto:
             if action=='add':
-                agregado=CartService.addProductCart(db,current_user.id,id_producto)
-
-                #Dependiendo de la respuesta, manda un mensaje u otro
-                if agregado:
-                    if agregado=='Sin stock':
-                        flash('Sin Stock')
-                    else:
-                        if '/product/' in request.referrer:
-                            flash('Añadido al carrito')
-                
-                else:
-                    flash('Error al añadir al carrito')
-
-                #Si venimos de la apgina del product, que nos redirija ahi
-                if '/product/' in request.referrer:
-                    return redirect(request.referrer)
+                CartService.addProductCart(db,current_user.id,id_producto)
 
             elif action=='remove_one':
                 CartService.removeOneProductCart(db,current_user.id,id_producto)

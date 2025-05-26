@@ -98,6 +98,10 @@ class CartService:
             if row:
                 stock=row[0]
                 precio=row[1]
+                activo=row[2]
+
+                if activo==0:
+                    return None
                 
 
                 #Si el stock es 0, no permitimos añadir al carrito
@@ -153,7 +157,7 @@ class CartService:
             cursor=db.connection.cursor()
 
             #Obtenemos el stock y el precio del producto requerido
-            sql='SELECT precio FROM productos WHERE id=%s'
+            sql='SELECT precio,activo FROM productos WHERE id=%s'
             cursor.execute(sql,(id_producto,))
 
             row=cursor.fetchone()
@@ -161,6 +165,10 @@ class CartService:
             #Si el producto existe
             if row:
                 precio=row[0]
+                activo=row[1]
+
+                if activo==0:
+                    return None
 
                 #Consultamos a ver si el producto ya fue añadido al carrito antes
                 sql='SELECT cantidad FROM carrito WHERE id_usuario=%s and id_producto=%s'
@@ -217,13 +225,17 @@ class CartService:
             cursor=db.connection.cursor()
 
             #Obtenemos el stock y el precio del producto requerido
-            sql='SELECT precio FROM productos WHERE id=%s'
+            sql='SELECT precio,activo FROM productos WHERE id=%s'
             cursor.execute(sql,(id_producto,))
 
             row=cursor.fetchone()
 
             #Si el producto existe
             if row:
+                activo=row[1]
+
+                if activo==0:
+                    return None
 
                 #Consultamos a ver si el producto ya fue añadido al carrito antes
                 sql='SELECT cantidad FROM carrito WHERE id_usuario=%s and id_producto=%s'
