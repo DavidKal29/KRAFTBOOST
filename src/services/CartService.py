@@ -89,7 +89,7 @@ class CartService:
             cursor=db.connection.cursor()
 
             #Obtenemos el stock y el precio del producto requerido
-            sql='SELECT stock,precio FROM productos WHERE id=%s'
+            sql='SELECT stock,precio,activo FROM productos WHERE id=%s'
             cursor.execute(sql,(id_producto,))
 
             row=cursor.fetchone()
@@ -98,6 +98,7 @@ class CartService:
             if row:
                 stock=row[0]
                 precio=row[1]
+                
 
                 #Si el stock es 0, no permitimos añadir al carrito
                 if stock==0:

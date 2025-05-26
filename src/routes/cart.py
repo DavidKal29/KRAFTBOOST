@@ -39,7 +39,8 @@ def cart():
                     if agregado=='Sin stock':
                         flash('Sin Stock')
                     else:
-                        flash('Añadido al carrito')
+                        if '/product/' in request.referrer:
+                            flash('Añadido al carrito')
                 
                 else:
                     flash('Error al añadir al carrito')

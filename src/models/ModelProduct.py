@@ -760,10 +760,40 @@ class ModelProduct():
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
 
-            
             #Montamos y ejecutamos la instruccion que activará el producto
             sql='UPDATE productos SET activo=NOT activo WHERE id=%s'
             cursor.execute(sql,(id,))
+
+            sql='SELECT activo FROM productos WHERE id=%s'
+            cursor.execute(sql,(id,))
+
+            resultados=cursor.fetchone()
+
+            if resultados:
+                activo=resultados[0]
+                print('El activo',activo)
+
+            if activo==0:
+            
+                #Obtenemos la suma de todos los productos
+                sql='SELECT SUM(cantidad) FROM carrito WHERE id_producto=%s'
+                cursor.execute(sql,(id,))
+
+                resultado=cursor.fetchone()
+
+                #Si hay resultados, definimos la cantidad
+                if resultado and resultado[0] is not None:
+                    cantidad=resultado[0]
+
+                    #Si la cantidad es mayor a 0, sumamos esa cantidad al stock del producto
+                    if cantidad>0:
+                        sql='UPDATE productos SET stock=stock+%s WHERE id=%s'
+                        cursor.execute(sql,(cantidad,id))
+
+                #Borramos del carrito todos los registros de ese producto
+                sql='DELETE FROM carrito WHERE id_producto=%s'
+                cursor.execute(sql,(id,))
+
             db.connection.commit()
 
             return True
