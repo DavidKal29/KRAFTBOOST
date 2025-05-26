@@ -42,9 +42,15 @@
       <div class="flex flex-col gap-4 xl:flex-row">
         
         {% if not current_user.is_authenticated or current_user.rol=='client'%}
+          {% if producto.stock==0 %}
+          <div class="w-full bg-[#C40C0C] text-white rounded py-3 font-bold text-[16px] text-center">
+            Sin Stock <i class="fa-solid fa-xmark"></i>
+          </div>
+          {% else %}
           <a onclick="desactivar(this)" href="{{url_for('cart.cart',action='add',id_producto=producto.id)}}" class="w-full bg-[#C40C0C] text-white rounded py-3 font-bold text-[16px] text-center">
             <button>Añadir al carrito <i class="fa-solid fa-cart-plus"></i></button>
           </a>
+          {% endif %}
 
           {% if favorito %}
           <a href="{{url_for('profile.deleteFavorites',id=id)}}" class="w-full bg-white text-[#C40C0C] rounded py-3 font-bold text-[16px] text-center">

@@ -11,11 +11,13 @@ class CartService:
 
             #Obtenemos el stock y el precio del producto requerido
             sql='''
-                SELECT p.id, p.nombre, p.imagen, c.cantidad, c.precio FROM carrito c
+                SELECT p.id, p.nombre, p.imagen, p.stock, c.cantidad, c.precio FROM carrito c
                 INNER JOIN productos p
                 ON c.id_producto=p.id
                 WHERE id_usuario=%s
             '''
+
+            print('El sql:',sql)
             cursor.execute(sql,(id_usuario,))
           
             row=cursor.fetchall()
@@ -28,10 +30,11 @@ class CartService:
                     id=product[0]
                     nombre=product[1]
                     imagen=product[2]
-                    cantidad=product[3]
-                    precio=product[4]
+                    stock=product[3]
+                    cantidad=product[4]
+                    precio=product[5]
                 
-                    productos_carrito.append(CartProduct(id,nombre,imagen,cantidad,precio))
+                    productos_carrito.append(CartProduct(id,nombre,imagen,cantidad,precio,stock))
 
                 return productos_carrito
 

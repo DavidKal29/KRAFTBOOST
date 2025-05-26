@@ -82,14 +82,27 @@
                             {{p.nombre}}
                         </p>
 
+                        {% if p.stock==0 %}
+                        <p class="text-[#C40C0C] font-bold text-[12px] sm:text-[16px]">
+                            Sin Stock
+                        </p>
+                        {% endif %}
+
                         <div class="flex items-center gap-3">
                             <a onclick="desactivar(this)" href="{{url_for('cart.cart',action='remove_one',id_producto=p.id)}}" class="text-[#C40C0C] text-[20px]">
                                 <i class="fa-solid fa-circle-minus"></i>
                             </a>
                             <p class="text-white font-bold text-[12px] sm:text-[18px]">{{p.cantidad}}</p>
+                            {% if p.stock==0 %}
+                            <a class="text-[#C40C0C] text-[20px]">
+                                <i class="fa-solid fa-circle-plus"></i>
+                            </a>
+                            {% else %}
                             <a onclick="desactivar(this)" href="{{url_for('cart.cart',action='add',id_producto=p.id)}}" class="text-[#C40C0C] text-[20px]">
                                 <i class="fa-solid fa-circle-plus"></i>
                             </a>
+                            {% endif %}
+                            
                         </div>
                     </div>
                 </div>
