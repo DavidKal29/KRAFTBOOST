@@ -323,7 +323,7 @@ class CartService:
                 cursor=db.connection.cursor()
                 
                 #Creamos el pedido con los datos requeridos
-                sql='INSERT INTO pedidos (precio_total,id_usuario,nombre_destinatario,domicilio,localidad,puerta,codigo_postal,enviado) VALUES (%s,%s,%s,%s,%s,%s,%s,True)'
+                sql='INSERT INTO pedidos (precio_total,id_usuario,nombre_destinatario,domicilio,localidad,puerta,codigo_postal,enviado) VALUES (%s,%s,%s,%s,%s,%s,%s,False)'
                 cursor.execute(sql,(precio_total,id,direccion.nombre_destinatario,direccion.domicilio,direccion.localidad,direccion.puerta,direccion.codigo_postal))
                 db.connection.commit()
 

@@ -638,7 +638,7 @@ class ModelProduct():
                 FROM productos p
                 INNER JOIN marcas m ON p.id_marca=m.id
                 INNER JOIN categorias c ON p.id_categoria=c.id
-                WHERE p.id=%s;
+                WHERE p.id=%s and p.activo=1;
             '''
 
             #Ejecutamos
