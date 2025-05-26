@@ -15,7 +15,7 @@ def client_required():
         return redirect(url_for('auth.login'))
     
     if not current_user.rol=='client':
-        abort(401)
+        abort(404)
 
     else:
         return True

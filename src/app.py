@@ -72,6 +72,13 @@ def error_404(error):
 #Registramos en el manejador de errores el 404 en flask
 app.register_error_handler(404,error_404)
 
+#Pagina 401
+def error_401(error):
+    return render_template('401.html')
+
+#Registramos en el manejador de errores el 401 en flask
+app.register_error_handler(401,error_401)
+
 
 #Utilizamos el contexto de la app porque estamos haciendo una consulta fuera de las rutas
 with app.app_context():
