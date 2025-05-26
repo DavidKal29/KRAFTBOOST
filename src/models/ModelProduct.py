@@ -632,7 +632,7 @@ class ModelProduct():
 
             #Montamos una consulta con joins para obtener el nombre de la categoria y marca
             sql='''
-                SELECT p.nombre as nombre_producto,p.precio,p.descripcion,p.imagen,
+                SELECT p.nombre as nombre_producto,p.precio,p.descripcion,p.imagen,p.stock,
                 m.nombre as nombre_marca,
                 c.nombre as nombre_categoria
                 FROM productos p
@@ -643,23 +643,24 @@ class ModelProduct():
 
             #Ejecutamos
             cursor.execute(sql,(id,))
-            resultado=cursor.fetchall()
+            resultado=cursor.fetchone()
            
 
             #SI hay resultado, metemos todos los campos devueltos en el objeto Product y retornamos eso
             if resultado:
 
-                print('Er resultado:',resultado)
+                print('El resultado:',resultado)
                 
-                nombre_producto=resultado[0][0]
-                precio=resultado[0][1]
-                descripcion=resultado[0][2]
-                imagen=resultado[0][3]
-                nombre_marca=resultado[0][4]
-                nombre_categoria=resultado[0][5]
+                nombre_producto=resultado[0]
+                precio=resultado[1]
+                descripcion=resultado[2]
+                imagen=resultado[3]
+                stock=resultado[4]
+                nombre_marca=resultado[5]
+                nombre_categoria=resultado[6]
 
 
-                producto=Product(id, nombre_producto, precio, nombre_marca, nombre_categoria, descripcion, imagen)
+                producto=Product(id,nombre_producto,precio,nombre_marca,nombre_categoria,descripcion,imagen,stock)
 
             
                 cursor.close()
@@ -759,10 +760,40 @@ class ModelProduct():
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
 
-            
             #Montamos y ejecutamos la instruccion que activará el producto
             sql='UPDATE productos SET activo=NOT activo WHERE id=%s'
             cursor.execute(sql,(id,))
+
+            sql='SELECT activo FROM productos WHERE id=%s'
+            cursor.execute(sql,(id,))
+
+            resultados=cursor.fetchone()
+
+            if resultados:
+                activo=resultados[0]
+                print('El activo',activo)
+
+            if activo==0:
+            
+                #Obtenemos la suma de todos los productos
+                sql='SELECT SUM(cantidad) FROM carrito WHERE id_producto=%s'
+                cursor.execute(sql,(id,))
+
+                resultado=cursor.fetchone()
+
+                #Si hay resultados, definimos la cantidad
+                if resultado and resultado[0] is not None:
+                    cantidad=resultado[0]
+
+                    #Si la cantidad es mayor a 0, sumamos esa cantidad al stock del producto
+                    if cantidad>0:
+                        sql='UPDATE productos SET stock=stock+%s WHERE id=%s'
+                        cursor.execute(sql,(cantidad,id))
+
+                #Borramos del carrito todos los registros de ese producto
+                sql='DELETE FROM carrito WHERE id_producto=%s'
+                cursor.execute(sql,(id,))
+
             db.connection.commit()
 
             return True

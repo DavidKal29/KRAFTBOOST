@@ -68,7 +68,6 @@
         <!-- Icono Carrito -->
         <a href="{{url_for('cart.cart')}}" class="hidden lg:flex text-white text-[25px] hover:text-[#C40C0C] duration-[0.5s]"><i class="fa-solid fa-cart-shopping"></i></a>
 
-
         {% elif current_user.is_authenticated and current_user.rol=='admin' %}
         <!-- Icono Panel -->
          <a href="{{url_for('admin.panel')}}" class="hidden lg:flex text-white text-[25px] hover:text-[#C40C0C] duration-[0.5s]"><i class="fa-solid fa-pen-to-square"></i></a>
@@ -115,7 +114,7 @@
                 <i class="fa-solid fa-cart-shopping"></i> Carrito
             </a>  
             {% elif current_user.is_authenticated and current_user.rol=='admin' %}
-            <a href="{{url_for('cart.cart')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
+            <a href="{{url_for('admin.panel')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
                 <i class="fa-solid fa-pen-to-square"></i> Admin
             </a>  
             {% endif %}

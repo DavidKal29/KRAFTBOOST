@@ -11,11 +11,13 @@ class CartService:
 
             #Obtenemos el stock y el precio del producto requerido
             sql='''
-                SELECT p.id, p.nombre, p.imagen, c.cantidad, c.precio FROM carrito c
+                SELECT p.id, p.nombre, p.imagen, p.stock, c.cantidad, c.precio FROM carrito c
                 INNER JOIN productos p
                 ON c.id_producto=p.id
                 WHERE id_usuario=%s
             '''
+
+            print('El sql:',sql)
             cursor.execute(sql,(id_usuario,))
           
             row=cursor.fetchall()
@@ -28,10 +30,11 @@ class CartService:
                     id=product[0]
                     nombre=product[1]
                     imagen=product[2]
-                    cantidad=product[3]
-                    precio=product[4]
+                    stock=product[3]
+                    cantidad=product[4]
+                    precio=product[5]
                 
-                    productos_carrito.append(CartProduct(id,nombre,imagen,cantidad,precio))
+                    productos_carrito.append(CartProduct(id,nombre,imagen,cantidad,precio,stock))
 
                 return productos_carrito
 
@@ -86,7 +89,7 @@ class CartService:
             cursor=db.connection.cursor()
 
             #Obtenemos el stock y el precio del producto requerido
-            sql='SELECT stock,precio FROM productos WHERE id=%s'
+            sql='SELECT stock,precio,activo FROM productos WHERE id=%s'
             cursor.execute(sql,(id_producto,))
 
             row=cursor.fetchone()
@@ -95,11 +98,16 @@ class CartService:
             if row:
                 stock=row[0]
                 precio=row[1]
+                activo=row[2]
+
+                if activo==0:
+                    return None
+                
 
                 #Si el stock es 0, no permitimos añadir al carrito
                 if stock==0:
                     print('Sin stock')
-                    return None
+                    return 'Sin stock'
                 
                 #Consultamos a ver si el producto ya fue añadido al carrito antes
                 sql='SELECT cantidad FROM carrito WHERE id_usuario=%s and id_producto=%s'
@@ -114,14 +122,13 @@ class CartService:
                     # carrito asociado al usuario y al producto
                     sql='UPDATE carrito SET cantidad=cantidad+1, precio=precio+%s WHERE id_usuario=%s and id_producto=%s'
                     cursor.execute(sql,(precio,id_usuario,id_producto))
-                    db.connection.commit()
 
                 else:
                 
                     #Sino, insertamos en la tabla carrito, el id del usuario,producto,cantidad del producto y precio total
                     sql='INSERT INTO carrito (id_usuario,id_producto,cantidad,precio) VALUES (%s,%s,%s,%s)'
                     cursor.execute(sql,(id_usuario,id_producto,1,precio))
-                    db.connection.commit()
+                    
 
                 #Quitamos 1 al stock del producto requerido
                 sql='UPDATE productos SET stock=stock-1 WHERE id=%s'
@@ -150,7 +157,7 @@ class CartService:
             cursor=db.connection.cursor()
 
             #Obtenemos el stock y el precio del producto requerido
-            sql='SELECT precio FROM productos WHERE id=%s'
+            sql='SELECT precio,activo FROM productos WHERE id=%s'
             cursor.execute(sql,(id_producto,))
 
             row=cursor.fetchone()
@@ -158,6 +165,10 @@ class CartService:
             #Si el producto existe
             if row:
                 precio=row[0]
+                activo=row[1]
+
+                if activo==0:
+                    return None
 
                 #Consultamos a ver si el producto ya fue añadido al carrito antes
                 sql='SELECT cantidad FROM carrito WHERE id_usuario=%s and id_producto=%s'
@@ -173,7 +184,6 @@ class CartService:
                     if cantidad==1:
                         sql='DELETE FROM carrito WHERE id_usuario=%s and id_producto=%s'
                         cursor.execute(sql,(id_usuario,id_producto))
-                        db.connection.commit()
 
                     else:
 
@@ -181,11 +191,12 @@ class CartService:
                         # en la tabla carrito asociado al usuario y al producto
                         sql='UPDATE carrito SET cantidad=cantidad-1, precio=precio-%s WHERE id_usuario=%s and id_producto=%s'
                         cursor.execute(sql,(precio,id_usuario,id_producto))
-                        db.connection.commit()
 
                     #Añadimos 1 al stock del producto requerido
                     sql='UPDATE productos SET stock=stock+1 WHERE id=%s'
                     cursor.execute(sql,(id_producto,))
+                    
+                    #Commiteamos todo
                     db.connection.commit()
 
                     #Devolvemos True para indicar que todo salio bien
@@ -214,13 +225,17 @@ class CartService:
             cursor=db.connection.cursor()
 
             #Obtenemos el stock y el precio del producto requerido
-            sql='SELECT precio FROM productos WHERE id=%s'
+            sql='SELECT precio,activo FROM productos WHERE id=%s'
             cursor.execute(sql,(id_producto,))
 
             row=cursor.fetchone()
 
             #Si el producto existe
             if row:
+                activo=row[1]
+
+                if activo==0:
+                    return None
 
                 #Consultamos a ver si el producto ya fue añadido al carrito antes
                 sql='SELECT cantidad FROM carrito WHERE id_usuario=%s and id_producto=%s'
@@ -338,6 +353,10 @@ class CartService:
                     id_producto=p[0]
                     cantidad=p[1]
                     precio=p[2]
+
+                    #Añadimos las ventas en los productos
+                    sql='UPDATE productos SET ventas=ventas+%s WHERE id=%s'
+                    cursor.execute(sql,(cantidad,id_producto))
 
                     #Por cada producto insertamos sus datos en detalles_pedido
                     sql='INSERT INTO detalles_pedido (id_pedido,id_producto,cantidad,precio) VALUES(%s,%s,%s,%s)'

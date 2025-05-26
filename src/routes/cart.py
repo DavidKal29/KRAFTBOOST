@@ -1,4 +1,4 @@
-from flask import Blueprint,abort,redirect,url_for,render_template,request,current_app
+from flask import Blueprint,abort,redirect,url_for,render_template,request,current_app,flash
 from flask_login import current_user
 from services.CartService import CartService
 
@@ -15,59 +15,42 @@ def client_required():
         return True
 
 
-@cart_bp.route('/',methods=['GET'])
+@cart_bp.route('/', methods=['GET'])
 def cart():
     check=client_required()
     if check!=True:
         return check
+
     else:
+        #Obtenemos la db
         db=current_app.config['db']
 
-        productos_carrito=CartService.showAllProductsInCart(db,current_user.id)
+        #Capturamos los parámetros opcionales de la query
+        action=request.args.get('action')
+        id_producto=request.args.get('id_producto')
 
-        subtotal=CartService.showSumario(db,current_user.id)
+        #Dependiendo de la accion hacemos una cosa u otra
+        if action and id_producto:
+            if action=='add':
+                CartService.addProductCart(db,current_user.id,id_producto)
+
+            elif action=='remove_one':
+                CartService.removeOneProductCart(db,current_user.id,id_producto)
+            elif action=='remove_all':
+                CartService.removeProductCart(db,current_user.id,id_producto)
+
+            
+
+        #Cargamos el carrito actualizado
+        productos=CartService.showAllProductsInCart(db,current_user.id)
+        subtotal =CartService.showSumario(db,current_user.id)
 
         if subtotal:
             subtotal=float(subtotal)
-                
-        return render_template('cart.html',productos_carrito=productos_carrito,subtotal=subtotal)
+        
+        else:
+            subtotal=0
+
+        return render_template('cart.html',productos=productos,subtotal=subtotal)
 
 
-@cart_bp.route('/add_product/<id_producto>',methods=['GET'])
-def add_product(id_producto):
-    check=client_required()
-    if check!=True:
-        return check
-    else:
-        db=current_app.config['db']
-
-        CartService.addProductCart(db,current_user.id,id_producto)
-
-            
-        return redirect(url_for('cart.cart'))
-
-
-@cart_bp.route('/removeOneProduct/<id_producto>',methods=['GET'])
-def removeOneProduct(id_producto):
-    check=client_required()
-    if check!=True:
-        return check
-    else:
-        db=current_app.config['db']
-
-        CartService.removeOneProductCart(db,current_user.id,id_producto)
-            
-        return redirect(url_for('cart.cart'))
-
-
-@cart_bp.route('/removeProduct/<id_producto>',methods=['GET'])
-def removeProduct(id_producto):
-    check=client_required()
-    if check!=True:
-        return check
-    else:
-        db=current_app.config['db']
-
-        CartService.removeProductCart(db,current_user.id,id_producto)
-            
-        return redirect(url_for('cart.cart'))

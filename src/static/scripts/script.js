@@ -44,3 +44,19 @@ let desactivar=(a)=>{
     
     return true
 }
+
+
+console.log('El pathname:',window.location.pathname);
+
+//Si la ruta es cualquiera salvo /shop(por los filtros) y tiene parámetros
+if (window.location.pathname!='/shop' && window.location.pathname!='/admin/products' && window.location.search){
+    
+    //Limpiamos los parámetros sin recargar la página
+    let newUrl=window.location.origin+window.location.pathname
+    window.history.replaceState({},document.title,newUrl)
+
+    console.log('Cambiado con exito')
+
+}
+
+  
