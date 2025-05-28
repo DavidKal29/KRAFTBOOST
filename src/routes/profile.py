@@ -294,7 +294,7 @@ def addFavorites(id):
             if agregado:
                 #Si es true, mostramos el mensaje de añadido
                 if agregado==True:
-                    flash('Producto añadido a Favoritos')
+                    return redirect(url_for('profile.favorites'))
                 
                 #Sino, mostramos el mensaje de error que nos llega del metodo addFavorites
                 else: 
