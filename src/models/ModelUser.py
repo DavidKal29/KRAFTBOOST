@@ -156,6 +156,10 @@ class ModelUser():
             sql='DELETE FROM pedidos WHERE id_usuario=%s'
             cursor.execute(sql,(id,))
 
+            #Borramos el carrito que tenga el usuario
+            sql='DELETE FROM carrito WHERE id_usuario=%s'
+            cursor.execute(sql,(id,))
+
             #Borramos al usuario
             sql='DELETE FROM usuarios WHERE id=%s'
             cursor.execute(sql,(id,))
