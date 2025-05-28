@@ -304,7 +304,6 @@ def addFavorites(id):
             
             #Sino mostramos el mensaje de error
             else:
-                flash('Error al añadir producto')
                 return redirect(url_for('product.product',id=id))
             
 
