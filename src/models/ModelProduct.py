@@ -141,6 +141,21 @@ class ModelProduct():
 
             existe=cls.checkFavorite(db,id_usuario,id_producto)
 
+            #Vemos si el producto está activo y si no es asi no dejamos añadirlo
+            sql='SELECT activo FROM productos WHERE id=%s'
+            cursor.execute(sql,(id_producto,))
+
+            resultado=cursor.fetchone()
+
+            if resultado and resultado[0]:
+                activo=resultado[0]
+
+                if activo==0:
+                    return None
+            
+            else:
+                return None
+
             #Si el producto existe en favoritos, no dejamos añadirlo
             if existe:
                 cursor.close()
@@ -156,6 +171,9 @@ class ModelProduct():
             if cantidad and cantidad[0]>=12:
                 cursor.close()
                 return 'Solo puedes tener 12 productos en favoritos'
+            
+
+            
                     
                       
             #Insertamos en la tabla favoritos, los ids del producto y usuario
@@ -807,6 +825,11 @@ class ModelProduct():
 
                 #Borramos del carrito todos los registros de ese producto
                 sql='DELETE FROM carrito WHERE id_producto=%s'
+                cursor.execute(sql,(id,))
+
+            
+                #Borramos tambien los productos de favoritos
+                sql='DELETE FROM favoritos WHERE id_producto=%s'
                 cursor.execute(sql,(id,))
 
             db.connection.commit()
