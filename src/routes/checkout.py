@@ -59,7 +59,7 @@ def checkout_token():
 
             cursor=db.connection.cursor()
 
-            sql='SELECT COUNT(*) FROM kraftboost.carrito WHERE id_usuario=%s'
+            sql='SELECT COUNT(*) FROM carrito WHERE id_usuario=%s'
             cursor.execute(sql,(current_user.id,))
 
             cantidad_productos=cursor.fetchone()[0]
