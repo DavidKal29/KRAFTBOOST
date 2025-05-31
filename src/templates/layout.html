@@ -6,6 +6,10 @@
     
     <!-- Titulo -->
     <title>{% block title %} {% endblock %}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{url_for('static', filename='images/logos/logo.png')}}" type="image/x-icon">
+
     
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -22,105 +26,24 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body class="bg-black overflow-x-hidden">
-    <header class="bg-[#1B1A1A] z-50 flex justify-between items-center py-[10px] px-[15px] sm:px-[35px] fixed top-0 w-full h-[80px] md:h-[100px] ">
-        <!-- Logo -->
-        <a href="{{url_for('home.home')}}" class="w-[16%] min-[568px]:w-[10%] sm:w-[10%] lg:w-[7%] xl:w-[5%]">
-            <img class="w-full" src="{{ url_for('static', filename='images/logos/logo.png') }}" alt="Logo">
-        </a>
-        
-        <!-- Buscador -->
-        <form action="{{url_for('shop.shop')}}" method="post">
-            <div class="relative w-full">
-                <input {% if 'search' in parametros and request.path==url_for('shop.shop') %}value="{{parametros['search']}}"{% endif %} name="search" type="text" class="font-bold outline-none p-2 w-[200px] max-[320px]:w-[160px] min-[568px]:w-[350px] sm:w-[450px] md:w-[500px] lg:w-[420px] min-[1180px]:w-[500px] min-[1280px]:w-[600px] min-[1281px]:w-[700px] h-[30px] min-[568px]:h-[35px] sm:h-[40px] text-gray-900  bg-gray-50 rounded-[5px] rounded-r-lg border border-gray-300 text-[12px]  max-[320px]:text-[10px] sm:text-[15px]" placeholder="Busca tu producto" required />
-                
-                <button type="submit" class="h-[30px] min-[568px]:h-[35px] sm:h-[40px] absolute right-0 px-1.5 sm:px-3 md:px-3 bg-[#C40C0C] text-white rounded-r-lg border border-red-700">
-                    <i class="fa-solid fa-magnifying-glass text-lg md:text-xl"></i>
-                </button>
-            </div>
-        </form>
+    
+    {% include 'header.html' %}
 
-        <!-- Icono tienda -->
-        <a href="{{url_for('shop.shop')}}" class="hidden lg:flex text-white text-[25px] duration-[0.5s] hover:text-[#C40C0C]"><i class="fa-solid fa-shop"></i></a>
-        
-
-        <!-- botones -->
-        <div class="hidden lg:flex items-center">
-            
-            {% if current_user.is_authenticated %}
-                <div id="botones" class="flex space-x-4">
-                    <a href="{% if current_user.rol=='admin' %}{{ url_for('admin.account') }}{% else %}{{ url_for('profile.profile') }}{% endif %}"><button class="bg-transparent text-white rounded px-[16px] py-[8px] font-bold text-[14px] border-[2px] border-white"><i class="fa-solid fa-user"></i> {{current_user.username}}</button></a>
-                    <a href="{{url_for('logout.logout')}}"><button class="bg-[#C40C0C] text-white rounded px-[16px] py-[8px] font-bold text-[14px]"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button></a>
-                </div>
-                
-
-            {% else %}
-            <div id="botones" class="flex gap-4">
-                <a href="{{url_for('auth.login')}}"><button class="bg-white text-[#C40C0C] rounded px-[16px] py-[8px] font-bold text-[14px]">Iniciar Sesión</button></a>
-                <a href="{{url_for('auth.register')}}"><button class="bg-[#C40C0C] text-white rounded px-[16px] py-[8px] font-bold text-[14px]">Crear cuenta</button></a>
-            </div>
-            {% endif %}
-  
-        </div>
-
-
-        
-        {% if not current_user.is_authenticated or current_user.rol=='client'%}
-        <!-- Icono Carrito -->
-        <a href="{{url_for('cart.cart')}}" class="hidden lg:flex text-white text-[25px] hover:text-[#C40C0C] duration-[0.5s]"><i class="fa-solid fa-cart-shopping"></i></a>
-
-        {% elif current_user.is_authenticated and current_user.rol=='admin' %}
-        <!-- Icono Panel -->
-         <a href="{{url_for('admin.panel')}}" class="hidden lg:flex text-white text-[25px] hover:text-[#C40C0C] duration-[0.5s]"><i class="fa-solid fa-pen-to-square"></i></a>
+    {% with messages=get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="flash-message fixed top-24 md:top-28 right-4 bg-[#C40C0C] text-white font-bold py-2 px-4 rounded z-1">¡{{msg}}!</div>
+            {% endfor %}
+        <script>
+            setTimeout(() => {
+                let messages=document.getElementsByClassName("flash-message");
+                [...messages].forEach(msg => msg.remove())
+            }, 3000);
+        </script>
 
         {% endif %}
-        
-    
-        
-        <!-- Boton menu hamburguesa -->
-        <button id="boton_hamburguesa" class="lg:hidden text-white text-2xl">
-            <i id="icono_boton" class="fa-solid fa-bars"></i>
-        </button>
+    {% endwith %}
 
-
-        <!-- Menu hamburguesa -->
-        <nav id="menu_hamburguesa" class="fixed right-[-100%] top-[80px] md:top-[100px] w-[60%] h-screen overflow-y-auto scrollbar-hide bg-gradient-to-b from-[#1B1A1A] to-[#C40C0C] shadow-lg flex flex-col items-start pl-[20px] pt-[30px] gap-[40px] max-[320px]:gap-[20px] duration-300 lg:hidden overflow-y-scroll min-[568px]:flex-row min-[568px]:w-[100%] min-[568px]:justify-center min-[568px]:items-center min-[568px]:h-[80px] min-[568px]:gap-[20px] sm:h-[100px] sm:gap-[30px] md:h-[100px] md:gap-[35px]">
-    
-            <a href="{{url_for('shop.shop')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
-                <i class="fa-solid fa-shop"></i> Tienda
-            </a>
-
-            {% if current_user.is_authenticated %}
-                <a href="{% if current_user.rol=='admin' %}{{ url_for('admin.account') }}{% else %}{{ url_for('profile.profile') }}{% endif %}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
-                    <i class="fa-solid fa-user"></i> {{current_user.username}}
-                </a>
-                <a href="{{url_for('logout.logout')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
-                    <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
-                </a>
-
-            
-            {% else %}
-            <a href="{{url_for('auth.login')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
-                <i class="fa-solid fa-user"></i> Iniciar Sesión
-            </a>
-            <a href="{{url_for('auth.register')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
-                <i class="fa-solid fa-user-plus"></i> Crear Cuenta
-            </a>
-                
-            {% endif %}
-            
-
-            {% if not current_user.is_authenticated or current_user.rol=='client'%}
-            <a href="{{url_for('cart.cart')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
-                <i class="fa-solid fa-cart-shopping"></i> Carrito
-            </a>  
-            {% elif current_user.is_authenticated and current_user.rol=='admin' %}
-            <a href="{{url_for('admin.panel')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
-                <i class="fa-solid fa-pen-to-square"></i> Admin
-            </a>  
-            {% endif %}
-        </nav>
-    </header>
-    
     
     <!-- El cuerpo del html -->
     {% block body %} 
@@ -128,62 +51,11 @@
     {% endblock %}
 
     
-    <footer class="bg-[#1B1A1A] text-white w-full flex flex-col items-center px-6 py-8">
-        
-        <div class="w-full max-w-screen-xl flex flex-col lg:flex-row justify-between items-center lg:items-start gap-8 lg:gap-16">
-            <!-- General -->
-            <div class="menus_footer flex flex-col justify-center items-center lg:items-start gap-4 text-center lg:text-left min-w-[180px]">
-                <span class="text-[#C40C0C] font-bold text-[20px] lg:text-[22px] md:text-[25px]">GENERAL</span>
-                <div class="info_footer flex flex-col justify-center items-center lg:items-start gap-3">
-                    <a href="" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">Sobre Nosotros</a>
-                    <a href="" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">Términos y condiciones</a>
-                    <a href="" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">Política de privacidad</a>
-                </div>
-             </div>
-      
-            <!-- Redes Sociales -->
-            <div id="redes_sociales" class="flex flex-col items-center text-center">
-                <a href="">
-                    <img id="logo_footer" src="{{ url_for('static', filename='images/logos/logo.png') }}"  alt="Logo" class="w-[100px] mb-4" />
-                </a>
-                <div class="social-links flex gap-4">
-                    <a href="" class="flex justify-center items-center text-white bg-[#222] border-2 border-[#C40C0C] w-10 h-10 md:w-12 md:h-12 lg:w-[50px] lg:h-[50px] rounded-full hover:text-[#1AA9FF] transition-all duration-300">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="" class="flex justify-center items-center text-white bg-[#222] border-2 border-[#C40C0C] w-10 h-10 md:w-12 md:h-12 lg:w-[50px] lg:h-[50px] rounded-full hover:text-[#e4405f] transition-all duration-300">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="" class="flex justify-center items-center text-white bg-[#222] border-2 border-[#C40C0C] w-10 h-10 md:w-12 md:h-12 lg:w-[50px] lg:h-[50px] rounded-full hover:text-[#69c9d0] transition-all duration-300">
-                        <i class="fab fa-tiktok"></i>
-                    </a>
-                </div>
-            </div>
-      
-            <!--Tiendas -->
-            <div class="menus_footer flex flex-col justify-center items-center lg:items-start gap-4 text-center lg:text-left min-w-[180px]">
-                <span class="text-[#C40C0C] font-bold text-[20px] lg:text-[22px] md:text-[25px]">TIENDAS</span>
-                <div class="info_footer flex flex-col justify-center items-center lg:items-start gap-3">
-                    <a href="#" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">
-                        <i class="fa-solid fa-location-dot text-[#b0b0b0] mr-1"></i> Valencia
-                    </a>
-                    <a href="#" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">
-                        <i class="fa-solid fa-location-dot text-[#b0b0b0] mr-1"></i> Madrid
-                    </a>
-                    <a href="#" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">
-                        <i class="fa-solid fa-location-dot text-[#b0b0b0] mr-1"></i> Barcelona
-                    </a>
-                </div>
-            </div>
-        </div>
-      
-        <!-- Copyright -->
-        <div class="w-full mt-8 pt-4 border-t border-[#333] text-center text-[#777] text-[14px]">
-          &copy; 2025 KraftBoost. Todos los derechos reservados.
-        </div>
-    </footer>
+    {% include 'footer.html' %}
 
     <!-- Script -->
     <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
 
 </body>
 </html>
+

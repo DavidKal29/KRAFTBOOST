@@ -3,29 +3,31 @@ from models.ModelUser import ModelUser
 
 class CartService:
 
+    #Método para mostrar todos los productos en el carrito
     @classmethod
     def showAllProductsInCart(cls,db,id_usuario):
         try:
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
 
-            #Obtenemos el stock y el precio del producto requerido
+            #Obtenemos los datos requeridos para mostrar en el carrito
             sql='''
                 SELECT p.id, p.nombre, p.imagen, p.stock, c.cantidad, c.precio FROM carrito c
                 INNER JOIN productos p
                 ON c.id_producto=p.id
                 WHERE id_usuario=%s
             '''
-
-            print('El sql:',sql)
             cursor.execute(sql,(id_usuario,))
           
             row=cursor.fetchall()
 
             #Si hay resultados
             if row:
+
+                #Creamos la lista de productos
                 productos_carrito=[]
 
+                #Recorremos los productos y los metemos en esa lista
                 for product in row:
                     id=product[0]
                     nombre=product[1]
@@ -36,6 +38,7 @@ class CartService:
                 
                     productos_carrito.append(CartProduct(id,nombre,imagen,cantidad,precio,stock))
 
+                #Devolvemos los productos
                 return productos_carrito
 
             #Sino, devolvemos None
@@ -46,24 +49,25 @@ class CartService:
         #Si hay errores, devolvemos None
         except Exception as error:
             print(error)
-            print('Usuario sin productos + error en la consola')
+            print('Usuario sin productos en el carrito')
             return None
         
 
 
+    #Metodos para mostrar el sumario(subtotal)
     @classmethod
     def showSumario(cls,db,id_usuario):
         try:
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
 
-            #Obtenemos el stock y el precio del producto requerido
+            #Obtenemos la suma del precio de todos los productos del carrito de un usuario
             sql='SELECT SUM(precio) FROM carrito WHERE id_usuario=%s'
             cursor.execute(sql,(id_usuario,))
           
             row=cursor.fetchone()
 
-            #Si hay resultados
+            #Si hay resultados devolvemos el subtotal
             if row:
                 subtotal=row[0]
 
@@ -77,18 +81,18 @@ class CartService:
         #Si hay errores, devolvemos None
         except Exception as error:
             print(error)
-            print('Usuario sin productos + error en la consola')
+            print('Usuario sin productos en el carrito')
             return None
 
 
-
+    #Metodo para añadir productos al carrito
     @classmethod
     def addProductCart(cls,db,id_usuario,id_producto):
         try:
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
 
-            #Obtenemos el stock y el precio del producto requerido
+            #Obtenemos el stock,precio y el estado del producto requerido
             sql='SELECT stock,precio,activo FROM productos WHERE id=%s'
             cursor.execute(sql,(id_producto,))
 
@@ -100,10 +104,10 @@ class CartService:
                 precio=row[1]
                 activo=row[2]
 
+                #Si no esta activo impedimos la compra
                 if activo==0:
                     return None
                 
-
                 #Si el stock es 0, no permitimos añadir al carrito
                 if stock==0:
                     print('Sin stock')
@@ -150,13 +154,14 @@ class CartService:
             return None
         
     
+    #Metodo para quitar uno de cantidad al producto del carrito
     @classmethod
     def removeOneProductCart(cls,db,id_usuario,id_producto):
         try:
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
 
-            #Obtenemos el stock y el precio del producto requerido
+            #Obtenemos el stock,precio y estado del producto requerido
             sql='SELECT precio,activo FROM productos WHERE id=%s'
             cursor.execute(sql,(id_producto,))
 
@@ -167,6 +172,7 @@ class CartService:
                 precio=row[0]
                 activo=row[1]
 
+                #Si no está activo impedimos la compra
                 if activo==0:
                     return None
 
@@ -214,10 +220,11 @@ class CartService:
         #Si hay errores, devolvemos None
         except Exception as error:
             print(error)
-            print('Producto no añadido')
+            print('Producto no decrementado')
             return None
         
 
+    #Metodo para quitar el producto del carrito
     @classmethod
     def removeProductCart(cls,db,id_usuario,id_producto):
         try:
@@ -234,6 +241,7 @@ class CartService:
             if row:
                 activo=row[1]
 
+                #Si no esta activo impedimos la compra
                 if activo==0:
                     return None
 
@@ -249,15 +257,12 @@ class CartService:
 
                     sql='DELETE FROM carrito WHERE id_usuario=%s and id_producto=%s'
                     cursor.execute(sql,(id_usuario,id_producto))
-                    db.connection.commit()
-
                     
 
                     #Añadimos 1 al stock del producto requerido
                     sql='UPDATE productos SET stock=stock+%s WHERE id=%s'
                     cursor.execute(sql,(cantidad,id_producto))
                     db.connection.commit()
-
                     #Devolvemos True para indicar que todo salio bien
                     return True
 
@@ -273,7 +278,7 @@ class CartService:
         #Si hay errores, devolvemos None
         except Exception as error:
             print(error)
-            print('Producto no añadido')
+            print('Producto no borrado')
             return None
     
 
@@ -281,6 +286,8 @@ class CartService:
     @staticmethod
     def generar_numero_pedido(id_pedido):
         import random
+
+        #Es un numero de letras y numeros random mas el id del pedido al final
         nums='1234567890'
         letras='ABCDEFGHIJKLMNOPRSTUVWXYZ'
         numero=''
@@ -323,10 +330,8 @@ class CartService:
                 cursor=db.connection.cursor()
                 
                 #Creamos el pedido con los datos requeridos
-                sql='INSERT INTO pedidos (precio_total,id_usuario,nombre_destinatario,domicilio,localidad,puerta,codigo_postal,enviado) VALUES (%s,%s,%s,%s,%s,%s,%s,True)'
+                sql='INSERT INTO pedidos (precio_total,id_usuario,nombre_destinatario,domicilio,localidad,puerta,codigo_postal,enviado) VALUES (%s,%s,%s,%s,%s,%s,%s,False)'
                 cursor.execute(sql,(precio_total,id,direccion.nombre_destinatario,direccion.domicilio,direccion.localidad,direccion.puerta,direccion.codigo_postal))
-                db.connection.commit()
-
                 
                 #Obtenemos el id del pedido
                 sql='SELECT id FROM pedidos ORDER BY fecha_compra DESC LIMIT 1'
@@ -340,7 +345,7 @@ class CartService:
                 #Actualizamos el numero_pedido del pedido
                 sql='UPDATE pedidos SET numero_pedido=%s WHERE id=%s'
                 cursor.execute(sql,(numero_pedido,id_pedido))
-                db.connection.commit()
+                
                 
                 #Obtenemos todos los productos del carrito del usuario
                 sql='SELECT id_producto,cantidad,precio FROM carrito WHERE id_usuario=%s'
@@ -362,7 +367,6 @@ class CartService:
                     sql='INSERT INTO detalles_pedido (id_pedido,id_producto,cantidad,precio) VALUES(%s,%s,%s,%s)'
                     cursor.execute(sql,(id_pedido,id_producto,cantidad,precio))
                 
-                db.connection.commit()
 
                 
                 #Finalmente, borramos el carrito
@@ -381,7 +385,7 @@ class CartService:
 
         #Si hay errores, devolvemos None
         except Exception as error:
-            db.connection.rollback() #Deshacer todo lo cambiado
+            db.connection.rollback() #Deshacer todo lo cambiado si fallamos
             print(error)
             print('Pedido no realizado')
             return None

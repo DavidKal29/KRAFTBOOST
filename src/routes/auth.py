@@ -1,4 +1,4 @@
-from flask import Blueprint,redirect,url_for,render_template,request,current_app,flash
+from flask import Blueprint,redirect,url_for,render_template,request,current_app,flash,abort
 from flask_login import login_user,current_user
 from models.ModelUser import ModelUser
 from models.entities.User import User
@@ -15,12 +15,21 @@ from formularios_WTF.forms import Register,Login,EmailRecuperacion,ChangePasswor
 auth_bp=Blueprint('auth',__name__,url_prefix='/auth')
 
 
+#Ruta de /auth
 @auth_bp.route('/',methods=['GET','POST'])
 def auth():
-    return redirect(url_for('auth.login'))
+    try:
+        #Retornamos a login
+        return redirect(url_for('auth.login'))
+    
+    #Cualquier otro error, 404
+    except Exception as error:
+        print('ERROR DETECTADO EN /auth')
+        print(error)
+        abort(404)
 
 
-
+#Ruta de login
 @auth_bp.route('/login',methods=['GET','POST'])
 def login():
     try:
@@ -45,14 +54,16 @@ def login():
 
             #Si el usuario fue encontrado
             if logged_user:
-                #Si si contraseña está bine
+                #Si si contraseña está bien
                 if logged_user.password:
                     #Lo logueamos y llevamos a perfil dependiendo del rol
                     login_user(logged_user)
 
+                    #Si es admin lo lleva a admin
                     if logged_user.rol=='admin':
                         return redirect(url_for('admin.admin'))
                     
+                    #Si es cliente, lo lleva al perfil
                     if logged_user.rol=='client':
                         return redirect(url_for('profile.profile'))
                           
@@ -72,22 +83,27 @@ def login():
         else:
             #Si estamos logueados
             if current_user.is_authenticated:
-                #Redirijir a perfil
-                return redirect(url_for('profile.profile'))
+                #Si es admin lo lleva a admin
+                    if current_user.rol=='admin':
+                        return redirect(url_for('admin.admin'))
+                    
+                    #Si es cliente, lo lleva al perfil
+                    if current_user.rol=='client':
+                        return redirect(url_for('profile.profile'))
             #Sino
             else:
                 #Redirijir a login otra vez
                 return render_template('auth/login.html',form=form)
     
-    #Cualquier otro error, al home
+    #Cualquier otro error, 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /auth/login')
         print(error)
-        return redirect(url_for('home.home'))
+        abort(404)
     
 
 
-
+#Ruta de register
 @auth_bp.route('/register',methods=['GET','POST'])
 def register():
     try:
@@ -133,24 +149,29 @@ def register():
             
             
         else:
-            #SI estamos logueados
+            #Si estamos logueados
             if current_user.is_authenticated:
-                #Redirijir a perfil
-                return redirect(url_for('profile.profile'))
+                #Si es admin lo lleva a admin
+                    if current_user.rol=='admin':
+                        return redirect(url_for('admin.admin'))
+                    
+                    #Si es cliente, lo lleva al perfil
+                    if current_user.rol=='client':
+                        return redirect(url_for('profile.profile'))
             
             #Sino
             else:
                 #Redirijir a register
                 return render_template('auth/register.html',form=form)
     
-    #Cualquier error nos lleva a home
+    #Cualquier otro error, 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /auth/register')
         print(error)
-        return redirect(url_for('home.home'))
+        abort(404)
     
 
-
+#Ruta de olvidaste contraseña
 @auth_bp.route('/forgot_password',methods=['GET','POST'])
 def forgot_password():
     try:
@@ -173,7 +194,7 @@ def forgot_password():
             #Si hay validacion avisa que se envió el correo
             if validation:
 
-                #Pasamos el email, tiempo de exp y el secret key
+                #Pasamos el email, tiempo de exp y el secret key(el None es el step, que en este caso no hace falta)
                 token=TokenManager.create_token(email,2,current_app.config['JWT_SECRET_KEY_RESET_PASSWORD'],None)
 
                 #Enviamos el email
@@ -195,21 +216,26 @@ def forgot_password():
         else:
             #Si estamos logueados
             if current_user.is_authenticated:
-                #Redirijir a perfil
-                return redirect(url_for('profile.profile'))
+                #Si es admin lo lleva a admin
+                    if current_user.rol=='admin':
+                        return redirect(url_for('admin.admin'))
+                    
+                    #Si es cliente, lo lleva al perfil
+                    if current_user.rol=='client':
+                        return redirect(url_for('profile.profile'))
             #Sino
             else:
                 #Redirijir a forgot password otra vez
                 return render_template('auth/forgot_password.html',form=form)
     
-    #Cualquier otro error, al home
+    #Cualquier otro error, 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /auth/forgot_password')
         print(error)
-        return redirect(url_for('home.home'))
+        abort(404)
     
 
-
+#Ruta cambiar contraseña
 @auth_bp.route('/reset_password/<token>',methods=['GET','POST'])
 def reset_password(token):
     try:
@@ -265,20 +291,24 @@ def reset_password(token):
             
             #Si estamos logueados
             if current_user.is_authenticated:
-                #Redirijir a perfil
-                return redirect(url_for('profile.profile'))
+                #Si es admin lo lleva a admin
+                    if current_user.rol=='admin':
+                        return redirect(url_for('admin.admin'))
+                    
+                    #Si es cliente, lo lleva al perfil
+                    if current_user.rol=='client':
+                        return redirect(url_for('profile.profile'))
             #Sino
             else:
                 
                 #Redirijir a forgot password otra vez
                 return render_template('auth/reset_password.html',form=form,token=token)
     
-    #Cualquier otro error, al home
+    #Cualquier otro error, 404
     except Exception as error:
-        
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO /auth/reset_password')
         print(error)
-        return render_template('token_error.html')
+        abort(404)
 
 
             

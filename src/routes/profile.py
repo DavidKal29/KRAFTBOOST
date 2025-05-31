@@ -7,6 +7,7 @@ from models.entities.Address import Address
 from models.entities.User import User
 from models.entities.Order import Order
 from models.ModelOrder import ModelOrder
+from werkzeug.exceptions import HTTPException
 
 
 profile_bp=Blueprint('profile',__name__,url_prefix='/profile')
@@ -25,7 +26,24 @@ def client_required():
 #Ruta raiz
 @profile_bp.route('/',methods=['GET','POST'])
 def profile():
-    return redirect(url_for('profile.account'))
+    try:
+        check=client_required()
+        if check!=True:
+            return check
+        
+        else:
+            #Redirijimos a la cuenta del cliente
+            return redirect(url_for('profile.account'))
+        
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
+    #Cualquier otro error, 404
+    except Exception as error:
+        print('ERROR DETECTADO EN /admin')
+        print(error)
+        abort(404)
 
 
 
@@ -65,6 +83,7 @@ def account():
                 #Si los datos han sido cambiados
                 if datos_cambiados:
                     print('Datos cambaidos con exitillo')
+                    flash('Datos cambiados con éxito')
 
                     return redirect(url_for('profile.account'))
 
@@ -79,12 +98,15 @@ def account():
                 return render_template('profile/account.html',form=form,datos=datos)
     
     
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /profile/account')
         print(error)
         abort(404)
-
 
 
 @profile_bp.route('/delete_account',methods=['GET'])
@@ -111,9 +133,13 @@ def delete_account():
                 flash('Error al borrar al usuario')
                 return redirect(url_for('profile.account'))
 
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /profile/delete_account')
         print(error)
         abort(404)
 
@@ -158,6 +184,7 @@ def address():
                 #Si la direccion se ha asignado correctamente
                 if direccion_asignada:
                     print('Direccion asignada con exitillo')
+                    flash('Datos cambiados con éxito')
 
                     return redirect(url_for('profile.address'))
 
@@ -170,9 +197,13 @@ def address():
             else:
                 return render_template('profile/address.html',form=form,direccion_antigua=direccion_antigua)
     
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /profile/address')
         print(error)
         abort(404)
 
@@ -196,6 +227,7 @@ def delete_address():
 
             #Si fue borrada, mostramos el fomulario vacio
             if direccion_eliminada:
+                flash('Dirección borrada con éxito')
                 return redirect(url_for('profile.address'))
             
             #Sino, indicamos el error
@@ -204,9 +236,13 @@ def delete_address():
                 return redirect(url_for('profile.address'))
       
     
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /profile/delete_address')
         print(error)
         abort(404)
 
@@ -231,9 +267,13 @@ def favorites():
             return render_template('profile/favorites.html',productos=productos)
             
 
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /profile/favorites')
         print(error)
         abort(404)
 
@@ -257,7 +297,7 @@ def addFavorites(id):
             if agregado:
                 #Si es true, mostramos el mensaje de añadido
                 if agregado==True:
-                    flash('Producto añadido a Favoritos')
+                    return redirect(url_for('profile.favorites'))
                 
                 #Sino, mostramos el mensaje de error que nos llega del metodo addFavorites
                 else: 
@@ -267,13 +307,16 @@ def addFavorites(id):
             
             #Sino mostramos el mensaje de error
             else:
-                flash('Error al añadir producto')
                 return redirect(url_for('product.product',id=id))
             
 
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /profile/addFavorites')
         print(error)
         abort(404)
 
@@ -312,12 +355,15 @@ def deleteFavorites(id):
                 return redirect(url_for('product.product',id=id))
             
 
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /profile/deleteFavorites')
         print(error)
         abort(404)
-
 
 
 #Ruta de Pedidos
@@ -338,9 +384,13 @@ def orders():
             return render_template('profile/orders.html',pedidos=pedidos)
             
 
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /profile/orders')
         print(error)
         abort(404)
 
@@ -372,9 +422,13 @@ def order(num):
                 abort(404)
             
 
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /profile/order')
         print(error)
         abort(404)
 
@@ -403,9 +457,13 @@ def delete_order(id):
                 abort(404)
             
 
+    #Si cae en 401
+    except HTTPException as http_err:
+        raise http_err
+    
     #Cualquier error nos lleva a 404
     except Exception as error:
-        print('ERROR DETECTADO EN LA CONSOLA')
+        print('ERROR DETECTADO EN /profile/delete_order')
         print(error)
         abort(404)
 

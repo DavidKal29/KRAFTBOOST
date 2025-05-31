@@ -3,7 +3,6 @@ from models.entities.Product import Product
 
 class ModelProduct():
 
-
     #Función basica para mostrar productos en inicio
     @classmethod
     def mostrar_productos(cls,db,order):
@@ -69,8 +68,7 @@ class ModelProduct():
                 WHERE f.id_usuario=%s
                 ORDER BY f.id DESC
                 LIMIT 12
-            '''
-            
+            ''' 
 
             #Ejecutamos la consulta
             cursor.execute(sql,(id_usuario,))
@@ -104,13 +102,14 @@ class ModelProduct():
             return None
         
 
+    #Metodo para ver si un producto está en la lista de favoritos de un usuario
     @classmethod
     def checkFavorite(cls,db,id_usuario,id_producto):
         try:
             #Se abre un cursor con la conexion a la db y se crea la consulta sql
             cursor=db.connection.cursor()
 
-             #Vemos a ver si ese producto ya está en favoritos
+            #Vemos a ver si ese producto ya está en favoritos
             sql='SELECT id_producto FROM favoritos WHERE id_producto=%s and id_usuario=%s'
             cursor.execute(sql,(id_producto,id_usuario))
 
@@ -119,11 +118,10 @@ class ModelProduct():
             #Si el producto existe en favoritos, retornamos true
             if existe and existe[0]:
                 cursor.close()
-
                 return True
             
+            #Sino None
             else:
-
                 cursor.close()
                 return None
 
@@ -134,21 +132,32 @@ class ModelProduct():
             return None
         
         
-
+    #Metodo para añadir a favoritos
     @classmethod
     def addFavorites(cls,db,id_usuario,id_producto):
         try:
             #Se abre un cursor con la conexion a la db y se crea la consulta sql
             cursor=db.connection.cursor()
 
-             #Vemos a ver si ese producto ya está en favoritos
-            sql='SELECT id_producto FROM favoritos WHERE id_producto=%s and id_usuario=%s'
-            cursor.execute(sql,(id_producto,id_usuario))
+            existe=cls.checkFavorite(db,id_usuario,id_producto)
 
-            existe=cursor.fetchone()
+            #Vemos si el producto está activo y si no es asi no dejamos añadirlo
+            sql='SELECT activo FROM productos WHERE id=%s'
+            cursor.execute(sql,(id_producto,))
+
+            resultado=cursor.fetchone()
+
+            if resultado and resultado[0]:
+                activo=resultado[0]
+
+                if activo==0:
+                    return None
+            
+            else:
+                return None
 
             #Si el producto existe en favoritos, no dejamos añadirlo
-            if existe and existe[0]:
+            if existe:
                 cursor.close()
                 return 'El producto ya está en tu lista de favoritos'
 
@@ -158,10 +167,13 @@ class ModelProduct():
 
             cantidad=cursor.fetchone()
 
+            #Si la cantidad es mayor o igual a 12 no permitimos añadir más
             if cantidad and cantidad[0]>=12:
-                #Si la cantidad es mayor o igual a 12 no permitimos añadir más
                 cursor.close()
                 return 'Solo puedes tener 12 productos en favoritos'
+            
+
+            
                     
                       
             #Insertamos en la tabla favoritos, los ids del producto y usuario
@@ -178,6 +190,7 @@ class ModelProduct():
             return None
         
 
+    #Metodo para borrar favoritos de la lista
     @classmethod
     def deleteFavorites(cls,db,id_usuario,id_producto):
         try:
@@ -214,17 +227,16 @@ class ModelProduct():
         #Dividiremos el search en palabras que usaremos para 
         # buscar el nombre del producto utilizando likes
         terminos=search.split()
-        print('Los terminos primeros',terminos)
 
-        #Manejar terminos que tengan el numero y 
-        # los kilos igual, tipo '20kilos' o '10kg'
+       
         for i in range(len(terminos)):
-            #Casos en los que kg va separado
+            
+            #Si la palabra kilo no esta junto al numero (20 kilos o 20 kg)
             if ('kilo' in terminos[i] or 'kg' in terminos[i]) and terminos[i].isalpha():
                 terminos[i]='kg'
 
             
-            #Casos en los que kg va junto
+            #Si la palabra kilo y el numero estan juntos (20kilos o 20kg) 
             if ('kilo' in terminos[i] or 'kg' in terminos[i]) and not terminos[i].isalpha() and not terminos[i].isdigit():
                 
                 #Vamos recorriendo el termino, metiendo en 
@@ -232,23 +244,30 @@ class ModelProduct():
                 numeros=[]
                 numero=''
                 
+                #Recorremos los terminos
                 for p in terminos[i]:
+
+                    #Si el p es un numero o un punto, concatenamos a numero
                     if p.isdigit() or p=='.':
                         numero+=p
 
+                    #Sino, nos hemos encontrado una letra, añadimos a la lista de numeros el numero
                     else:
                         numeros.append(numero)
                         numero=''
                 
+                #Appendeamos el ultimo numero
                 numeros.append(numero)
 
+                #Añadimos a los terminos todos los numeros
                 for n in numeros:
                     terminos.append(n)
-                    
+
+                #Hacemos que el termino se vuelva '', luego sera filtrado  
                 terminos[i]=''
 
 
-        #Reemplazamos las comas por puntos, para los decimales
+        #Reemplazamos las comas por puntos, para los floats
         terminos[i]=terminos[i].replace(',','.')
                 
         #Comprobamos si un termino es un float o no
@@ -261,17 +280,17 @@ class ModelProduct():
                 #Si no es un float, tiene letras
                 print('No es un float')
                 
-                #Vemos si el termino tiene carácteres molestos
+                #Si no es un alfanumerico, quiere decir que tiene caracteres raros
                 if not terminos[i].isalnum():
                     print('Contiene terminos raros')
 
-                    #Creo una lista solo con caracteres normales y los junto con join
+                    #Creamo una lista solo con caracteres normales y los juntamos con join
                     terminos[i]=''.join([p for p in terminos[i] if p.isalnum()])
 
+                #Con esto, evitamos palabras tipo d#isco o cosas raras
 
-        #Recorremos los terminos, para ver si se han puesto cosas, 
-        # que deberian arrojar resultados pero por no ser escritos 
-        # como estan en la db, se reemplazan.
+
+        #Terminos que podrian escribirse mal y no se rencontrado
         reglas={
             'rodilleras':['rodill'],
             'coderas':['cod'],
@@ -287,12 +306,12 @@ class ModelProduct():
             'kettlebell':['ruso', 'rusa','ketlebel']
         }
 
-        
-        #Recorrer todos los terminos
+       
+        #Recorremos todos los terminos
         for i in range(len(terminos)):
-            #Recorrer el dicionario reglas
+            #Recorremos el dicionario de reglas
             for nuevo_valor, patrones in reglas.items():
-                #Recorremos los diferentes patrones
+                #Recorremos la lista de cada clave
                 for patron in patrones:
                     #Si el patron esta dentro de un termino sustituimos
                     if patron in terminos[i]:
@@ -308,13 +327,11 @@ class ModelProduct():
 
 
         
-
         #Si hay palabras inutiles que molestan a la hora de filtrar, las borramos
         for i in range(len(terminos)-1,-1,-1):
-            if terminos[i] in ['','de', 'o', 'en', 'la', 'el', 'los', 'las', 'y', 'a', 'para', 'por', 'con', 'un', 'una', 'unos', 'unas']:
+            if terminos[i] in ['','de','o','en','la','el','los','las','y','a','para','por','con','un','una','unos','unas']:
                 del terminos[i]
-
-                
+     
 
         #Variable para ver si hay numeros o decimales
         hay_numeros=False
@@ -334,11 +351,10 @@ class ModelProduct():
                 except:
                     print('No es un numero')
 
-
         
         #Si hay numeros, borramos todos los terminos que sean kg, 
         # para evitar que al hacer la consulta, pille todos los 
-        # productos que tengan kg
+        # productos que tengan kg en el nombre
         if hay_numeros:
             for i in range(len(terminos)-1,-1,-1):
                 if terminos[i]=='kg':
@@ -352,7 +368,7 @@ class ModelProduct():
     
     
         
-    #Metodo para construir el where de la consulta para msotrar productos
+    #Metodo para construir el where de la consulta para mostrar los productos
     @classmethod
     def construir_where(cls,parametros,categorias,admin=False):
         
@@ -398,7 +414,7 @@ class ModelProduct():
 
                 #Recorre los terminos
                 for termino in terminos:
-                    #Si es un número, añade a las condiciones_numeros con el kg
+                    #Si es un número, añade a las condiciones_numeros
                     if termino.isdigit():
                     
                         condiciones_numeros.append("p.nombre LIKE '%% {}kg%%'".format(termino))
@@ -425,6 +441,7 @@ class ModelProduct():
                             elif termino in ['domyos','maniak','corength','e-series','kraftboost','tunturi']:
                                 condiciones_marcas.append("p.nombre LIKE '%%{}%%'".format(termino))
 
+                            #Si es un material lo añade a condiciones_materiales
                             elif termino in ['inclinado','plano','abierto','cuerda','metal','neutro','unilateral','estrecho','gironda','hierro','goma','metalico']:
                                 condiciones_materiales.append("p.nombre LIKE '%%{}%%'".format(termino))
 
@@ -451,10 +468,12 @@ class ModelProduct():
                     condiciones.append('({})'.format(' OR '.join(condiciones_kilos)))
             
             
-            #si hay condiciones, mete un WHERE y luego, los 
+            #Si hay condiciones, mete un WHERE y luego, los 
             # strings separados por ands usando el join
             if condiciones:
                 
+                #Si el admin es False, quiere decir que los productos los 
+                # veran los clientes, y solo odeben ver los activos
                 if not admin:
                     condiciones=' WHERE p.activo=1 AND '+' AND '.join(condiciones)
                 else:
@@ -464,9 +483,10 @@ class ModelProduct():
                 
                 return condiciones
                 
-                
+            #Si no hay condicones devuelve nada 
             return ''
         
+        #Si no hay parametros devuelve nada
         return ''
 
 
@@ -478,16 +498,26 @@ class ModelProduct():
             #Se abre un cursor con la conexion a la db
             cursor=db.connection.cursor()
         
+            #Consulta base
             sql='SELECT COUNT(*) FROM productos p'
-            #Añado al sql, las condiciones del where
+            
+            #Dependiendo de si admin es True o False, pasamos al metodo construir where el admin
             if not admin:
                 condiciones=cls.construir_where(parametros,categorias)
             else:
                 condiciones=cls.construir_where(parametros,categorias,admin=True)
-                
+
+            #Añadimos als condicones al sql  
             sql+=condiciones
 
-            print('El sql final dsde mostrar contador:',sql)
+            #Si no hay condicones, y no es para el admin, 
+            # añadimos que se muestren solo los productos 
+            # activos
+            if not condiciones:
+                if not admin:
+                    sql+=' WHERE p.activo=1'
+
+            print('El sql final desde mostrar contador:',sql)
             
             #Ejecutamos la consulta
             cursor.execute(sql)
@@ -495,13 +525,12 @@ class ModelProduct():
 
             #Si hay resultados obtendrémos el count
             if resultados:
-
                 cursor.close()
                 return resultados[0][0]
                  
+            
             #Si no hay resultados, retornamos None    
             else:
-
                 cursor.close()
                 return None
         
@@ -514,7 +543,6 @@ class ModelProduct():
         
 
     
-
     #Funcion para /shop, donde se mostraran los productos y se filtraran con LIMIT y OFFSET
     # para que se muestren asi con la paginación
     @classmethod
@@ -532,7 +560,8 @@ class ModelProduct():
             offset=(page-1)*productos_por_pagina
             
 
-            #Montamos la consulta base
+            #Montamos la consulta base, que si es para el admin tendra 
+            # nombre de marca y categoria, ventas, activo, etc...
             if not admin:
                 sql='SELECT id,nombre,precio,imagen FROM productos p'
             else:
@@ -545,13 +574,18 @@ class ModelProduct():
                 '''
 
 
-            #Añado al sql, las condiciones del where
+            #Dependiendo de si admin es True o False, pasamos al metodo construir where el admin
             if not admin:
                 condiciones=cls.construir_where(parametros,categorias)
             else:
                 condiciones=cls.construir_where(parametros,categorias,admin=True)
+
+            #Añadimos las condicones al sql
             sql+=condiciones
 
+            #Si no hay condicones, y no es para el admin, 
+            # añadimos que se muestren solo los productos 
+            # activos
             if not condiciones:
                 if not admin:
                     sql+=' WHERE p.activo=1'
@@ -582,6 +616,7 @@ class ModelProduct():
             if resultados:
                 productos=[]
 
+
                 if not admin:
                     for resultado in resultados:
                         
@@ -593,7 +628,7 @@ class ModelProduct():
                         productos.append(Product(id,nombre, precio, None, None, None, imagen))
                 
                 else:
-                    print('Estamos ante el admin, obteniendo todito')
+                    #Si es para el admin, añadimos mas datos
                     for resultado in resultados:
                         id=resultado[0]
                         nombre=resultado[1]
@@ -604,7 +639,6 @@ class ModelProduct():
                         marca=resultado[6]
                         categoria=resultado[7]
                     
-
                         productos.append(Product(id,nombre,precio,marca,categoria,0,0,stock,ventas,activo))
 
                 cursor.close()
@@ -622,7 +656,7 @@ class ModelProduct():
             return None
         
     
-
+    #Metodo para mostrar la informacion de u nproducto en su pagina 
     @classmethod
     def mostrar_producto_info(cls,db,id):
 
@@ -638,7 +672,7 @@ class ModelProduct():
                 FROM productos p
                 INNER JOIN marcas m ON p.id_marca=m.id
                 INNER JOIN categorias c ON p.id_categoria=c.id
-                WHERE p.id=%s;
+                WHERE p.id=%s and p.activo=1;
             '''
 
             #Ejecutamos
@@ -730,40 +764,38 @@ class ModelProduct():
             return None
         
 
-    #Función para mostrar un producto
+    #Función para editar un producto
     @classmethod
     def setProduct(cls,db,product):
         try:
             #Se abre un cursor con la conexion a la db y se crea la consulta sql
             cursor=db.connection.cursor()
 
+            #Actualizamos los campos requeridos en el producto
             sql='UPDATE productos SET nombre=%s,stock=%s,precio=%s,descripcion=%s,id_marca=%s,id_categoria=%s WHERE id=%s'
-
-            
             cursor.execute(sql,(product.nombre,product.stock,product.precio,product.descripcion,product.nombre_marca,product.nombre_categoria,product.id))
             db.connection.commit()
             
             return True
            
-        
-        #Si hay errores, devolvemos None tambien
+        #Si hay errores, devolvemos None
         except Exception as error:
             print(error)
             return None
         
         
-        
-
+    #Funcion para activar/desactivar un producto
     @classmethod
     def setActiveProduct(cls,db,id):
         try:
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
 
-            #Montamos y ejecutamos la instruccion que activará el producto
+            #Actualizamos el activo en el producto
             sql='UPDATE productos SET activo=NOT activo WHERE id=%s'
             cursor.execute(sql,(id,))
 
+            #Obtenemos el activo
             sql='SELECT activo FROM productos WHERE id=%s'
             cursor.execute(sql,(id,))
 
@@ -773,9 +805,10 @@ class ModelProduct():
                 activo=resultados[0]
                 print('El activo',activo)
 
+            #SI el producto está desactivado
             if activo==0:
             
-                #Obtenemos la suma de todos los productos
+                #Obtenemos la suma de la cantidad de los productos que estan en carrito
                 sql='SELECT SUM(cantidad) FROM carrito WHERE id_producto=%s'
                 cursor.execute(sql,(id,))
 
@@ -794,6 +827,11 @@ class ModelProduct():
                 sql='DELETE FROM carrito WHERE id_producto=%s'
                 cursor.execute(sql,(id,))
 
+            
+                #Borramos tambien los productos de favoritos
+                sql='DELETE FROM favoritos WHERE id_producto=%s'
+                cursor.execute(sql,(id,))
+
             db.connection.commit()
 
             return True
@@ -804,19 +842,3 @@ class ModelProduct():
             print('Error al activar/desactivar el producto')
             print(error)
             return None
-        
-        
-
-
-
-
-
-
-
-
-
-    
-
-
-
-

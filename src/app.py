@@ -29,7 +29,7 @@ load_dotenv()
 app=Flask(__name__)
 
 #Establecemos la configuración de la app
-app.config.from_object(config['development'])
+app.config.from_object(config['production'])
 
 #Conexión de la base de datos
 db=MySQL(app)
@@ -72,6 +72,13 @@ def error_404(error):
 #Registramos en el manejador de errores el 404 en flask
 app.register_error_handler(404,error_404)
 
+#Pagina 401
+def error_401(error):
+    return render_template('401.html')
+
+#Registramos en el manejador de errores el 401 en flask
+app.register_error_handler(401,error_401)
+
 
 #Utilizamos el contexto de la app porque estamos haciendo una consulta fuera de las rutas
 with app.app_context():
@@ -101,8 +108,6 @@ with app.app_context():
         }
 
         
-
-
         #Lo guardamos en config para que desde los bp se pueda acceder
         app.config['marcas']=marcas
         app.config['categorias']=categorias

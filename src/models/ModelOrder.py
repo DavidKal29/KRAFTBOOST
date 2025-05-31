@@ -3,6 +3,7 @@ from models.entities.Order import Order
 
 class ModelOrder:
 
+    #Metodo para mostrar los pedidos del usuario
     @classmethod
     def showOrders(cls,db,id_usuario):
         try:
@@ -42,41 +43,34 @@ class ModelOrder:
         
         #Cualquier error distitno, None también        
         except Exception as error:
-            print('Error al obtener el email')
+            print('Error al obtener los pedidos')
             print(error)
             return None
         
 
-    
+    #Metodo para obtener los productos de un pedido
     @classmethod
     def getOrderProducts(cls,db,id_pedido):
         try:
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
-
-            print(1)
-
-            print('el id delpedido:',id_pedido)
             
+            #Obtenemos todos los datos de los productos
             sql='''
                 SELECT p.nombre,p.imagen,dp.cantidad,dp.precio FROM productos p
                 INNER JOIN detalles_pedido dp
                 ON p.id=dp.id_producto
                 WHERE dp.id_pedido=%s
             '''
-
             cursor.execute(sql,(id_pedido,))
 
             row=cursor.fetchall()
-            print(row)
             
             #Si hay resultados, recorremos los productos, 
             # los metemos en una lista y devolvemos esa lista
             if row:
 
                 productos=[]
-
-                print(4)
 
                 for p in row:
                     nombre=p[0]
@@ -85,12 +79,10 @@ class ModelOrder:
                     precio=p[3]
 
                     productos.append(CartProduct(0,nombre,imagen,cantidad,precio))
-
-                
+ 
                 cursor.close()
 
                 return productos
-
 
             #Sino, retornamos None
             else:
@@ -100,14 +92,14 @@ class ModelOrder:
         
         #Cualquier error distitno, None también        
         except Exception as error:
-            print('Error al obtener el email')
+            print('Error al obtener los productos del pedido')
             print(error)
             return None
         
 
 
     
-    
+    #Metodo para mostrar todos los datos de un pedido(al abrirlo en el perfil)
     @classmethod
     def showFullOrder(cls,db,id_usuario,num):
         try:
@@ -120,8 +112,7 @@ class ModelOrder:
 
             row=cursor.fetchone()
             
-            #Si hay resultados, recorremos los pedidos, 
-            # los metemos en una lista y devolvemos esa lista
+            #Si hay resultados, enviamos el pedido con sus datos
             if row:
                 id=row[0]
                 fecha_compra=row[1]
@@ -133,8 +124,6 @@ class ModelOrder:
                 puerta=row[8]
                 codigo_postal=row[9]
                 enviado=row[10]
-
-                print(id,fecha_compra,numero_pedido,precio_total,nombre_destinatario,domicilio,localidad,puerta,codigo_postal,enviado)
 
                 order=Order(id,fecha_compra,numero_pedido,precio_total,enviado,nombre_destinatario,domicilio,localidad,puerta,codigo_postal)
 
@@ -150,13 +139,13 @@ class ModelOrder:
         
         #Cualquier error distitno, None también        
         except Exception as error:
-            print('Error al obtener el email')
+            print('Error al obtener el pedido')
             print(error)
             return None
         
 
 
-    
+    #Metodo para borrar un pedido
     @classmethod
     def deleteOrder(cls,db,id_usuario,id_pedido):
         try:
@@ -166,7 +155,6 @@ class ModelOrder:
             #Montamos y ejecutamos la instruccion que borrará los detalles del pedido
             sql='DELETE FROM detalles_pedido WHERE id_pedido=%s'
             cursor.execute(sql,(id_pedido,))
-            db.connection.commit()
 
             
             #Montamos y ejecutamos la instruccion que borrará el pedido
@@ -179,7 +167,7 @@ class ModelOrder:
         
         #Cualquier error distitno, None también        
         except Exception as error:
-            print('Error al obtener el email')
+            print('Error al borrar el pedido')
             print(error)
             return None
         
@@ -187,6 +175,9 @@ class ModelOrder:
 
 ##########################################################################################
 #Metodos del modo admin
+    
+    
+    #Metodo para mostrar todos los pedidos de todos los usuarios
     @classmethod
     def showAllOrders(cls,db,id_usuario=None):
         try:
@@ -201,11 +192,12 @@ class ModelOrder:
                 ON p.id_usuario=u.id
             '''
 
+            #Si se ha especificado el id del usuario, mostramos solo los de ese usuario
             if id_usuario:
                 sql+=' WHERE id_usuario=%s ORDER BY id DESC'
                 cursor.execute(sql,(id_usuario,))
 
-
+            #Sino nada, añadimos el order para ver los mas recientes
             else:
                 sql+=' ORDER BY id DESC'
                 cursor.execute(sql)
@@ -247,7 +239,7 @@ class ModelOrder:
         
 
 
-
+    #Metodo para obtener todos los datos de un pedido para el admin
     @classmethod
     def showFullOrderAdmin(cls,db,id):
         try:
@@ -292,11 +284,14 @@ class ModelOrder:
         
         #Cualquier error distitno, None también        
         except Exception as error:
-            print('Error al obtener el pedido')
+            print('Error al obtener lod datos del pedido')
             print(error)
             return None
         
 
+    
+        
+    #Metodo para borar un pedido desde el admin
     @classmethod
     def deleteOrderAdmin(cls,db,id_pedido):
         try:
@@ -306,9 +301,7 @@ class ModelOrder:
             #Montamos y ejecutamos la instruccion que borrará los detalles del pedido
             sql='DELETE FROM detalles_pedido WHERE id_pedido=%s'
             cursor.execute(sql,(id_pedido,))
-            db.connection.commit()
 
-            
             #Montamos y ejecutamos la instruccion que borrará el pedido
             sql='DELETE FROM pedidos WHERE id=%s'
             cursor.execute(sql,(id_pedido,))
@@ -324,13 +317,13 @@ class ModelOrder:
             return None
         
 
+    #Metodo para activar/desactivar el estado de enviado de un pedido
     @classmethod
     def setEnviadoOrder(cls,db,id):
         try:
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
 
-            
             #Montamos y ejecutamos la instruccion que cambiara el estado de enviado del pedido
             sql='UPDATE pedidos SET enviado=NOT enviado WHERE id=%s'
             cursor.execute(sql,(id,))
@@ -341,7 +334,6 @@ class ModelOrder:
         
         #Cualquier error distitno, None también        
         except Exception as error:
-            print('Error al activar el producto')
+            print('Error al setear el producto')
             print(error)
             return None
-        

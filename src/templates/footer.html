@@ -1,0 +1,53 @@
+<footer class="bg-[#1B1A1A] text-white w-full flex flex-col items-center px-6 py-8">
+        
+        <div class="w-full max-w-screen-xl flex flex-col lg:flex-row justify-between items-center lg:ml-12 lg:items-start gap-8 lg:gap-16">
+            <!-- General -->
+            <div class="menus_footer flex flex-col justify-center items-center lg:items-start gap-4 text-center lg:text-left min-w-[180px]">
+                <span class="text-[#C40C0C] font-bold text-[20px] lg:text-[22px] md:text-[25px]">GENERAL</span>
+                <div class="info_footer flex flex-col justify-center items-center lg:items-start gap-3">
+                    <a href="" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">Sobre Nosotros</a>
+                    <a href="" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">Términos y condiciones</a>
+                    <a href="" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">Política de privacidad</a>
+                </div>
+             </div>
+      
+            <!-- Redes Sociales -->
+            <div id="redes_sociales" class="flex flex-col items-center text-center">
+                <a href="">
+                    <img id="logo_footer" src="{{ url_for('static', filename='images/logos/logo.png') }}"  alt="Logo" class="w-[100px] mb-4" />
+                </a>
+                <div class="social-links flex gap-4">
+                    <a href="" class="flex justify-center items-center text-white bg-[#222] border-2 border-[#C40C0C] w-10 h-10 md:w-12 md:h-12 lg:w-[50px] lg:h-[50px] rounded-full hover:text-[#1AA9FF] transition-all duration-300">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="" class="flex justify-center items-center text-white bg-[#222] border-2 border-[#C40C0C] w-10 h-10 md:w-12 md:h-12 lg:w-[50px] lg:h-[50px] rounded-full hover:text-[#e4405f] transition-all duration-300">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="" class="flex justify-center items-center text-white bg-[#222] border-2 border-[#C40C0C] w-10 h-10 md:w-12 md:h-12 lg:w-[50px] lg:h-[50px] rounded-full hover:text-[#69c9d0] transition-all duration-300">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </div>
+            </div>
+      
+            <!--Tiendas -->
+            <div class="menus_footer flex flex-col justify-center items-center lg:items-start gap-4 text-center lg:text-left min-w-[180px]">
+                <span class="text-[#C40C0C] font-bold text-[20px] lg:text-[22px] md:text-[25px]">TIENDAS</span>
+                <div class="info_footer flex flex-col justify-center items-center lg:items-start gap-3">
+                    <a href="#" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">
+                        <i class="fa-solid fa-location-dot text-[#b0b0b0] mr-1"></i> Valencia
+                    </a>
+                    <a href="#" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">
+                        <i class="fa-solid fa-location-dot text-[#b0b0b0] mr-1"></i> Madrid
+                    </a>
+                    <a href="#" class="text-[#b0b0b0] font-bold hover:text-[#C40C0C] transition-colors duration-300 text-[15px] md:text-[18px]">
+                        <i class="fa-solid fa-location-dot text-[#b0b0b0] mr-1"></i> Barcelona
+                    </a>
+                </div>
+            </div>
+        </div>
+      
+        <!-- Copyright -->
+        <div class="w-full mt-8 pt-4 border-t border-[#333] text-center text-[#777] text-[14px]">
+          &copy; 2025 KraftBoost. Todos los derechos reservados.
+        </div>
+    </footer>
