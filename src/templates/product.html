@@ -43,8 +43,8 @@
         
         {% if not current_user.is_authenticated or current_user.rol=='client'%}
           {% if producto.stock==0 %}
-          <div class="w-full bg-[#C40C0C] text-white rounded py-3 font-bold text-[16px] text-center">
-            Sin Stock <i class="fa-solid fa-xmark"></i>
+          <div class="w-full border-[4px] border-[#C40C0C] text-[#C40C0C] rounded py-3 font-bold text-[16px] text-center">
+            Agotado
           </div>
           {% else %}
           <a onclick="desactivar(this)" href="{{url_for('cart.cart',action='add',id_producto=producto.id)}}" class="w-full bg-[#C40C0C] text-white rounded py-3 font-bold text-[16px] text-center">

@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField,EmailField,PasswordField,SubmitField,IntegerField,DecimalField,TextAreaField,SelectField
 from flask_wtf.file import FileField,FileRequired,FileAllowed
-from wtforms.validators import DataRequired,Length,EqualTo,Email,ValidationError,NumberRange
+from wtforms.validators import DataRequired,Length,EqualTo,Email,ValidationError,NumberRange,InputRequired
 import re
 import unidecode
 
@@ -260,11 +260,12 @@ class ProductForm(FlaskForm):
     categoria=SelectField('Categoría',choices=categoria_choices,coerce=int)
 
     precio=DecimalField('Precio',validators=[
-        DataRequired(message="Este campo es obligatorio")
+        InputRequired(message="Este campo es obligatorio")
     ])
 
     stock=IntegerField('Stock',validators=[
-        DataRequired(message="Este campo es obligatorio")
+        InputRequired(message="Este campo es obligatorio"),
+        NumberRange(min=0),
     ])
 
     descripcion=TextAreaField('Descripcion',validators=[
