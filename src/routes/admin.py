@@ -149,17 +149,7 @@ def delete_account():
         abort(404)
 
 
-#Ruta inical del panel de los admins
-@admin_bp.route('/panel',methods=['GET'])
-def panel():
-    try:
-        return redirect(url_for('admin.users'))
-    
-    #Cualquier error nos lleva a 404
-    except Exception as error:
-        print('ERROR DETECTADO EN /admin/panel')
-        print(error)
-        abort(404)
+
 
 
 #Ruta para ver a todos los usuarios

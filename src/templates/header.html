@@ -24,7 +24,7 @@
             
             {% if current_user.is_authenticated %}
                 <div id="botones" class="flex space-x-4">
-                    <a href="{% if current_user.rol=='admin' %}{{ url_for('admin.account') }}{% else %}{{ url_for('profile.profile') }}{% endif %}"><button class="bg-transparent text-white rounded px-[16px] py-[8px] font-bold text-[14px] border-[2px] border-white"><i class="fa-solid fa-user"></i> {{current_user.username}}</button></a>
+                    <a href="{% if current_user.rol=='admin' %}{{ url_for('admin.account') }}{% else %}{{ url_for('profile.account') }}{% endif %}"><button class="bg-transparent text-white rounded px-[16px] py-[8px] font-bold text-[14px] border-[2px] border-white"><i class="fa-solid fa-user"></i> {{current_user.username}}</button></a>
                     <a href="{{url_for('logout.logout')}}"><button class="bg-[#C40C0C] text-white rounded px-[16px] py-[8px] font-bold text-[14px]"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button></a>
                 </div>
                 
@@ -46,7 +46,7 @@
 
         {% elif current_user.is_authenticated and current_user.rol=='admin' %}
         <!-- Icono Panel -->
-         <a href="{{url_for('admin.panel')}}" class="hidden lg:flex text-white text-[25px] hover:text-[#C40C0C] duration-[0.5s]"><i class="fa-solid fa-pen-to-square"></i></a>
+         <a href="{{url_for('admin.users')}}" class="hidden lg:flex text-white text-[25px] hover:text-[#C40C0C] duration-[0.5s]"><i class="fa-solid fa-pen-to-square"></i></a>
 
         {% endif %}
         
@@ -66,7 +66,7 @@
             </a>
 
             {% if current_user.is_authenticated %}
-                <a href="{% if current_user.rol=='admin' %}{{ url_for('admin.account') }}{% else %}{{ url_for('profile.profile') }}{% endif %}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
+                <a href="{% if current_user.rol=='admin' %}{{ url_for('admin.account') }}{% else %}{{ url_for('profile.account') }}{% endif %}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
                     <i class="fa-solid fa-user"></i> {{current_user.username}}
                 </a>
                 <a href="{{url_for('logout.logout')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
@@ -90,7 +90,7 @@
                 <i class="fa-solid fa-cart-shopping"></i> Carrito
             </a>  
             {% elif current_user.is_authenticated and current_user.rol=='admin' %}
-            <a href="{{url_for('admin.panel')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
+            <a href="{{url_for('admin.users')}}" class="text-white text-[16px] sm:text-[16px] md: lg:text-[30px] font-bold transition duration-200 min-[568px]:text-[14px]">
                 <i class="fa-solid fa-pen-to-square"></i> Admin
             </a>  
             {% endif %}
