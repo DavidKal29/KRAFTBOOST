@@ -11,14 +11,6 @@
 
         {{ form.hidden_tag() }}
 
-        {% with messages=get_flashed_messages() %}
-            {% if messages %}
-                {% for msg in messages %}
-                    <span class="text-[#C40C0C] text-md font-semibold text-center">¡{{msg}}!</span>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
         <!-- Nombre y Apellidos -->
         <div class="flex flex-col min-[568px]:flex-row justify-center items-center gap-4 min-[568px]:gap-2 w-full">
             <!-- Nombre -->

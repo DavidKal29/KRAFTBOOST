@@ -14,16 +14,6 @@
         
         <!-- Hidden Tag -->
         {{ form.hidden_tag() }}
-
-        <!-- Errores -->
-        {% with messages=get_flashed_messages() %}
-            {% if messages %}
-                {% for msg in messages %}
-                    <span class="text-[#C40C0C] text-md font-semibold text-center">¡{{msg}}!</span>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    
         
         
         <!-- Nombre Destinatario -->

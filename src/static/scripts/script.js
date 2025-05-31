@@ -60,3 +60,14 @@ if (window.location.pathname!='/shop' && window.location.pathname!='/admin/produ
 }
 
   
+
+
+let flashMessages=document.getElementsByClassName('.flash-message');
+    
+    flashMessages.forEach(msg => {
+        // Después de 5 segundos (5000ms), elimina el mensaje
+        setTimeout(() => {
+            msg.remove();
+        }, 5000);
+    
+    });

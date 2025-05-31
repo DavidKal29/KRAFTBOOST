@@ -28,6 +28,22 @@
 <body class="bg-black overflow-x-hidden">
     
     {% include 'header.html' %}
+
+    {% with messages=get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="flash-message fixed top-24 md:top-28 right-4 bg-[#C40C0C] text-white font-bold py-2 px-4 rounded z-1">¡{{msg}}!</div>
+            {% endfor %}
+        <script>
+            setTimeout(() => {
+                let messages=document.getElementsByClassName("flash-message");
+                [...messages].forEach(msg => msg.remove())
+            }, 3000);
+        </script>
+
+        {% endif %}
+    {% endwith %}
+
     
     <!-- El cuerpo del html -->
     {% block body %} 
@@ -42,3 +58,4 @@
 
 </body>
 </html>
+
