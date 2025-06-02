@@ -190,6 +190,13 @@ def edit_user(id):
             return check
         
         else:    
+
+            if str(id)==str(current_user.id):
+                print('El id es igual al del admin')
+                return redirect(url_for('admin.account'))
+            
+            print('El id no es igual')
+
             #Obtenemos el cursor de la db y el formulario de datos de cuenta
             db=current_app.config['db']
             form=Account()
@@ -255,6 +262,12 @@ def delete_user(id):
             return check
         
         else:
+
+            if str(id)==str(current_user.id):
+                print('El id es igual al del admin')
+                return redirect(url_for('admin.account'))
+            
+            print('El id no es igual')
             
             #Obtenemos el cursor de la db
             db=current_app.config['db']
@@ -369,10 +382,14 @@ def order(id):
             #Obtenemos el pedido
             pedido=ModelOrder.showFullOrderAdmin(db,id)
 
+            print('El pedido existe mira',pedido)
+
             #Si existe el pedido
             if pedido:
                 #Obtenemos los productos comprados en el pedido
                 productos=ModelOrder.getOrderProducts(db,id)
+
+                print('El productos existen mira',productos)
 
                 #Obtenemos la ruta desde donde ha llegado la peticion para redirijir ahi
                 referrer=request.referrer
