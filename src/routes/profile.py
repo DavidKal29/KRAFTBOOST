@@ -326,6 +326,7 @@ def addFavorites(id):
 @profile_bp.route('/deleteFavorites/<id>',methods=['GET'])
 def deleteFavorites(id):
     try:
+        print('El id',id)
         check=client_required()
         if check!=True:
             return check
@@ -341,7 +342,7 @@ def deleteFavorites(id):
             if borrado:
 
                 #Si estamos en la pagina del producto, msotramos el mensaje de borrado
-                if '/product' in request.referrer:
+                if request.referrer and '/product' in request.referrer:
                     flash('Producto quitado de Favoritos')
                     return redirect(url_for('product.product',id=id))
                 
