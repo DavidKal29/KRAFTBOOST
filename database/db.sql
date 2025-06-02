@@ -1,5 +1,7 @@
+DROP DATABASE IF EXISTS kraftboost;
+CREATE DATABASE kraftboost;
+USE kraftboost;
 
-USE bkdelw9t0gmsep2zaa4h;
 
 CREATE TABLE usuarios (
 	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -305,5 +307,3 @@ INSERT INTO usuarios (
 );
 
 -- Contraseña del admin: admin12345
-
-ALTER TABLE carrito ADD UNIQUE(id_usuario, id_producto);
