@@ -82,8 +82,12 @@ def account():
 
                 #Si los datos han sido cambiados
                 if datos_cambiados:
-                    print('Datos cambaidos con exitillo')
-                    flash('Datos cambiados con éxito')
+                    if datos_cambiados=='Datos iguales':
+                        print('Los datos son iguales')
+                        flash('Los datos son iguales')
+
+                    else:
+                        flash('Datos cambiados con éxito')
 
                     return redirect(url_for('profile.account'))
 
@@ -183,8 +187,12 @@ def address():
 
                 #Si la direccion se ha asignado correctamente
                 if direccion_asignada:
-                    print('Direccion asignada con exitillo')
-                    flash('Datos cambiados con éxito')
+                    if direccion_asignada=='Datos iguales':
+                        print('Los datos son iguales')
+                        flash('Los datos son iguales')
+
+                    else:
+                        flash('Datos cambiados con éxito')
 
                     return redirect(url_for('profile.address'))
 
