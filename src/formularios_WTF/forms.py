@@ -24,7 +24,7 @@ def validar_year(form, field):
 
     year_actual=datetime.now().year
 
-    if field.data<year_actual:
+    if field.data<year_actual or field.data>2030:
         raise ValidationError('Año de expiración inválido')
     
 def validar_mes(form, field):
@@ -50,7 +50,16 @@ def validar_letras(form,field):
 #Validador de digitos
 def validar_digitos(form,field):
     if not field.data.isdigit():
-        raise ValidationError('Este campo solo puede tener digitos')
+        raise ValidationError('Este campo solo puede tener dígitos')
+
+    if field.data=='0':
+        raise ValidationError('Este campo no puede ser cero')
+
+    if field.data.lstrip('0')=='':
+        raise ValidationError('No puede contener solo ceros')
+
+    if field.data!=str(int(field.data)):
+        raise ValidationError('No puede empezar con ceros innecesarios')
 
     
 

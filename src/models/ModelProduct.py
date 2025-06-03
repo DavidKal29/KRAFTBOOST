@@ -775,6 +775,11 @@ class ModelProduct():
             sql='UPDATE productos SET nombre=%s,stock=%s,precio=%s,descripcion=%s,id_marca=%s,id_categoria=%s WHERE id=%s'
             cursor.execute(sql,(product.nombre,product.stock,product.precio,product.descripcion,product.nombre_marca,product.nombre_categoria,product.id))
             db.connection.commit()
+
+            print('El row count:',cursor.rowcount)
+
+            if cursor.rowcount==0:
+                return 'Datos iguales'
             
             return True
            

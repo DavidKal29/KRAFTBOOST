@@ -88,8 +88,12 @@ def account():
 
                 #Si los datos han sido cambiados
                 if datos_cambiados:
-                    print('Datos cambaidos con exitillo')
-                    flash('Datos cambiados con éxito')
+                    if datos_cambiados=='Datos iguales':
+                        print('Los datos son iguales')
+                        flash('Los datos son iguales')
+
+                    else:
+                        flash('Datos cambiados con éxito')
 
                     return redirect(url_for('admin.account'))
 
@@ -109,42 +113,6 @@ def account():
     #Cualquier error nos lleva a 404
     except Exception as error:
         print('ERROR EN /admin/account')
-        print(error)
-        abort(404)
-
-
-#Ruta para borrar la cuenta del admin
-@admin_bp.route('/delete_account',methods=['GET'])
-def delete_account():
-    try:
-        check=admin_required()
-        if check!=True:
-            return check
-        
-        else:
-            
-            #Obtenemos el cursor de la db
-            db=current_app.config['db']
-
-            #Eliminamos la cuenta
-            eliminado=ModelUser.deleteAccount(db,current_user.id)
-
-            #Si el usuario fue elimiando, redirijimos a inicio
-            if eliminado:
-                return redirect(url_for('home.home'))
-            
-            #Sino indicamos el error
-            else:
-                flash('Error al borrar al usuario')
-                return redirect(url_for('admin.account'))
-            
-    #Si cae en 401
-    except HTTPException as http_err:
-        raise http_err
-
-    #Cualquier error nos lleva a 404
-    except Exception as error:
-        print('ERROR DETECTADO EN /admin/delete_account')
         print(error)
         abort(404)
 
@@ -190,6 +158,13 @@ def edit_user(id):
             return check
         
         else:    
+
+            if str(id)==str(current_user.id):
+                print('El id es igual al del admin')
+                return redirect(url_for('admin.account'))
+            
+            print('El id no es igual')
+
             #Obtenemos el cursor de la db y el formulario de datos de cuenta
             db=current_app.config['db']
             form=Account()
@@ -220,7 +195,12 @@ def edit_user(id):
 
                 #Si los datos han sido cambiados
                 if datos_cambiados:
-                    flash('Datos cambiados')
+                    if datos_cambiados=='Datos iguales':
+                        print('Los datos son iguales')
+                        flash('Los datos son iguales')
+
+                    else:
+                        flash('Datos cambiados con éxito')
 
                     return redirect(url_for('admin.edit_user',id=id))
 
@@ -255,6 +235,12 @@ def delete_user(id):
             return check
         
         else:
+
+            if str(id)==str(current_user.id):
+                print('El id es igual al del admin')
+                return redirect(url_for('admin.account'))
+            
+            print('El id no es igual')
             
             #Obtenemos el cursor de la db
             db=current_app.config['db']
@@ -369,10 +355,14 @@ def order(id):
             #Obtenemos el pedido
             pedido=ModelOrder.showFullOrderAdmin(db,id)
 
+            print('El pedido existe mira',pedido)
+
             #Si existe el pedido
             if pedido:
                 #Obtenemos los productos comprados en el pedido
                 productos=ModelOrder.getOrderProducts(db,id)
+
+                print('El productos existen mira',productos)
 
                 #Obtenemos la ruta desde donde ha llegado la peticion para redirijir ahi
                 referrer=request.referrer
@@ -514,6 +504,7 @@ def setActiveProduct(id):
 
             #Si el producto fue seteado
             if seteado:
+
                 #Mandamos a los productos o a la ruta desde la que hicimos la peticion
                 return redirect(request.referrer or url_for('admin.products'))
             
@@ -578,7 +569,12 @@ def edit_product(id):
 
                 #Si salio bien todo, mensaje de exito
                 else:
-                    flash('Actualizado con éxito')
+                    if actualizado=='Datos iguales':
+                        print('Los datos son iguales')
+                        flash('Los datos son iguales')
+
+                    else:
+                        flash('Datos cambiados con éxito')
 
                 #Mandamos a la apgina de edicion del producto
                 return redirect(url_for('admin.edit_product',id=id))

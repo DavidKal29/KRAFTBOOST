@@ -6,7 +6,7 @@
 
 <section class="flex flex-col justify-center items-center mt-[80px] md:mt-[120px] mb-12 gap-4">
 
-    <h1 class="text-[#C40C0C] font-bold text-[30px] xl:text-[40px] text-center">Datos de Cuenta</h1>
+    <h1 class="text-white font-bold text-[30px] xl:text-[40px] text-center">Datos de Cuenta</h1>
 
     
     <form action="{{url_for('admin.account')}}" method="post" class="flex flex-col justify-center items-center gap-6 text-white px-4 w-full max-w-[600px]">
@@ -58,14 +58,9 @@
         
         <!-- Botones -->
         <div class="flex flex-col min-[568px]:flex-row justify-center items-center gap-4 min-[568px]:gap-2 w-full">
-            <!-- Borrar Cuenta -->
+            <!-- Guardar los cambios -->
             <div class="flex flex-col w-full">
-                <a href="{{url_for('admin.delete_account')}}" class="cursor-pointer text-white font-bold bg-[#C40C0C] rounded text-center px-4 py-2 w-full">Borrar Cuenta</a>
-            </div>
-
-            <!--  -->
-            <div class="flex flex-col w-full">
-                {{ form.submit(class="cursor-pointer text-[#C40C0C] font-bold bg-white rounded px-4 py-2 w-full") }}
+                {{ form.submit(class="cursor-pointer text-white font-bold bg-[#C40C0C] rounded px-4 py-2 w-full") }}
             </div>
         </div>
         

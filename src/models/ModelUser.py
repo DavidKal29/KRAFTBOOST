@@ -324,6 +324,11 @@ class ModelUser():
                 sql='UPDATE domicilios SET nombre_destinatario=%s,domicilio=%s,localidad=%s,puerta=%s,codigo_postal=%s WHERE id_usuario=%s'
                 cursor.execute(sql,(address.nombre_destinatario,address.domicilio,address.localidad,address.puerta,address.codigo_postal,address.id_usuario))
                 db.connection.commit()
+
+                print('El row count:',cursor.rowcount)
+
+                if cursor.rowcount==0:
+                    return 'Datos iguales'
             
             #Sino, no tiene direccion el usuario
             else:
@@ -378,6 +383,11 @@ class ModelUser():
             sql='UPDATE usuarios SET nombre=%s,apellidos=%s,email=%s,username=%s WHERE id=%s'
             cursor.execute(sql,(user.nombre,user.apellidos,user.email,user.username,user.id))
             db.connection.commit()
+
+            print('El row count:',cursor.rowcount)
+
+            if cursor.rowcount==0:
+                return 'Datos iguales'
 
             #Devolvemos true si todo sale bien
             return True

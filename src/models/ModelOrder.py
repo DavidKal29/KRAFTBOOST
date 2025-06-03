@@ -152,6 +152,18 @@ class ModelOrder:
             #Se abre el cursor de la db
             cursor=db.connection.cursor()
 
+            #Vemos si existe el pedido asociado al user y al pedido
+            sql='SELECT id from pedidos WHERE id_usuario=%s and id=%s'
+            cursor.execute(sql,(id_usuario,id_pedido))
+
+            resultado=cursor.fetchone()
+
+            if not resultado:
+                print('Usuario incorrecto')
+                return None
+        
+
+            print('Usuario correcto')
             #Montamos y ejecutamos la instruccion que borrará los detalles del pedido
             sql='DELETE FROM detalles_pedido WHERE id_pedido=%s'
             cursor.execute(sql,(id_pedido,))
