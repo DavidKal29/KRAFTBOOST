@@ -566,7 +566,7 @@ class ModelProduct():
                 sql='SELECT id,nombre,precio,imagen FROM productos p'
             else:
                 sql='''
-                    SELECT p.id,p.nombre,p.stock,p.precio,p.activo,p.ventas,m.nombre,c.nombre FROM productos p 
+                    SELECT p.id,p.nombre,p.stock,p.precio,p.activo,p.ventas,p.fecha_registro,m.nombre,c.nombre FROM productos p 
                     INNER JOIN marcas m
                     ON p.id_marca=m.id
                     INNER JOIN categorias c
@@ -636,10 +636,11 @@ class ModelProduct():
                         precio=resultado[3]
                         activo=resultado[4]
                         ventas=resultado[5]
-                        marca=resultado[6]
-                        categoria=resultado[7]
+                        fecha_registro=resultado[6]
+                        marca=resultado[7]
+                        categoria=resultado[8]
                     
-                        productos.append(Product(id,nombre,precio,marca,categoria,0,0,stock,ventas,activo))
+                        productos.append(Product(id,nombre,precio,marca,categoria,0,0,stock,ventas,activo,fecha_registro))
 
                 cursor.close()
                 return productos
