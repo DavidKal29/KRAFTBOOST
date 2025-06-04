@@ -117,9 +117,18 @@ def register():
             #Obtenemos todos lod datos del formulario de register
             nombre=request.form.get('nombre')
             apellidos=request.form.get('apellidos')
-            email=request.form.get('email')
-            username=request.form.get('username')
+            email=request.form.get('email').strip().lower()
+            username=request.form.get('username').strip()
             password=request.form.get('password')
+
+            #Limpiamos el nombre
+            nombre=' '.join(nombre.strip().split())
+            nombre=' '.join(letra.capitalize() for letra in nombre.split())
+
+            #Limpiamos los apellidos
+            apellidos=' '.join(apellidos.strip().split())
+            apellidos=' '.join(letra.capitalize() for letra in apellidos.split())
+
 
             print(nombre,apellidos,email,username,password)
 

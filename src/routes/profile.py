@@ -69,9 +69,17 @@ def account():
                 #Obtenemos todos lod datos del formulario
                 nombre=request.form.get('nombre')
                 apellidos=request.form.get('apellidos')
-                email=request.form.get('email')
-                username=request.form.get('username')
-            
+                email=request.form.get('email').strip().lower()
+                username=request.form.get('username').strip().replace(' ','')
+
+                #Limpiamos el nombre
+                nombre=' '.join(nombre.strip().split())
+                nombre=nombre.title()
+
+                #Limpiamos los apellidos
+                apellidos=' '.join(apellidos.strip().split())
+                apellidos=apellidos.title()
+
                 print(nombre,apellidos,email,username)
 
                 datos_nuevos=User(current_user.id,nombre,apellidos,email,username,None,None)
@@ -176,6 +184,18 @@ def address():
                 localidad=request.form.get('localidad')
                 puerta=request.form.get('puerta')
                 codigo_postal=request.form.get('codigo_postal')
+
+                #Limpiamos el nombre del destinatario
+                nombre_destinatario=' '.join(nombre_destinatario.strip().split())
+                nombre_destinatario=nombre_destinatario.title()
+
+                #Limpiamos el domicilio
+                domicilio=' '.join(domicilio.strip().split())
+                domicilio=domicilio.title()
+
+                #Limpiamos la localidad
+                localidad=' '.join(localidad.strip().split())
+                localidad=localidad.title()
 
                 print(nombre_destinatario,domicilio,localidad,puerta,codigo_postal)
 
