@@ -285,6 +285,10 @@ def reset_password(token):
                 else:
                     print('Contraseña cambiada éxito')
                     flash('Contraseña cambiada éxito')
+
+                    #Enviamos el email de confirmacion
+                    MailSender.password_changed(current_app,token_decode['email'])
+                    
                     return render_template('auth/reset_password.html',form=form,token=token)
 
 

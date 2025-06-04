@@ -374,9 +374,12 @@ class CartService:
                 cursor.execute(sql,(id,))
                 db.connection.commit()
 
+
                 cursor.close()
 
-                return True
+                print('El numero de pedido:',numero_pedido)
+
+                return numero_pedido
 
             #Sino, devolvemos None
             else:
@@ -389,3 +392,5 @@ class CartService:
             print(error)
             print('Pedido no realizado')
             return None
+
+

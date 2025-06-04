@@ -4,9 +4,11 @@ from flask_login import current_user
 from formularios_WTF.forms import AddressForm,Payment
 from models.entities.Address import Address
 from models.ModelUser import ModelUser
+from models.ModelOrder import ModelOrder
 from services.CartService import CartService
 
 from utils.TokenManager import TokenManager
+from utils.MailSender import MailSender
 
 from werkzeug.exceptions import HTTPException
 
@@ -171,7 +173,7 @@ def payment(token):
             if token_decode['step']!='payment':
                 abort(404)
             
-            #Obtenemos el cursor de la db y el formulario del register
+            #Obtenemos el cursor de la db y el formulario
             db=current_app.config['db']
             form=Payment()
 
@@ -182,7 +184,30 @@ def payment(token):
             if form.validate() and request.method=='POST':
                 crear_pedido=CartService.makePedido(db,current_user.id)
 
+                #SI se nos devuelve el numero del pedido, el pedido ha sido creado
                 if crear_pedido:
+                    print('Pedido creado')
+                    
+                    numero_pedido=crear_pedido
+                    
+                    #Enviamos el email con los detalles
+                    pedido=ModelOrder.showFullOrder(db,current_user.id,numero_pedido)
+
+                    print('El pedido:',pedido)
+
+                    #Si existe el pedido
+                    if pedido:
+                        #Obtenemos los productos comprados en el pedido
+                        productos=ModelOrder.getOrderProducts(db,pedido.id)
+                        print('Los productos:',productos)
+
+
+                        #Enviamos un email que confirma nuestro pedido
+                        MailSender.confirmOrder(current_app,current_user.email,current_user.username,pedido,productos,request.host_url)
+                    
+                    else:
+                        flash('No se ha podido enviar el correo')
+
                     new_token=TokenManager.create_token(current_user.email,1,current_app.config['JWT_SECRET_KEY_RESET_CART'],'success')
                     return redirect(url_for('checkout.success',token=new_token))
 
@@ -220,8 +245,6 @@ def success(token):
             
             if token_decode['step']!='success':
                 abort(404)
-            
-            print(token_decode)
 
             return render_template('checkout/success.html')
     
