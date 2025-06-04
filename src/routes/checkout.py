@@ -120,6 +120,18 @@ def address(token):
                 puerta=request.form.get('puerta')
                 codigo_postal=request.form.get('codigo_postal')
 
+                #Limpiamos el nombre del destinatario
+                nombre_destinatario=' '.join(nombre_destinatario.strip().split())
+                nombre_destinatario=nombre_destinatario.title()
+
+                #Limpiamos el domicilio
+                domicilio=' '.join(domicilio.strip().split())
+                domicilio=domicilio.title()
+
+                #Limpiamos la localidad
+                localidad=' '.join(localidad.strip().split())
+                localidad=localidad.title()
+
                 print(nombre_destinatario,domicilio,localidad,puerta,codigo_postal)
 
                 #Creamos la direccion con los datos
