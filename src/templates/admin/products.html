@@ -16,6 +16,7 @@
 
 
     <form method="post" action="{{ url_for('admin.products') }}{% if parametros['search'] %}?search={{ parametros['search'] }}{% endif %}" class="flex flex-col  justify-center items-center mb-6 gap-4 lg:gap-8 px-4 w-full xl:px-8">
+        
         <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 justify-center items-center gap-2 sm:gap-3 w-full sm:w-[80%] lg:w-[60%] xl:w-[90%]">
 
 
@@ -50,20 +51,18 @@
                 </select>
             </div>
           
-            <!-- Select Precio -->
+            
+
+            <!-- Select Orden -->
             <div class="flex items-start flex-col w-full">
-                <label for="select_precio" class="text-white font-bold mb-1">Precio:</label>
-                <select name="select_precio" id="select_precio" class="w-full rounded px-4 h-10 font-bold bg-[#1B1A1A] text-white">
-                    <option value="0" {% if not parametros['precio'] %}selected{% endif %}>Cualquiera</option>
-                    {% for clave,valor in precios.items() %}
-                    <option value="{{clave}}" {% if parametros['precio']==clave %}selected{% endif %}>{{valor}}</option>
-                    {% endfor %}
+                <label for="select_orden" class="text-white font-bold mb-1">Orden:</label>
+                <select name="select_orden" id="select_orden" class="w-full rounded px-4 h-10 font-bold bg-[#1B1A1A] text-white">
+                    <option value="masRecientes" {% if orden=='masRecientes' %}selected{% endif %}>Recientes</option>
+                    <option value="topVentas" {% if orden=='topVentas' %}selected{% endif %}>Top Ventas</option>
                 </select>
             </div>
 
             
-              
-
             <div class="flex items-start flex-col w-full mt-2 lg:mt-0">
                 <label class="hidden lg:block opacity-0 mb-1">Label</label>
                 <button  type="submit" class="w-full bg-white text-[#C40C0C] rounded px-4 h-10 font-bold">Filtrar</button>
