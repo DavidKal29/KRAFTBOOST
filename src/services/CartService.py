@@ -38,6 +38,7 @@ class CartService:
                 
                     productos_carrito.append(CartProduct(id,nombre,imagen,cantidad,precio,stock))
 
+                cursor.close()
                 #Devolvemos los productos
                 return productos_carrito
 
@@ -49,6 +50,7 @@ class CartService:
         #Si hay errores, devolvemos None
         except Exception as error:
             print(error)
+            cursor.close()
             print('Usuario sin productos en el carrito')
             return None
         
@@ -67,6 +69,8 @@ class CartService:
           
             row=cursor.fetchone()
 
+            cursor.close()
+
             #Si hay resultados devolvemos el subtotal
             if row:
                 subtotal=row[0]
@@ -81,6 +85,7 @@ class CartService:
         #Si hay errores, devolvemos None
         except Exception as error:
             print(error)
+            cursor.close()
             print('Usuario sin productos en el carrito')
             return None
 
@@ -106,11 +111,13 @@ class CartService:
 
                 #Si no esta activo impedimos la compra
                 if activo==0:
+                    cursor.close()
                     return None
                 
                 #Si el stock es 0, no permitimos añadir al carrito
                 if stock==0:
                     print('Sin stock')
+                    cursor.close()
                     return 'Sin stock'
                 
                 #Consultamos a ver si el producto ya fue añadido al carrito antes
@@ -139,6 +146,8 @@ class CartService:
                 cursor.execute(sql,(id_producto,))
                 db.connection.commit()
 
+                cursor.close()
+
                 #Devolvemos true para indicar que todo salió bien
                 return True
             
@@ -150,6 +159,7 @@ class CartService:
         #Si hay errores, devolvemos None
         except Exception as error:
             print(error)
+            cursor.close()
             print('Producto no añadido')
             return None
         
@@ -174,6 +184,7 @@ class CartService:
 
                 #Si no está activo impedimos la compra
                 if activo==0:
+                    cursor.close()
                     return None
 
                 #Consultamos a ver si el producto ya fue añadido al carrito antes
@@ -205,6 +216,8 @@ class CartService:
                     #Commiteamos todo
                     db.connection.commit()
 
+                    cursor.close()
+
                     #Devolvemos True para indicar que todo salio bien
                     return True
 
@@ -220,6 +233,7 @@ class CartService:
         #Si hay errores, devolvemos None
         except Exception as error:
             print(error)
+            cursor.close()
             print('Producto no decrementado')
             return None
         
@@ -243,6 +257,7 @@ class CartService:
 
                 #Si no esta activo impedimos la compra
                 if activo==0:
+                    cursor.close()
                     return None
 
                 #Consultamos a ver si el producto ya fue añadido al carrito antes
@@ -263,6 +278,9 @@ class CartService:
                     sql='UPDATE productos SET stock=stock+%s WHERE id=%s'
                     cursor.execute(sql,(cantidad,id_producto))
                     db.connection.commit()
+                    
+                    cursor.close()
+                    
                     #Devolvemos True para indicar que todo salio bien
                     return True
 
@@ -278,6 +296,7 @@ class CartService:
         #Si hay errores, devolvemos None
         except Exception as error:
             print(error)
+            cursor.close()
             print('Producto no borrado')
             return None
     

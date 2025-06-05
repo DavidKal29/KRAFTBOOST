@@ -47,6 +47,10 @@ class ModelOrder:
             print(error)
             return None
         
+        finally:
+            if cursor:
+                cursor.close()
+        
 
     #Metodo para obtener los productos de un pedido
     @classmethod
@@ -96,6 +100,10 @@ class ModelOrder:
             print(error)
             return None
         
+        finally:
+            if cursor:
+                cursor.close()
+        
 
 
     
@@ -143,6 +151,10 @@ class ModelOrder:
             print(error)
             return None
         
+        finally:
+            if cursor:
+                cursor.close()
+        
 
 
     #Metodo para borrar un pedido
@@ -159,6 +171,7 @@ class ModelOrder:
             resultado=cursor.fetchone()
 
             if not resultado:
+                cursor.close()
                 print('Usuario incorrecto')
                 return None
         
@@ -174,6 +187,8 @@ class ModelOrder:
             cursor.execute(sql,(id_usuario,id_pedido))
             db.connection.commit()
 
+            cursor.close()
+
             return True
         
         
@@ -182,6 +197,10 @@ class ModelOrder:
             print('Error al borrar el pedido')
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
         
 
 
@@ -249,6 +268,10 @@ class ModelOrder:
             print(error)
             return None
         
+        finally:
+            if cursor:
+                cursor.close()
+        
 
 
     #Metodo para obtener todos los datos de un pedido para el admin
@@ -278,10 +301,6 @@ class ModelOrder:
                 codigo_postal=row[9]
                 enviado=row[10]
 
-                print(id,fecha_compra,numero_pedido,precio_total,nombre_destinatario,domicilio,localidad,puerta,codigo_postal,enviado)
-
-
-
                 order=Order(id,fecha_compra,numero_pedido,precio_total,enviado,nombre_destinatario,domicilio,localidad,puerta,codigo_postal)
 
                 cursor.close()
@@ -299,6 +318,10 @@ class ModelOrder:
             print('Error al obtener lod datos del pedido')
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
         
 
     
@@ -319,6 +342,8 @@ class ModelOrder:
             cursor.execute(sql,(id_pedido,))
             db.connection.commit()
 
+            cursor.close()
+
             return True
         
         
@@ -327,6 +352,10 @@ class ModelOrder:
             print('Error al borrar el pedido')
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
         
 
     #Metodo para activar/desactivar el estado de enviado de un pedido
@@ -341,6 +370,8 @@ class ModelOrder:
             cursor.execute(sql,(id,))
             db.connection.commit()
 
+            cursor.close()
+
             return True
         
         
@@ -349,3 +380,7 @@ class ModelOrder:
             print('Error al setear el producto')
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()

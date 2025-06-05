@@ -38,3 +38,7 @@ class ModelBrand():
         except Exception as error:
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()

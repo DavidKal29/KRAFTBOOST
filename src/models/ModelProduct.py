@@ -52,6 +52,10 @@ class ModelProduct():
             print(error)
             return None
         
+        finally:
+            if cursor:
+                cursor.close()
+        
 
     #Función basica para mostrar productos en inicio
     @classmethod
@@ -101,6 +105,10 @@ class ModelProduct():
             print(error)
             return None
         
+        finally:
+            if cursor:
+                cursor.close()
+        
 
     #Metodo para ver si un producto está en la lista de favoritos de un usuario
     @classmethod
@@ -131,6 +139,10 @@ class ModelProduct():
             print(error)
             return None
         
+        finally:
+            if cursor:
+                cursor.close()
+        
         
     #Metodo para añadir a favoritos
     @classmethod
@@ -151,9 +163,11 @@ class ModelProduct():
                 activo=resultado[0]
 
                 if activo==0:
+                    cursor.close()
                     return None
             
             else:
+                cursor.close()
                 return None
 
             #Si el producto existe en favoritos, no dejamos añadirlo
@@ -172,14 +186,13 @@ class ModelProduct():
                 cursor.close()
                 return 'Solo puedes tener 12 productos en favoritos'
             
-
-            
-                    
-                      
+          
             #Insertamos en la tabla favoritos, los ids del producto y usuario
             sql='INSERT INTO favoritos (id_usuario,id_producto) VALUES (%s,%s)'
             cursor.execute(sql,(id_usuario,id_producto))
             db.connection.commit()
+
+            cursor.close()
 
             return True
 
@@ -188,6 +201,10 @@ class ModelProduct():
         except Exception as error:
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
         
 
     #Metodo para borrar favoritos de la lista
@@ -202,13 +219,20 @@ class ModelProduct():
             cursor.execute(sql,(id_producto,id_usuario))
             db.connection.commit()
 
+            cursor.close()
+
             return True
 
            
         #Si hay errores, devolvemos None tambien
         except Exception as error:
             print(error)
+            cursor.close()
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
 
 
     
@@ -539,6 +563,10 @@ class ModelProduct():
         except Exception as error:
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
     
         
 
@@ -616,7 +644,6 @@ class ModelProduct():
             if resultados:
                 productos=[]
 
-
                 if not admin:
                     for resultado in resultados:
                         
@@ -655,6 +682,10 @@ class ModelProduct():
         except Exception as error:
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
         
     
     #Metodo para mostrar la informacion de u nproducto en su pagina 
@@ -712,6 +743,10 @@ class ModelProduct():
             print(error)
             return None
         
+        finally:
+            if cursor:
+                cursor.close()
+        
 
 ###################################################################################################
 #Metodos para modo admin
@@ -764,6 +799,10 @@ class ModelProduct():
             print(error)
             return None
         
+        finally:
+            if cursor:
+                cursor.close()
+        
 
     #Función para editar un producto
     @classmethod
@@ -780,7 +819,10 @@ class ModelProduct():
             print('El row count:',cursor.rowcount)
 
             if cursor.rowcount==0:
+                cursor.close()
                 return 'Datos iguales'
+            
+            cursor.close()
             
             return True
            
@@ -788,6 +830,10 @@ class ModelProduct():
         except Exception as error:
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
         
         
     #Funcion para activar/desactivar un producto
@@ -840,6 +886,8 @@ class ModelProduct():
 
             db.connection.commit()
 
+            cursor.close()
+
             return True
         
         
@@ -848,3 +896,7 @@ class ModelProduct():
             print('Error al activar/desactivar el producto')
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()

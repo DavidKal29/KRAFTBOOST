@@ -47,6 +47,10 @@ class ModelUser():
             print('Usuario no ha sido logueado')
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
 
     #Método para registrar usuarios tanto clientes como admins
     @classmethod
@@ -97,6 +101,10 @@ class ModelUser():
             print('Usuario no ha sido registrado')
             return None
         
+        finally:
+            if cursor:
+                cursor.close()
+        
 
     #Método para obtener el usuario por el id en el user loader
     @classmethod
@@ -139,6 +147,10 @@ class ModelUser():
             print(error)
             return None
         
+        finally:
+            if cursor:
+                cursor.close()
+        
 
     #Metodo para borrar la cuenta
     @classmethod
@@ -164,6 +176,8 @@ class ModelUser():
             sql='DELETE FROM usuarios WHERE id=%s'
             cursor.execute(sql,(id,))
             db.connection.commit()
+
+            cursor.close()
             
             return True
 
@@ -173,6 +187,10 @@ class ModelUser():
             print('Error al borrar al usuario')
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
     
 
     #Método para validar el email que se introduce al recuerar contraseña
@@ -214,6 +232,10 @@ class ModelUser():
             print('Error al obtener el email')
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
 
 
     #Método para cambiar la contraseña 
@@ -238,6 +260,7 @@ class ModelUser():
             #Si la contraseña antigua y la nueva son iguales, no 
             # cambiamos nada y mandamos el mensaje de que son iguales
             if check_password_hash(old_password, new_password):
+                cursor.close()
                 return 'Contraseñas iguales'
             
             #Encriptamos la contraseña para mandarla encriptada a la db
@@ -247,6 +270,7 @@ class ModelUser():
             sql='UPDATE usuarios SET password=%s WHERE email=%s'
             cursor.execute(sql,(new_password,email))
             db.connection.commit()
+            cursor.close()
 
             #Devolvemos true si todo sale bien
             return True
@@ -257,6 +281,10 @@ class ModelUser():
             print('Error al cambiar password')
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
     
     
 
@@ -300,6 +328,10 @@ class ModelUser():
             print('Error al obtener la direccion')
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
 
     
     #Metodo para cambiar la direccion de envio
@@ -328,6 +360,7 @@ class ModelUser():
                 print('El row count:',cursor.rowcount)
 
                 if cursor.rowcount==0:
+                    cursor.close()
                     return 'Datos iguales'
             
             #Sino, no tiene direccion el usuario
@@ -336,6 +369,8 @@ class ModelUser():
                 sql='INSERT INTO domicilios (nombre_destinatario,domicilio,localidad,puerta,codigo_postal,id_usuario) VALUES(%s,%s,%s,%s,%s,%s)'
                 cursor.execute(sql,(address.nombre_destinatario,address.domicilio,address.localidad,address.puerta,address.codigo_postal,address.id_usuario))
                 db.connection.commit()
+            
+            cursor.close()
             
             #Devolvemos true si todo sale bien
             return True
@@ -346,6 +381,10 @@ class ModelUser():
             print('Error al cambiar direccion')
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
         
 
     #Metodo para borrar la direccion de envio
@@ -360,6 +399,8 @@ class ModelUser():
             sql='DELETE FROM domicilios WHERE id_usuario=%s'
             cursor.execute(sql,(id,))
             db.connection.commit()
+
+            cursor.close()
             
             return True
 
@@ -369,6 +410,10 @@ class ModelUser():
             print('Error al borrar la dirección')
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
         
 
     #Metodo para editar los datos del usuario
@@ -387,7 +432,10 @@ class ModelUser():
             print('El row count:',cursor.rowcount)
 
             if cursor.rowcount==0:
+                cursor.close()
                 return 'Datos iguales'
+            
+            cursor.close()
 
             #Devolvemos true si todo sale bien
             return True
@@ -398,6 +446,10 @@ class ModelUser():
             print('Error al cambiar los datos de cuenta')
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
         
 
 ########################################################################################
@@ -448,6 +500,10 @@ class ModelUser():
             print('Error al obtener los usuarios')
             print(error)
             return None
+
+        finally:
+            if cursor:
+                cursor.close()
             
 
     #Metodo para obtener los datos de un usuario para el admin
@@ -486,4 +542,8 @@ class ModelUser():
             print('Error al obtener al usuario')
             print(error)
             return None
+        
+        finally:
+            if cursor:
+                cursor.close()
 
