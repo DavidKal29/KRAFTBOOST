@@ -106,7 +106,7 @@ def account():
 
                 #Sino indicamos el error
                 else:
-                    flash('Error al cambiar los datos de cuenta')
+                    flash('Email o Username ya están en uso')
                     return render_template('admin/account.html',form=form,datos=datos)
 
             #Sino      
@@ -221,7 +221,7 @@ def edit_user(id):
 
                 #Sino indicamos el error
                 else:
-                    flash('Error al cambiar los datos de cuenta')
+                    flash('Email o Username ya están en uso')
                     return render_template('admin/editUser.html',form=form,datos=datos)
 
 
