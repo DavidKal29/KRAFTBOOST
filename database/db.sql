@@ -298,12 +298,18 @@ Oxylane, distribuido por la marca Domyos.', 'images/productos/bancos/banco_multi
 ('Banda 60kg Corength', 50, 29.99, 6, 4, 'Banda elástica de 60 kilogramos. Ideal para entrenamientos dinámicos y de fuerza . Distribuido por la marca Corength.', 'images/productos/bandas elasticas/banda_60kg.png');
 
 
-INSERT INTO usuarios (
-    nombre, apellidos, email, username, password, rol
-) VALUES (
-    'Admin', 'Principal', 'admin@admin.com', 'admincillo08',
-    'scrypt:32768:8:1$i2eSxFilsgxQYEAE$f306961759e42931aab784b7835b4773f2de8a9433a8d0f9975da78dbd97f3aea4a2a4fc7ce19c6f12024c79d4e1cfee058c35b64cab87554ef29d5dba2d14c1',
-    'admin'
-);
+-- Para evitar duplicados en el carrito
+ALTER TABLE carrito ADD UNIQUE(id_usuario, id_producto);
 
--- Contraseña del admin: admin12345
+
+
+-- Para insertar al admin
+-- INSERT INTO usuarios (
+--     nombre, apellidos, email, username, password, rol
+-- ) VALUES (
+--     'Admin', 'Principal', 'kraftboost@gmail.com', 'admincillo08',
+--     'scrypt:32768:8:1$i2eSxFilsgxQYEAE$f306961759e42931aab784b7835b4773f2de8a9433a8d0f9975da78dbd97f3aea4a2a4fc7ce19c6f12024c79d4e1cfee058c35b64cab87554ef29d5dba2d14c1',
+--     'admin'
+-- );
+
+-- -- Contraseña del admin: admin12345
