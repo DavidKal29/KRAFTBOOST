@@ -52,6 +52,7 @@ class ModelProduct():
             print(error)
             return None
         
+        
 
     #Función basica para mostrar productos en inicio
     @classmethod
@@ -151,9 +152,11 @@ class ModelProduct():
                 activo=resultado[0]
 
                 if activo==0:
+                    cursor.close()
                     return None
             
             else:
+                cursor.close()
                 return None
 
             #Si el producto existe en favoritos, no dejamos añadirlo
@@ -172,14 +175,13 @@ class ModelProduct():
                 cursor.close()
                 return 'Solo puedes tener 12 productos en favoritos'
             
-
-            
-                    
-                      
+          
             #Insertamos en la tabla favoritos, los ids del producto y usuario
             sql='INSERT INTO favoritos (id_usuario,id_producto) VALUES (%s,%s)'
             cursor.execute(sql,(id_usuario,id_producto))
             db.connection.commit()
+
+            cursor.close()
 
             return True
 
@@ -202,12 +204,15 @@ class ModelProduct():
             cursor.execute(sql,(id_producto,id_usuario))
             db.connection.commit()
 
+            cursor.close()
+
             return True
 
            
         #Si hay errores, devolvemos None tambien
         except Exception as error:
             print(error)
+            cursor.close()
             return None
 
 
@@ -540,8 +545,6 @@ class ModelProduct():
             print(error)
             return None
     
-        
-
     
     #Funcion para /shop, donde se mostraran los productos y se filtraran con LIMIT y OFFSET
     # para que se muestren asi con la paginación
@@ -566,7 +569,7 @@ class ModelProduct():
                 sql='SELECT id,nombre,precio,imagen FROM productos p'
             else:
                 sql='''
-                    SELECT p.id,p.nombre,p.stock,p.precio,p.activo,p.ventas,m.nombre,c.nombre FROM productos p 
+                    SELECT p.id,p.nombre,p.stock,p.precio,p.activo,p.ventas,p.fecha_registro,m.nombre,c.nombre FROM productos p 
                     INNER JOIN marcas m
                     ON p.id_marca=m.id
                     INNER JOIN categorias c
@@ -616,7 +619,6 @@ class ModelProduct():
             if resultados:
                 productos=[]
 
-
                 if not admin:
                     for resultado in resultados:
                         
@@ -636,10 +638,11 @@ class ModelProduct():
                         precio=resultado[3]
                         activo=resultado[4]
                         ventas=resultado[5]
-                        marca=resultado[6]
-                        categoria=resultado[7]
+                        fecha_registro=resultado[6]
+                        marca=resultado[7]
+                        categoria=resultado[8]
                     
-                        productos.append(Product(id,nombre,precio,marca,categoria,0,0,stock,ventas,activo))
+                        productos.append(Product(id,nombre,precio,marca,categoria,0,0,stock,ventas,activo,fecha_registro))
 
                 cursor.close()
                 return productos
@@ -779,7 +782,10 @@ class ModelProduct():
             print('El row count:',cursor.rowcount)
 
             if cursor.rowcount==0:
+                cursor.close()
                 return 'Datos iguales'
+            
+            cursor.close()
             
             return True
            
@@ -838,6 +844,8 @@ class ModelProduct():
                 cursor.execute(sql,(id,))
 
             db.connection.commit()
+
+            cursor.close()
 
             return True
         

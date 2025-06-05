@@ -18,6 +18,11 @@ def validar_password(form, field):
     if not re.search(r'[a-z]', field.data):
         raise ValidationError('Al menos 1 minúscula en la contraseña')
     
+    if ' ' in field.data:
+        raise ValidationError('La contraseña no puede contener espacios')
+    
+
+    
 #Validador de fechas
 def validar_year(form, field):
     from datetime import datetime
@@ -60,6 +65,35 @@ def validar_digitos(form,field):
 
     if field.data!=str(int(field.data)):
         raise ValidationError('No puede empezar con ceros innecesarios')
+    
+
+
+#Validador de alnum
+def validar_alnum(form,field):
+    texto=unidecode.unidecode(field.data)
+    texto=texto.replace(' ','')
+    if not texto.isalnum():
+        raise ValidationError('Este campo solo puede tener alfanuméricos')
+    
+
+#Validar los domicilios
+def validar_domicilio(form, field):
+    texto=unidecode.unidecode(field.data)
+    permitidos="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,#+-/ºª"
+    
+    for i in texto:
+        if i not in permitidos:
+            raise ValidationError('La dirección contiene caracteres no permitidos')
+        
+
+#Validar la descripcion de los productos
+def validar_descripcion(form, field):
+    texto=unidecode.unidecode(field.data)
+    permitidos="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,;"
+    
+    for i in texto:
+        if i not in permitidos:
+            raise ValidationError('La descripción contiene caracteres no permitidos')
 
     
 
@@ -68,12 +102,14 @@ class Register(FlaskForm):
 
     nombre=StringField('Nombre',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=3,max=25,message='3-25 caracteres requeridos')
+        Length(min=3,max=25,message='3-25 caracteres requeridos'),
+        validar_letras
     ])
 
     apellidos=StringField('Apellidos',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=3,max=25,message='3-25 caracteres requeridos')
+        Length(min=3,max=25,message='3-25 caracteres requeridos'),
+        validar_letras
     ])
 
     email=EmailField('Correo electrónico',validators=[
@@ -84,7 +120,8 @@ class Register(FlaskForm):
 
     username=StringField('Username',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=5,max=25,message='5-25 caracteres requeridos')
+        Length(min=5,max=25,message='5-25 caracteres requeridos'),
+        validar_alnum
     ])
 
     password=PasswordField('Contraseña',validators=[
@@ -162,7 +199,8 @@ class AddressForm(FlaskForm):
 
     domicilio=StringField('Domcilio',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=3,max=50,message='3-50 caracteres requeridos')
+        Length(min=3,max=50,message='3-50 caracteres requeridos'),
+        validar_domicilio
     ])
 
     localidad=StringField('Localidad',validators=[
@@ -173,7 +211,8 @@ class AddressForm(FlaskForm):
 
     puerta=StringField('Puerta',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=1,max=10,message='1-10 caracteres requeridos')
+        Length(min=1,max=3,message='1-3 caracteres requeridos'),
+        validar_digitos
     ])
 
     codigo_postal=StringField('Código Postal',validators=[
@@ -228,12 +267,14 @@ class Account(FlaskForm):
 
     nombre=StringField('Nombre',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=3,max=25,message='3-25 caracteres requeridos')
+        Length(min=3,max=25,message='3-25 caracteres requeridos'),
+        validar_letras
     ])
 
     apellidos=StringField('Apellidos',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=3,max=25,message='3-25 caracteres requeridos')
+        Length(min=3,max=25,message='3-25 caracteres requeridos'),
+        validar_letras
     ])
 
     email=EmailField('Correo electrónico',validators=[
@@ -244,7 +285,8 @@ class Account(FlaskForm):
 
     username=StringField('Username',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=5,max=25,message='5-25 caracteres requeridos')
+        Length(min=5,max=25,message='5-25 caracteres requeridos'),
+        validar_alnum
     ])
 
 
@@ -257,7 +299,8 @@ class ProductForm(FlaskForm):
 
     nombre=StringField('Nombre',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(min=3,max=100,message='3-100 caracteres requeridos')
+        Length(min=3,max=100,message='3-100 caracteres requeridos'),
+        validar_alnum
     ])
 
     marca_choices=[(1,'Domyos'),(2,'Tunturi'),(3,'Kraftboost'),(4,'Corength'),(5,'Maniak'),(6,'E-series')]
@@ -269,22 +312,19 @@ class ProductForm(FlaskForm):
     categoria=SelectField('Categoría',choices=categoria_choices,coerce=int)
 
     precio=DecimalField('Precio',validators=[
-        InputRequired(message="Este campo es obligatorio")
+        InputRequired(message="Este campo es obligatorio"),
+        NumberRange(min=0.01, message="Debe ser positivo")
     ])
 
     stock=IntegerField('Stock',validators=[
         InputRequired(message="Este campo es obligatorio"),
-        NumberRange(min=0),
+        NumberRange(min=0)
     ])
 
     descripcion=TextAreaField('Descripcion',validators=[
         DataRequired(message="Este campo es obligatorio"),
-        Length(max=255, message="Máximo 255 caracteres")
-    ])
-
-
-    imagen=FileField('Imagen',validators=[
-        FileAllowed(['jpg','jpeg','png','gif','webp','svg'],'Solo se permiten imágenes')
+        Length(max=255, message="Máximo 255 caracteres"),
+        validar_descripcion
     ])
 
 

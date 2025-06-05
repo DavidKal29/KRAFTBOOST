@@ -8,8 +8,6 @@ from models.ModelProduct import ModelProduct
 from models.ModelBrand import ModelBrand
 from models.ModelCategory import ModelCategory
 from models.entities.Product import Product
-import unidecode
-import math
 from werkzeug.exceptions import HTTPException
 
 
@@ -75,9 +73,18 @@ def account():
                 #Obtenemos todos lod datos del formulario
                 nombre=request.form.get('nombre')
                 apellidos=request.form.get('apellidos')
-                email=request.form.get('email')
-                username=request.form.get('username')
-            
+                email=request.form.get('email').strip().lower()
+                username=request.form.get('username').strip().replace(' ','')
+
+                #Limpiamos el nombre
+                nombre=' '.join(nombre.strip().split())
+                nombre=nombre.title()
+
+                #Limpiamos los apellidos
+                apellidos=' '.join(apellidos.strip().split())
+                apellidos=apellidos.title()
+                
+                
                 print(nombre,apellidos,email,username)
 
                 #Creamos el objeto con los nuevos datos
@@ -179,12 +186,20 @@ def edit_user(id):
             #Si el metodo es post y se valida el formulario
             if form.validate() and request.method=='POST':
                 
-                #Obtenemos todos los datos del formulario
+                #Obtenemos todos lod datos del formulario
                 nombre=request.form.get('nombre')
                 apellidos=request.form.get('apellidos')
-                email=request.form.get('email')
-                username=request.form.get('username')
-            
+                email=request.form.get('email').strip().lower()
+                username=request.form.get('username').strip().replace(' ','')
+
+                #Limpiamos el nombre
+                nombre=' '.join(nombre.strip().split())
+                nombre=nombre.title()
+
+                #Limpiamos los apellidos
+                apellidos=' '.join(apellidos.strip().split())
+                apellidos=apellidos.title()
+
                 print(nombre,apellidos,email,username)
 
                 datos_nuevos=User(id,nombre,apellidos,email,username,None,None)
@@ -553,7 +568,14 @@ def edit_product(id):
                 categoria=int(request.form.get('categoria'))
                 precio=request.form.get('precio')
                 stock=request.form.get('stock')
-                descripcion=request.form.get('descripcion')
+                descripcion=request.form.get('descripcion').strip()
+
+                #Limpiamos el nombre
+                nombre=' '.join(nombre.strip().split())
+                nombre=nombre.title()
+
+                #Limpiamos la descripcion
+                descripcion=' '.join(descripcion.strip().split())
                 
                 print(nombre,marca,categoria,precio,stock,descripcion)
 
