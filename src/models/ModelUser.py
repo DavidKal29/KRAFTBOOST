@@ -48,9 +48,6 @@ class ModelUser():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
 
     #Método para registrar usuarios tanto clientes como admins
     @classmethod
@@ -101,10 +98,6 @@ class ModelUser():
             print('Usuario no ha sido registrado')
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
-        
 
     #Método para obtener el usuario por el id en el user loader
     @classmethod
@@ -147,9 +140,6 @@ class ModelUser():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
         
 
     #Metodo para borrar la cuenta
@@ -188,9 +178,6 @@ class ModelUser():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
     
 
     #Método para validar el email que se introduce al recuerar contraseña
@@ -233,10 +220,6 @@ class ModelUser():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
-
 
     #Método para cambiar la contraseña 
     @classmethod
@@ -282,9 +265,6 @@ class ModelUser():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
     
     
 
@@ -329,9 +309,6 @@ class ModelUser():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
 
     
     #Metodo para cambiar la direccion de envio
@@ -382,10 +359,6 @@ class ModelUser():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
-        
 
     #Metodo para borrar la direccion de envio
     @classmethod
@@ -411,9 +384,6 @@ class ModelUser():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
         
 
     #Metodo para editar los datos del usuario
@@ -447,9 +417,6 @@ class ModelUser():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
         
 
 ########################################################################################
@@ -501,9 +468,7 @@ class ModelUser():
             print(error)
             return None
 
-        finally:
-            if cursor:
-                cursor.close()
+        
             
 
     #Metodo para obtener los datos de un usuario para el admin
@@ -542,8 +507,5 @@ class ModelUser():
             print('Error al obtener al usuario')
             print(error)
             return None
-        
-        finally:
-            if cursor:
-                cursor.close()
+    
 

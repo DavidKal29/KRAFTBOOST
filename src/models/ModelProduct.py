@@ -52,9 +52,6 @@ class ModelProduct():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
         
 
     #Función basica para mostrar productos en inicio
@@ -105,10 +102,6 @@ class ModelProduct():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
-        
 
     #Metodo para ver si un producto está en la lista de favoritos de un usuario
     @classmethod
@@ -138,10 +131,6 @@ class ModelProduct():
         except Exception as error:
             print(error)
             return None
-        
-        finally:
-            if cursor:
-                cursor.close()
         
         
     #Metodo para añadir a favoritos
@@ -202,10 +191,6 @@ class ModelProduct():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
-        
 
     #Metodo para borrar favoritos de la lista
     @classmethod
@@ -229,10 +214,6 @@ class ModelProduct():
             print(error)
             cursor.close()
             return None
-        
-        finally:
-            if cursor:
-                cursor.close()
 
 
     
@@ -563,13 +544,7 @@ class ModelProduct():
         except Exception as error:
             print(error)
             return None
-        
-        finally:
-            if cursor:
-                cursor.close()
     
-        
-
     
     #Funcion para /shop, donde se mostraran los productos y se filtraran con LIMIT y OFFSET
     # para que se muestren asi con la paginación
@@ -683,10 +658,6 @@ class ModelProduct():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
-        
     
     #Metodo para mostrar la informacion de u nproducto en su pagina 
     @classmethod
@@ -743,10 +714,6 @@ class ModelProduct():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
-        
 
 ###################################################################################################
 #Metodos para modo admin
@@ -799,10 +766,6 @@ class ModelProduct():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
-        
 
     #Función para editar un producto
     @classmethod
@@ -830,10 +793,6 @@ class ModelProduct():
         except Exception as error:
             print(error)
             return None
-        
-        finally:
-            if cursor:
-                cursor.close()
         
         
     #Funcion para activar/desactivar un producto
@@ -896,7 +855,3 @@ class ModelProduct():
             print('Error al activar/desactivar el producto')
             print(error)
             return None
-        
-        finally:
-            if cursor:
-                cursor.close()

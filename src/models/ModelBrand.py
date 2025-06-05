@@ -39,6 +39,3 @@ class ModelBrand():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()

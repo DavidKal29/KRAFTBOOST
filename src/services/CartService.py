@@ -50,7 +50,6 @@ class CartService:
         #Si hay errores, devolvemos None
         except Exception as error:
             print(error)
-            cursor.close()
             print('Usuario sin productos en el carrito')
             return None
         
@@ -85,7 +84,6 @@ class CartService:
         #Si hay errores, devolvemos None
         except Exception as error:
             print(error)
-            cursor.close()
             print('Usuario sin productos en el carrito')
             return None
 
@@ -159,7 +157,6 @@ class CartService:
         #Si hay errores, devolvemos None
         except Exception as error:
             print(error)
-            cursor.close()
             print('Producto no añadido')
             return None
         
@@ -233,7 +230,6 @@ class CartService:
         #Si hay errores, devolvemos None
         except Exception as error:
             print(error)
-            cursor.close()
             print('Producto no decrementado')
             return None
         
@@ -296,7 +292,6 @@ class CartService:
         #Si hay errores, devolvemos None
         except Exception as error:
             print(error)
-            cursor.close()
             print('Producto no borrado')
             return None
     
@@ -392,7 +387,6 @@ class CartService:
                 sql='DELETE FROM carrito WHERE id_usuario=%s'
                 cursor.execute(sql,(id,))
                 db.connection.commit()
-
 
                 cursor.close()
 

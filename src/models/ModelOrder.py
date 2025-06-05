@@ -47,10 +47,6 @@ class ModelOrder:
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
-        
 
     #Metodo para obtener los productos de un pedido
     @classmethod
@@ -100,10 +96,6 @@ class ModelOrder:
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
-        
 
 
     
@@ -151,10 +143,6 @@ class ModelOrder:
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
-        
 
 
     #Metodo para borrar un pedido
@@ -197,10 +185,6 @@ class ModelOrder:
             print('Error al borrar el pedido')
             print(error)
             return None
-        
-        finally:
-            if cursor:
-                cursor.close()
         
 
 
@@ -267,11 +251,6 @@ class ModelOrder:
             print('Error al obtener los pedidos')
             print(error)
             return None
-        
-        finally:
-            if cursor:
-                cursor.close()
-        
 
 
     #Metodo para obtener todos los datos de un pedido para el admin
@@ -318,11 +297,6 @@ class ModelOrder:
             print('Error al obtener lod datos del pedido')
             print(error)
             return None
-        
-        finally:
-            if cursor:
-                cursor.close()
-        
 
     
         
@@ -352,11 +326,7 @@ class ModelOrder:
             print('Error al borrar el pedido')
             print(error)
             return None
-        
-        finally:
-            if cursor:
-                cursor.close()
-        
+
 
     #Metodo para activar/desactivar el estado de enviado de un pedido
     @classmethod
@@ -380,7 +350,3 @@ class ModelOrder:
             print('Error al setear el producto')
             print(error)
             return None
-        
-        finally:
-            if cursor:
-                cursor.close()

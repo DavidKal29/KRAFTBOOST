@@ -40,6 +40,3 @@ class ModelCategory():
             print(error)
             return None
         
-        finally:
-            if cursor:
-                cursor.close()
