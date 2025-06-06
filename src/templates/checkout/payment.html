@@ -18,7 +18,7 @@
         <!-- Nombre Titular -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.nombre_titular.label(class="font-bold") }}
-            {{ form.nombre_titular(placeholder='Ej: Antonio Gutierrez', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
+            {{ form.nombre_titular(placeholder='Ej: Antonio Gutierrez', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
             {% if form.nombre_titular.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.nombre_titular.errors[0]}}</p>

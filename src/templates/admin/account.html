@@ -18,7 +18,7 @@
         <!-- Nombre -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.nombre.label(class="font-bold") }}
-            {{ form.nombre(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=datos.nombre if datos else '',autocomplete="off") }}
+            {{ form.nombre(placeholder='Ej: Antonio', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=datos.nombre if datos else '') }}
                 
             {% if form.nombre.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.nombre.errors[0]}}</p>
@@ -28,7 +28,7 @@
         <!-- Apellidos -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.apellidos.label(class="font-bold") }}
-            {{ form.apellidos(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=datos.apellidos if datos else '',autocomplete="off") }}
+            {{ form.apellidos(placeholder='Ej: Gutierrez', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=datos.apellidos if datos else '') }}
                 
             {% if form.apellidos.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.apellidos.errors[0]}}</p>
@@ -38,7 +38,7 @@
         <!-- Email -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.email.label(class="font-bold") }}
-            {{ form.email(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=datos.email if datos else '',autocomplete="off") }}
+            {{ form.email(placeholder='Ej: ejemplo@ejemplo.es', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=datos.email if datos else '') }}
                 
             {% if form.email.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.email.errors[0]}}</p>
@@ -49,7 +49,7 @@
         <!-- Username -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.username.label(class="font-bold") }}
-            {{ form.username(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=datos.username if datos else '',autocomplete="off") }}
+            {{ form.username(placeholder='Ej: tonio05', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",value=datos.username if datos else '') }}
                 
             {% if form.username.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.username.errors[0]}}</p>

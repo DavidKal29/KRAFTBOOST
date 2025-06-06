@@ -16,7 +16,7 @@
             <!-- Nombre -->
             <div class="flex flex-col w-full">
                 {{ form.nombre.label(class="font-bold") }}
-                {{ form.nombre(placeholder='Ej: Antonio', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
+                {{ form.nombre(placeholder='Ej: Antonio', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
                 {% if form.nombre.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.nombre.errors[0]}}</p>
@@ -29,7 +29,7 @@
             <!-- Apellidos -->
             <div class="flex flex-col w-full">
                 {{ form.apellidos.label(class="font-bold") }}
-                {{ form.apellidos(placeholder='Ej: Gutierrez', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
+                {{ form.apellidos(placeholder='Ej: Gutierrez', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
                 {% if form.apellidos.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.apellidos.errors[0]}}</p>
@@ -45,7 +45,7 @@
             <!-- Email -->
             <div class="flex flex-col w-full">
                 {{ form.email.label(class="font-bold") }}
-                {{ form.email(placeholder='Ej: ejemplo@ejemplo.es', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
+                {{ form.email(placeholder='Ej: ejemplo@ejemplo.es', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
                 {% if form.email.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.email.errors[0]}}</p>
@@ -58,7 +58,7 @@
             <!-- Username -->
             <div class="flex flex-col w-full">
                 {{ form.username.label(class="font-bold") }}
-                {{ form.username(placeholder='Ej: Tonio09', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
+                {{ form.username(placeholder='Ej: Tonio09', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
                 {% if form.username.errors %}
                     <p class="text-[12px] text-[#C40C0C] mt-1">{{form.username.errors[0]}}</p>

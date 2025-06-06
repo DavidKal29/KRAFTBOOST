@@ -17,7 +17,7 @@
         <!-- Email -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.email.label(class="font-bold") }}
-            {{ form.email(placeholder='Ej: ejemplo@ejemplo.es', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
+            {{ form.email(placeholder='Ej: ejemplo@ejemplo.es', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
                 
             {% if form.email.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.email.errors[0]}}</p>
@@ -27,7 +27,7 @@
         <!-- Password -->
         <div class="flex justify-center items-start flex-col w-full">
             {{ form.password.label(class="font-bold") }}
-            {{ form.password(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full") }}
+            {{ form.password(placeholder='Ej: 12xX50aA', class="bg-[#1B1A1A] text-white px-4 py-2 rounded outline-none w-full",autocomplete="off") }}
                 
             {% if form.password.errors %}
                 <p class="text-[12px] text-[#C40C0C] mt-1">{{form.password.errors[0]}}</p>
