@@ -72,6 +72,7 @@ def validar_digitos(form,field):
 def validar_alnum(form,field):
     texto=unidecode.unidecode(field.data)
     texto=texto.replace(' ','')
+    texto=texto.replace('.','')
     if not texto.isalnum():
         raise ValidationError('Este campo solo puede tener alfanuméricos')
     
