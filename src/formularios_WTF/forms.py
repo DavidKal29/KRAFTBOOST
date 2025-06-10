@@ -68,8 +68,16 @@ def validar_digitos(form,field):
     
 
 
+
 #Validador de alnum
 def validar_alnum(form,field):
+    texto=unidecode.unidecode(field.data)
+    texto=texto.replace(' ','')
+    if not texto.isalnum():
+        raise ValidationError('Este campo solo puede tener alfanuméricos')
+
+#Validador de alnum
+def validar_nombre_producto(form,field):
     texto=unidecode.unidecode(field.data)
     texto=texto.replace(' ','')
     texto=texto.replace('.','')
@@ -301,7 +309,7 @@ class ProductForm(FlaskForm):
     nombre=StringField('Nombre',validators=[
         DataRequired(message="Este campo es obligatorio"),
         Length(min=3,max=100,message='3-100 caracteres requeridos'),
-        validar_alnum
+        validar_nombre_producto
     ])
 
     marca_choices=[(1,'Domyos'),(2,'Tunturi'),(3,'Kraftboost'),(4,'Corength'),(5,'Maniak'),(6,'E-series')]

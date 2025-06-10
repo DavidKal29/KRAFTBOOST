@@ -29,7 +29,7 @@ load_dotenv()
 app=Flask(__name__)
 
 #Establecemos la configuración de la app
-app.config.from_object(config['development'])
+app.config.from_object(config['production'])
 
 #Conexión de la base de datos
 db=MySQL(app)
