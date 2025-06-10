@@ -118,7 +118,7 @@ def register():
             nombre=request.form.get('nombre')
             apellidos=request.form.get('apellidos')
             email=request.form.get('email').strip().lower()
-            username=request.form.get('username').strip()
+            username=request.form.get('username').strip().replace(' ','')
             password=request.form.get('password')
 
             #Limpiamos el nombre
