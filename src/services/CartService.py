@@ -16,6 +16,7 @@ class CartService:
                 INNER JOIN productos p
                 ON c.id_producto=p.id
                 WHERE id_usuario=%s
+                ORDER BY c.id DESC
             '''
             cursor.execute(sql,(id_usuario,))
           
