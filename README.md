@@ -1,26 +1,53 @@
-# Mini Blog en Flask
+# KRAFTBOOST
 
-Este es un proyecto simple de un blog creado con Python, Flask, MongoDB y un sistema de templates HTML. Permite a los usuarios agregar publicaciones al blog y almacenarlas en una base de datos MongoDB.
+Esta es una tienda online especializada en **pesas, mancuernas y equipamiento para el entrenamiento de fuerza**, diseñada para ofrecer una experiencia de compra fluida, completa y segura tanto para usuarios como para administradores.
 
-## Características
-- **Agregar entradas**: Los usuarios pueden agregar entradas al blog a través de un formulario.
-- **Listado de publicaciones**: Se muestran todas las publicaciones con su título y contenido.
-- **Persistencia de datos**: Las entradas se almacenan en una base de datos MongoDB.
-- **Templates HTML**: Uso de plantillas para renderizar el contenido.
-- **Fecha de publicación**: Cada entrada muestra la fecha actual.
+### Funcionalidades para el Usuario:
+
+- **Autenticación completa**: registro, login y recuperación de contraseña por email.
+- **Exploración de productos** con buscador inteligente y filtros por categoría, marca, precio y orden.
+- **Carrito de compras** con sistema de pasarela de pago ficticio pero funcional.
+- **Confirmación de pedidos** vía email, junto a mensajes de bienvenida y todo personalizado.
+- **Gestión de perfil**: edición de datos personales, direcciones, favoritos y visualización del historial de pedidos con sus respectivos detalles.
+- **Diseño intuitivo**, responsivo y enfocado en una experiencia de usuario amigable y eficiente.
+
+### Panel de Administración:
+
+- **Gestión de pedidos**: ver, activar/desactivar y actualizar su estado.
+- **Control de usuarios**: editar información o eliminar cuentas.
+- **Gestión de productos**: editar, dar de baja o activar productos con total control.
+- **Interfaz segura**, protegida y separada de las funciones de usuario normal.
+
+### Extras Técnicos:
+
+- Control de errores personalizado con páginas para códigos **401 (no autorizado)** y **404 (página no encontrada)**.
+- Sistema de envío de **emails automáticos** para distintas acciones.
+- Uso de **tokens** para proteger algunas rutas como la recuperación de contraseña o pasarela de pago.
+- Estructura modular con Blueprints de Flask para mantener el proyecto organizado y escalable.
+
+En resumen, esta tienda online no solo permite comprar artículos deportivos de manera sencilla, sino que también ofrece un backend robusto y potente para una administración total del sistema.
 
 ---
 
 ## Requisitos
 
 Para ejecutar este proyecto, necesitas:
+
 - **Python 3.x**
-- **MongoDB** (puede ser local o en la nube)
+- **MySQL** (puede ser local o en la nube)
 - Librerías de Python:
   - `Flask`
+  - `Flask-Login`
+  - `Flask-Mail`
+  - `Flask-MySQLdb`
+  - `Flask-WTF`
   - `python-dotenv`
-  - `pymongo`
-
+  - `WTForms`
+  - `gunicorn`
+  - `email_validator`
+  - `mysqlclient`
+  - `PyJWT`
+  - `Unidecode`
 ---
 
 ## Instalación
@@ -28,8 +55,8 @@ Para ejecutar este proyecto, necesitas:
 1. **Clona el repositorio**  
    Ejecuta el siguiente comando en tu terminal:
    ```bash
-   git clone https://github.com/DavidKal29/MiniBlogFlaskMongoDB.git
-   cd MiniBlogFlaskMongoDB
+   git https://github.com/DavidKal29/Proyecto-Final-TFG.git
+   cd Proyecto-Final-TFG
 
 2. **Crea un entorno virtual** (opcional pero recomendado):
    ```bash
@@ -42,13 +69,26 @@ Para ejecutar este proyecto, necesitas:
    pip install -r requeriments.txt
 
 4. **Configura las variables de entorno** 
-   Crea un archivo .env y pon en él lo siguiente:
+   Crea un archivo .env y pon las siguientes variables, poniendo obviamente tus propios datos:
    ```env
-   endpoint=<TU_ENDPOINT_DE_MONGODB>
+      SECRET_KEY=
+      MYSQL_HOST=
+      MYSQL_USER=
+      MYSQL_PASSWORD=
+      MYSQL_DB=
+      MYSQL_HOST_CLEVER_CLOUD=
+      MYSQL_USER_CLEVER_CLOUD=
+      MYSQL_PASSWORD_CLEVER_CLOUD=
+      MYSQL_DB_CLEVER_CLOUD=
+      CORREO=
+      PASSWORD_DEL_CORREO=
+      JWT_SECRET_KEY_RESET_PASSWORD=
+      JWT_SECRET_KEY_RESET_CART=
+
 
 5. **Ejectua la aplicacion** 
    ```bash
-    python app.py
+    python src/app.py 
 
 6. **Abre el navegador** 
    Ve a http://127.0.0.1:5000 para acceder a la aplicación.
