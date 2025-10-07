@@ -1,8 +1,34 @@
 from flask_mail import Message
+from utils.Brevo import api_instance
+import sib_api_v3_sdk
+from sib_api_v3_sdk.rest import ApiException
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 
 class MailSender:
 
+    #Método estático para enviar los mensajes
+    @staticmethod
+    def _send_email(to_email, subject, html):
+        sender={"name": "KraftBoost", "email": os.getenv('CORREO')}
+        to=[{"email": to_email}]
+        send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
+            to=to,
+            html_content=html,
+            sender=sender,
+            subject=subject
+        )
+
+        try:
+            api_instance.send_transac_email(send_smtp_email)
+            print("Correo enviado correctamente a {}".format(to_email))
+        except ApiException as e:
+            print("Error al enviar correo:", e)
+
+    
     #Método para enviar mensajes de bienvenida
     @classmethod
     def welcome_message(cls,current_app,username,email):
@@ -17,19 +43,7 @@ class MailSender:
             <p>💪¡No dudes en que te ayudaremos a lograr tus objetivos!🚀</p>
         '''.format(username)
 
-        #Estructura básica para enviar el mensaje, usando el current 
-        # app que traeré de las rutas, porque no puedo usarlo fuera de las rutas
-        Mensaje=Message(
-            subject=asunto,
-            sender=current_app.config['MAIL_USERNAME'],
-            recipients=[email]
-        )
-
-        #Añadimos el html al mensaje
-        Mensaje.html=html
-
-        #El correo se envia
-        current_app.config['mail'].send(Mensaje)
+        MailSender._send_email(email,asunto,html)
 
     #Metodo para resetear la contraseña
     @classmethod
@@ -44,17 +58,7 @@ class MailSender:
             <a href="{}auth/reset_password/{}">🔁 Reestablecer Contraseña</a>
         '''.format(ip,token)
 
-        #Estructura básica para enviar el mensaje, usando el current 
-        # app que traeré de las rutas, porque no puedo usarlo fuera de las rutas
-        Mensaje=Message(subject=asunto,
-              sender=current_app.config['MAIL_USERNAME'],
-              recipients=[email])
-
-        #Añadimos el html al mensaje
-        Mensaje.html=html
-
-        #El correo se envia
-        current_app.config['mail'].send(Mensaje)
+        MailSender._send_email(email,asunto,html)
 
 
     #Metodo para confirmar que la contraseña ha sido cambiada
@@ -71,19 +75,7 @@ class MailSender:
             <p>🙏Gracias una vez más por confiar en nosotros💙</p>
         '''
 
-        #Estructura básica para enviar el mensaje, usando el current 
-        # app que traeré de las rutas, porque no puedo usarlo fuera de las rutas
-        Mensaje=Message(
-            subject=asunto,
-            sender=current_app.config['MAIL_USERNAME'],
-            recipients=[email]
-        )
-
-        #Añadimos el html al mensaje
-        Mensaje.html=html
-
-        #El correo se envia
-        current_app.config['mail'].send(Mensaje)
+        MailSender._send_email(email,asunto,html)
 
     
     # Método para confirmar el pedido
@@ -144,18 +136,6 @@ class MailSender:
             </div>
         '''.format(username,pedido.numero_pedido,direccion_envio,productos_html,pedido.precio_total,ip,pedido.numero_pedido)
 
-        #Estructura básica para enviar el mensaje, usando el current 
-        # app que traeré de las rutas, porque no puedo usarlo fuera de las rutas
-        Mensaje=Message(
-            subject=asunto,
-            sender=current_app.config['MAIL_USERNAME'],
-            recipients=[email]
-        )
-
-        Mensaje.html=html
-
-        #Enviamos el correo
-        current_app.config['mail'].send(Mensaje)
-
+        MailSender._send_email(email,asunto,html)
 
         print('Confirmacion enviada con exito')
