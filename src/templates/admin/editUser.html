@@ -10,7 +10,7 @@
     <h1 class="text-white font-bold text-[30px] xl:text-[40px] text-center">Datos de {{datos.username}}</h1>
 
     
-    <form action="{{url_for('admin.edit_user',id=datos.id)}}" method="post" class="flex flex-col justify-center items-center gap-6 text-white px-4 w-full max-w-[600px]">
+    <form action="{{url_for('admin.edit_user',id=datos.id)}}" autocomplete="off" method="post" class="flex flex-col justify-center items-center gap-6 text-white px-4 w-full max-w-[600px]">
         
         <!-- Hidden Tag -->
         {{ form.hidden_tag() }}

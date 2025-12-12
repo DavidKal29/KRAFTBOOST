@@ -14,7 +14,7 @@
         </div>
 
         <!-- Formulario a la derecha -->
-        <form action="{{url_for('admin.edit_product',id=producto.id)}}" method="post" class="flex flex-col gap-6 text-white w-full md:w-1/2">
+        <form action="{{url_for('admin.edit_product',id=producto.id)}}" autocomplete="off" method="post" class="flex flex-col gap-6 text-white w-full md:w-1/2">
             
             {{ form.hidden_tag() }}
 
