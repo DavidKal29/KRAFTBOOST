@@ -2,15 +2,67 @@
 
 Esta es una tienda online especializada en **pesas, mancuernas y equipamiento para el entrenamiento de fuerza**, diseñada para ofrecer una experiencia de compra fluida, completa y segura tanto para usuarios como para administradores.
 
+
+# 📸 Capturas de pantalla
+
+<details>
+<summary><strong>📂 Mostrar / Ocultar capturas</strong></summary>
+
+<br>
+
+### **INICIO**
+![alt text](README-img/image1.png)
+
+### **TIENDA**
+![alt text](README-img/image4.png)
+
+### **LOGIN**
+![alt text](README-img/image5.png)
+
+### **REGISTER**
+![alt text](README-img/image6.png)
+
+### **PRODUCTO**
+![alt text](README-img/image7.png)
+
+### **CARRITO**
+![alt text](README-img/image8.png)
+
+### **COMPRA EXITOSA**
+![alt text](README-img/image10.png)
+
+### **PEDIDO**
+![alt text](README-img/image11.png)
+
+### **PERFIL USUARIO**
+![alt text](README-img/image12.png)
+
+### **PERFIL ADMIN**
+![alt text](README-img/image13.png)
+
+### **404**
+![alt text](README-img/image14.png)
+
+### **401**
+![alt text](README-img/image15.png)
+
+### **FOOTER**
+![alt text](README-img/image16.png)
+
+</details>
+
+
+
 ### Funcionalidades para el Usuario:
 
 - **Autenticación completa**: registro, login y recuperación de contraseña por email.
 - **Exploración de productos** con buscador inteligente y filtros por categoría, marca, precio y orden.
-- **Carrito de compras** con sistema de pasarela de pago ficticio pero funcional.
-- **Confirmación de pedidos** vía email, junto a mensajes de bienvenida y todo personalizado.
-- **Gestión de perfil**: edición de datos personales, direcciones, favoritos y visualización del historial de pedidos con sus respectivos detalles.
+- **Carrito de compras** con sistema de pasarela de pago, ficticio, pero funcional.
+- **Envío de Emails** Mensajes de bienvenida, confirmación de pedidos, recuperación de contraseña, etc.
+- **Gestión de perfil**: edición de datos personales, direcciones, favoritos y visualización del historial de pedidos con sus respectivos detalles y estado de envío.
 - **Diseño intuitivo**, responsivo y enfocado en una experiencia de usuario amigable y eficiente.
 - **Brevo**. Para el envío de correos utilizamos una API que maneja los correos por nosotros, evitando tener que usar manualmente smtplib y exponerse a restricciones impuestas por plataformas de despliegue como Render.
+
 
 ### Panel de Administración:
 
@@ -23,7 +75,7 @@ Esta es una tienda online especializada en **pesas, mancuernas y equipamiento pa
 
 - Control de errores personalizado con páginas para códigos **401 (no autorizado)** y **404 (página no encontrada)**.
 - Sistema de envío de **emails automáticos** para distintas acciones.
-- Uso de **tokens** para proteger algunas rutas como la recuperación de contraseña o pasarela de pago.
+- Uso de **tokens**, **cookies** y **CSRF** para proteger algunas rutas como la recuperación de contraseña o pasarela de pago y formularios varios.
 - Estructura modular con Blueprints de Flask para mantener el proyecto organizado y escalable.
 
 En resumen, esta tienda online no solo permite comprar artículos deportivos de manera sencilla, sino que también ofrece un backend robusto y potente para una administración total del sistema.
@@ -68,8 +120,6 @@ Para ejecutar este proyecto, necesitas:
 | **Werkzeug** | 3.1.3 | Utilidades WSGI utilizadas internamente por Flask. |
 | **WTForms** | 3.2.1 | Librería de formularios flexible y validaciones. |
 
-
-
 ## Instalación
 
 1. **Clona el repositorio**  
@@ -104,7 +154,6 @@ Para ejecutar este proyecto, necesitas:
       BREVO_API_KEY= (Asegurate de tener cuenta en Brevo y tener la apikey válida)
       JWT_SECRET_KEY_RESET_PASSWORD=
       JWT_SECRET_KEY_RESET_CART=
-
 
 5. **Ejectua la aplicacion** 
    ```bash
